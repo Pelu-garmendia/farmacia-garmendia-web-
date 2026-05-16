@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate"/>
+<title>Tienda · Farmacia Garmendia</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1e3a5f;--navy2:#2d5282;
+  --g:#22c55e;--g2:#16a34a;--glow:rgba(34,197,94,.3);
+  --bg:#f0f7ff;--card:#fff;--border:#dbeafe;
+  --text:#0f2744;--text2:#5b7fa6;
+  --r:10px;--r2:16px;
+  --sh:0 2px 12px rgba(30,58,95,.1);--sh2:0 8px 32px rgba(30,58,95,.15);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.topbar{background:var(--navy);border-bottom:2px solid var(--navy2);height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 4%;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(15,39,68,.4)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand-text{display:flex;flex-direction:column;line-height:1.1}
+.brand-top{font-size:.56rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#93c5fd}
+.brand-bot{font-size:.95rem;font-weight:800;color:#22c55e}
+.back-btn{font-size:.75rem;color:#93c5fd;text-decoration:none;display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;border:1px solid rgba(147,197,253,.2);transition:all .2s}
+.back-btn:hover{color:#fff;border-color:rgba(147,197,253,.4)}
+.tabs{background:var(--card);border-bottom:1px solid var(--border);display:flex;padding:0 4%;overflow-x:auto;box-shadow:var(--sh)}
+.tab{padding:13px 18px;font-size:.82rem;font-weight:700;color:var(--text2);cursor:pointer;border:none;border-bottom:2.5px solid transparent;background:none;font-family:inherit;white-space:nowrap;display:flex;align-items:center;gap:7px;transition:all .2s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--g);border-bottom-color:var(--g)}
+#tab-admin{display:none}
+.lock-btn{margin-left:auto;opacity:.3;font-size:.75rem;padding:10px;cursor:pointer;color:var(--text2);border:none;background:none;font-family:inherit;transition:opacity .2s}
+.lock-btn:hover{opacity:.7}
+.main{max-width:1200px;margin:0 auto;padding:24px 4%}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:100px;font-size:.82rem;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:all .2s;text-decoration:none;white-space:nowrap}
+.btn-g{background:var(--g);color:#052e16;box-shadow:0 4px 14px var(--glow)}
+.btn-g:hover{background:#4ade80;transform:translateY(-1px)}
+.btn-out{background:transparent;border:1.5px solid var(--border);color:var(--text2)}
+.btn-out:hover{border-color:var(--g);color:var(--g)}
+.btn-danger{background:rgba(239,68,68,.08);color:#ef4444;border:1px solid rgba(239,68,68,.2)}
+.btn-danger:hover{background:rgba(239,68,68,.15)}
+.btn-sm{padding:6px 14px;font-size:.74rem}
+.btn-navy{background:var(--navy);color:#fff;border:none}
+.btn-navy:hover{background:var(--navy2)}
+.fg{margin-bottom:12px}
+.fg label{font-size:.67rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);display:block;margin-bottom:5px}
+.fi{width:100%;background:var(--bg);border:1.5px solid var(--border);color:var(--text);padding:9px 13px;border-radius:var(--r);font-family:inherit;font-size:.85rem;outline:none;transition:border-color .2s}
+.fi:focus{border-color:var(--g)}
+.fi::placeholder{color:var(--text2)}
+.fgrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(15,39,68,.6);z-index:500;align-items:center;justify-content:center;padding:14px;backdrop-filter:blur(4px)}
+.modal-bg.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);width:100%;max-width:440px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 60px rgba(15,39,68,.25);animation:pop .28s both}
+.modal-head{background:#f8faff;border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:1}
+.modal-head h3{font-size:.9rem;font-weight:800;color:var(--text)}
+.modal-close{background:none;border:none;font-size:1.1rem;color:var(--text2);cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:7px}
+.modal-close:hover{background:var(--border)}
+.modal-body{padding:18px}
+.auth-ico{width:60px;height:60px;border-radius:50%;background:rgba(34,197,94,.1);border:2px solid rgba(34,197,94,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--g)}
+.auth-inp-wrap{position:relative;margin-bottom:10px}
+.auth-inp{width:100%;background:var(--bg);border:1.5px solid var(--border);color:var(--text);padding:11px 40px 11px 14px;border-radius:var(--r);font-family:inherit;font-size:.95rem;outline:none;text-align:center;letter-spacing:.06em;transition:border-color .2s}
+.auth-inp:focus{border-color:var(--g)}
+.auth-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text2);cursor:pointer;display:flex;align-items:center}
+.auth-err{font-size:.76rem;color:#ef4444;min-height:18px;margin-bottom:8px;text-align:center}
+.search-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.search-inp{flex:1;min-width:180px;background:var(--card);border:1.5px solid var(--border);color:var(--text);padding:9px 16px;border-radius:100px;font-family:inherit;font-size:.84rem;outline:none;transition:border-color .2s;box-shadow:var(--sh)}
+.search-inp:focus{border-color:var(--g)}
+.search-inp::placeholder{color:var(--text2)}
+.cat-sel{background:var(--card);border:1.5px solid var(--border);color:var(--text);padding:9px 14px;border-radius:100px;font-family:inherit;font-size:.8rem;outline:none;cursor:pointer;box-shadow:var(--sh)}
+.cat-sel:focus{border-color:var(--g)}
+.result-count{font-size:.75rem;color:var(--text2);margin-bottom:14px}
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+.prod-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);overflow:hidden;transition:all .22s;box-shadow:var(--sh)}
+.prod-card:hover{transform:translateY(-3px);box-shadow:var(--sh2);border-color:rgba(34,197,94,.3)}
+.prod-img{width:100%;aspect-ratio:1;background:#f8fbff;display:flex;align-items:center;justify-content:center;overflow:hidden;border-bottom:1px solid var(--border)}
+.prod-img img{width:100%;height:100%;object-fit:contain;padding:8px}
+.prod-img-ph{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--border)}
+.prod-body{padding:11px 13px}
+.prod-cat{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--g);margin-bottom:3px}
+.prod-name{font-size:.84rem;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.3}
+.prod-price{font-size:.98rem;font-weight:800;color:var(--g);margin-bottom:10px}
+.wa-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:8px;background:var(--g);color:#052e16;border:none;border-radius:100px;font-size:.76rem;font-weight:800;cursor:pointer;font-family:inherit;transition:background .2s}
+.wa-btn:hover{background:#4ade80}
+.empty-grid{grid-column:1/-1;padding:56px;text-align:center;color:var(--text2);border:2px dashed var(--border);border-radius:var(--r2)}
+.empty-grid svg{width:48px;display:block;margin:0 auto 12px;opacity:.25}
+.ofertas-sec{margin-bottom:28px}
+.sec-eyebrow{font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--g);margin-bottom:4px}
+.sec-title{font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:14px}
+.oferta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.oferta-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);overflow:hidden;position:relative;transition:all .22s;box-shadow:var(--sh)}
+.oferta-card:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
+.oferta-badge{position:absolute;top:8px;left:8px;background:#ef4444;color:#fff;font-size:.68rem;font-weight:800;padding:3px 8px;border-radius:100px;z-index:2}
+.oferta-img{width:100%;aspect-ratio:1;background:#f8fbff;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.oferta-img img{width:100%;height:100%;object-fit:contain;padding:8px}
+.oferta-body{padding:10px 12px}
+.oferta-nombre{font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:5px;line-height:1.3}
+.oferta-precios{display:flex;align-items:center;gap:7px;margin-bottom:8px;flex-wrap:wrap}
+.precio-old{font-size:.72rem;color:#9ca3af;text-decoration:line-through}
+.precio-new{font-size:.95rem;font-weight:800;color:var(--g)}
+.admin-banner{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:var(--r2);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.admin-banner-ico{color:#93c5fd;flex-shrink:0}
+.admin-banner h3{font-size:.9rem;font-weight:800}
+.admin-banner p{font-size:.76rem;color:#93c5fd;margin-top:2px}
+.sync-bar,.sheets-bar,.backup-bar{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:13px 18px;margin-bottom:18px;box-shadow:var(--sh)}
+.sync-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.sync-left{display:flex;align-items:center;gap:10px}
+.sync-ico{width:36px;height:36px;border-radius:9px;background:var(--navy);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff}
+.sync-title{font-size:.82rem;font-weight:700;color:var(--text)}
+.sync-sub{font-size:.7rem;color:var(--text2);margin-top:1px}
+.sbadge{font-size:.7rem;font-weight:600;padding:4px 10px;border-radius:100px;display:inline-flex;align-items:center;gap:4px;border:1px solid}
+.sbadge.ok{background:rgba(34,197,94,.08);color:var(--g2);border-color:rgba(34,197,94,.2)}
+.sbadge.loading{background:rgba(59,130,246,.08);color:#2563eb;border-color:rgba(59,130,246,.2)}
+.sbadge.err{background:rgba(239,68,68,.08);color:#dc2626;border-color:rgba(239,68,68,.2)}
+.acard{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);margin-bottom:18px;overflow:hidden;box-shadow:var(--sh)}
+.acard-head{background:#f8faff;border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.acard-head h3{font-size:.85rem;font-weight:800;color:var(--text);display:flex;align-items:center;gap:7px}
+.acard-body{padding:16px}
+.sheets-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sheets-inp{flex:1;min-width:200px;background:var(--bg);border:1.5px solid var(--border);color:var(--text);padding:8px 12px;border-radius:var(--r);font-family:inherit;font-size:.78rem;outline:none;transition:border-color .2s}
+.sheets-inp:focus{border-color:var(--g)}
+.sheets-inp::placeholder{color:var(--text2);font-size:.73rem}
+.sheets-hint{font-size:.7rem;color:var(--text2);margin-top:8px;line-height:1.7}
+.sheets-hint code{background:var(--bg);padding:1px 5px;border-radius:4px;font-family:monospace}
+.inv-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.inv-search{flex:1;min-width:160px;background:var(--bg);border:1.5px solid var(--border);color:var(--text);padding:8px 13px;border-radius:100px;font-family:inherit;font-size:.81rem;outline:none;transition:border-color .2s}
+.inv-search:focus{border-color:var(--g)}
+.inv-search::placeholder{color:var(--text2)}
+.inv-info{font-size:.72rem;color:var(--text2);white-space:nowrap;align-self:center}
+.sel-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:.78rem;color:var(--text2)}
+.pub-lbl{margin-left:auto;color:var(--g);font-weight:700;font-size:.74rem}
+.tbl-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--border);max-height:500px;overflow-y:auto}
+table{width:100%;border-collapse:collapse;font-size:.79rem}
+thead{position:sticky;top:0;z-index:2}
+thead tr{background:#eff6ff}
+th{padding:9px 11px;text-align:left;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text2);border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:8px 11px;border-bottom:1px solid #f0f6ff;color:var(--text);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f8fbff}
+input[type=checkbox]{width:15px;height:15px;accent-color:var(--g);cursor:pointer}
+.pcell{font-weight:700;color:var(--g)}
+.badge{font-size:.63rem;font-weight:700;padding:3px 8px;border-radius:100px;white-space:nowrap}
+.bp{background:rgba(34,197,94,.1);color:var(--g2)}
+.bh{background:#f1f5f9;color:var(--text2)}
+.tbl-img{width:36px;height:36px;border-radius:7px;object-fit:cover;border:1px solid var(--border);background:var(--bg);display:inline-block;vertical-align:middle}
+.tbl-ph{width:36px;height:36px;border-radius:7px;background:var(--bg);border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--text2);vertical-align:middle}
+.ep-inp{width:90px;background:var(--bg);border:1.5px solid var(--border);color:var(--text);padding:5px 8px;border-radius:8px;font-family:inherit;font-size:.79rem;outline:none;transition:border-color .2s}
+.ep-inp:focus{border-color:var(--g)}
+.rb{border-radius:7px;padding:4px 9px;font-size:.7rem;font-weight:700;cursor:pointer;font-family:inherit;border:1px solid transparent;white-space:nowrap;transition:all .15s}
+.rb:hover{opacity:.8}
+.rb-pub{background:rgba(34,197,94,.1);color:var(--g2);border-color:rgba(34,197,94,.25)}
+.rb-hid{background:#f1f5f9;color:var(--text2);border-color:#e2e8f0}
+.rb-edit{background:rgba(99,179,237,.1);color:#3b82f6;border-color:rgba(99,179,237,.25)}
+.rb-del{background:rgba(239,68,68,.08);color:#ef4444;border-color:rgba(239,68,68,.2)}
+.pag{display:flex;align-items:center;justify-content:space-between;padding:12px 0;flex-wrap:wrap;gap:8px}
+.pag-info{font-size:.74rem;color:var(--text2)}
+.pag-btns{display:flex;gap:4px;flex-wrap:wrap}
+.pb{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 11px;border-radius:7px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;min-width:30px;text-align:center}
+.pb:hover{border-color:var(--g);color:var(--g)}
+.pb.active{background:var(--g);color:#052e16;border-color:var(--g)}
+.pb:disabled{opacity:.4;cursor:not-allowed}
+.pj{display:flex;align-items:center;gap:6px;font-size:.74rem;color:var(--text2)}
+.pj input{width:48px;background:var(--bg);border:1.5px solid var(--border);color:var(--text);padding:5px 7px;border-radius:7px;font-family:inherit;font-size:.77rem;outline:none;text-align:center}
+.pj input:focus{border-color:var(--g)}
+.oac-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-top:12px}
+.oac{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r2);overflow:hidden;position:relative}
+.oac-badge{position:absolute;top:8px;left:8px;background:#ef4444;color:#fff;font-size:.68rem;font-weight:800;padding:3px 8px;border-radius:100px}
+.oac-img{width:100%;aspect-ratio:1;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.oac-img img{width:100%;height:100%;object-fit:contain;padding:6px}
+.oac-body{padding:10px 12px}
+.oac-nombre{font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:5px;line-height:1.3}
+.oac-ps{display:flex;gap:7px;align-items:center;margin-bottom:8px}
+.oac-old{font-size:.72rem;color:#9ca3af;text-decoration:line-through}
+.oac-new{font-size:.95rem;font-weight:800;color:var(--g)}
+.oac-acts{display:flex;gap:5px;padding:0 12px 12px}
+.img-prev{width:100%;height:130px;border-radius:var(--r);background:var(--bg);border:1.5px dashed var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:12px}
+.img-prev.has{border-style:solid;border-color:rgba(34,197,94,.3)}
+.img-prev img{width:100%;height:100%;object-fit:contain;padding:8px}
+.pct-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.pct-lbl{font-size:.78rem;color:var(--text2)}
+.pct-val{font-size:1.3rem;font-weight:800;color:#ef4444}
+.backup-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.backup-left{display:flex;align-items:center;gap:10px}
+.backup-ico{width:36px;height:36px;border-radius:9px;background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;color:var(--g);flex-shrink:0}
+.stor-ok{background:rgba(34,197,94,.08);color:var(--g2);border:1px solid rgba(34,197,94,.2);font-size:.7rem;font-weight:600;padding:3px 9px;border-radius:100px}
+.stor-warn{background:rgba(239,68,68,.08);color:#dc2626;border:1px solid rgba(239,68,68,.2);font-size:.7rem;font-weight:600;padding:3px 9px;border-radius:100px}
+.upload-zone{border:2px dashed var(--border);border-radius:var(--r);padding:28px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg)}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--g);background:rgba(34,197,94,.03)}
+.upload-zone svg{width:40px;color:var(--text2);margin:0 auto 10px;display:block;opacity:.3}
+.upload-zone h4{font-size:.88rem;font-weight:700;margin-bottom:4px}
+.upload-zone p{font-size:.76rem;color:var(--text2)}
+.excel-hint{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;margin-top:12px;font-size:.75rem;color:var(--text2);line-height:1.7}
+.excel-hint strong{color:var(--text);display:block;margin-bottom:3px}
+.excel-hint code{background:var(--card);padding:1px 5px;border-radius:4px;font-family:monospace;font-size:.72rem}
+.toast{position:fixed;bottom:20px;right:18px;z-index:999;background:var(--navy);color:#fff;border:1px solid var(--navy2);padding:10px 18px;border-radius:100px;font-size:.8rem;font-weight:600;transform:translateY(10px);opacity:0;transition:all .3s;pointer-events:none;max-width:300px;box-shadow:0 8px 24px rgba(15,39,68,.3)}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.suc{background:var(--g2);border-color:var(--g)}
+.toast.err{background:#dc2626;border-color:#ef4444}
+.hidden{display:none!important}
+.chip{display:inline-flex;align-items:center;gap:4px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--g);padding:2px 8px;border-radius:100px;font-size:.67rem;font-weight:700}
+.alert-info{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:10px 14px;border-radius:var(--r);font-size:.79rem;margin-bottom:12px}
+.divider{border:none;border-top:1px solid var(--border);margin:16px 0}
+@keyframes pop{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.anim-up{animation:fadeUp .4s both}
+@media(max-width:640px){
+  .main{padding:16px 3%}
+  .prod-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .oferta-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .fgrow{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="index.html" class="brand">
+    <svg viewBox="0 0 46 46" fill="none" style="height:44px;width:44px;flex-shrink:0">
+      <rect width="46" height="46" rx="10" fill="#0f1f38"/>
+      <rect x="18" y="8" width="10" height="30" rx="4" fill="#22c55e"/>
+      <rect x="8" y="18" width="30" height="10" rx="4" fill="#22c55e"/>
+    </svg>
+    <div class="brand-text">
+      <span class="brand-top">Farmacia</span>
+      <span class="brand-bot">Garmendia</span>
+    </div>
+  </a>
+  <a href="index.html" class="back-btn">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="12"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Sitio principal
+  </a>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" id="tab-tienda" onclick="showTab('tienda')">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="13"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Tienda
+  </button>
+  <button class="tab hidden" id="tab-admin" onclick="showTab('admin')">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="13"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+    Admin / Inventario
+    <span class="chip">🔒</span>
+  </button>
+  <button class="lock-btn" id="lock-btn" onclick="pedirClave()" title="Acceso admin">🔒</button>
+</nav>
+
+<div class="main">
+
+  <!-- TIENDA PÚBLICA -->
+  <section id="sec-tienda" class="anim-up">
+    <div id="ofertas-pub" style="display:none">
+      <div class="ofertas-sec">
+        <div class="sec-eyebrow">🔥 Ofertas especiales</div>
+        <div class="sec-title">Aprovechá estos precios</div>
+        <div class="oferta-grid" id="ofertas-pub-grid"></div>
+      </div>
+      <hr class="divider"/>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="t-search" class="search-inp" placeholder="🔍  Buscar producto..." oninput="renderTienda()"/>
+      <select id="t-cat" class="cat-sel" onchange="renderTienda()">
+        <option value="">Todas las categorías</option>
+      </select>
+    </div>
+    <p class="result-count" id="t-count"></p>
+    <div class="prod-grid" id="prod-grid"></div>
+  </section>
+
+  <!-- ADMIN -->
+  <section id="sec-admin" class="hidden anim-up">
+
+    <div class="admin-banner">
+      <div class="admin-banner-ico">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      </div>
+      <div style="flex:1">
+        <h3>Panel de Administración — Farmacia Garmendia</h3>
+        <p>Gestioná inventario, ofertas y sincronización.</p>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="cerrarAdmin()">Salir</button>
+    </div>
+
+    <!-- GitHub Sync -->
+    <div class="sync-bar">
+      <div class="sync-left">
+        <div class="sync-ico">
+          <svg fill="currentColor" viewBox="0 0 24 24" width="17"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        </div>
+        <div>
+          <div class="sync-title">Inventario desde GitHub</div>
+          <div class="sync-sub" id="sync-sub">Sin sincronizar</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span class="sbadge loading" id="sync-badge">⏳ Pendiente</span>
+        <button class="btn btn-navy btn-sm" onclick="syncGithub(0)">
+          <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="12"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          Actualizar
+        </button>
+      </div>
+    </div>
+
+    <!-- Google Sheets -->
+    <div class="acard">
+      <div class="acard-head">
+        <h3>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15"><path d="M9 17H7A5 5 0 017 7h2M15 7h2a5 5 0 010 10h-2M8 12h8"/></svg>
+          Google Sheets — Sincronización
+        </h3>
+        <button class="btn btn-g btn-sm" onclick="syncSheets()">
+          <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="12"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          Sincronizar
+        </button>
+      </div>
+      <div class="acard-body">
+        <div class="sheets-row">
+          <input type="url" id="sheets-url" class="sheets-inp" placeholder="https://docs.google.com/spreadsheets/d/.../pub?output=csv"/>
+          <button class="btn btn-out btn-sm" onclick="saveSheets()">Guardar URL</button>
+        </div>
+        <div class="sheets-hint">
+          <strong>Cómo configurar:</strong>
+          Google Sheets → <strong>Archivo → Compartir → Publicar en la web</strong> → Hoja 1 → CSV → Publicar → Copiar URL y pegarla arriba.<br>
+          Columnas reconocidas: <code>nombre</code> | <code>precio</code> | <code>categoria</code> | <code>imagen</code> | <code>publicado</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- Excel Import -->
+    <div class="acard">
+      <div class="acard-head">
+        <h3>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Cargar desde Excel / CSV
+        </h3>
+        <label class="btn btn-g btn-sm" style="cursor:pointer">
+          <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="12"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Subir archivo
+          <input type="file" id="excel-inp" accept=".xlsx,.xls,.csv" style="display:none" onchange="importExcel(this)"/>
+        </label>
+      </div>
+      <div class="acard-body">
+        <label class="upload-zone" for="excel-inp" id="drop-zone">
+          <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="12" y2="12"/><line x1="15" y1="15" x2="12" y2="12"/></svg>
+          <h4>Arrastrá tu archivo aquí</h4>
+          <p>Soporta .xlsx, .xls y .csv</p>
+        </label>
+        <div class="excel-hint">
+          <strong>Columnas reconocidas automáticamente</strong>
+          <code>nombre</code> / <code>producto</code> · <code>precio</code> · <code>categoria</code> / <code>rubro</code> · <code>imagen</code> · <code>publicado</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla inventario -->
+    <div class="acard">
+      <div class="acard-head">
+        <h3>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15"><path d="M9 17H7A5 5 0 017 7h2M15 7h2a5 5 0 010 10h-2M8 12h8"/></svg>
+          Inventario
+          <span class="chip" id="inv-badge">0</span>
+        </h3>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          <button class="btn btn-g btn-sm" onclick="pubSel()">✓ Publicar sel.</button>
+          <button class="btn btn-out btn-sm" onclick="despubTodos()">⊘ Despub. todos</button>
+          <button class="btn btn-danger btn-sm" onclick="limpiarInv()">🗑 Limpiar</button>
+        </div>
+      </div>
+      <div class="acard-body" style="padding:14px">
+        <div class="inv-toolbar">
+          <input type="text" class="inv-search" id="inv-search" placeholder="🔍  Buscar..." oninput="buscarInv()"/>
+          <select id="inv-cat" class="cat-sel" onchange="buscarInv()" style="border-radius:var(--r)">
+            <option value="">Todas las categorías</option>
+          </select>
+          <span class="inv-info" id="inv-info"></span>
+        </div>
+        <div class="sel-row">
+          <input type="checkbox" id="sel-all" onchange="toggleAll(this)"/>
+          <label for="sel-all" style="cursor:pointer">Sel/Desel. página</label>
+          <span class="pub-lbl" id="pub-lbl"></span>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>✓</th><th>#</th><th>Producto</th>
+                <th style="min-width:110px">Precio</th>
+                <th>Estado</th>
+                <th style="min-width:210px">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="inv-tbody"></tbody>
+          </table>
+          <div id="inv-empty" class="hidden" style="padding:40px;text-align:center;color:var(--text2);font-size:.83rem">
+            📂 Importá un Excel o sincronizá desde GitHub para ver el inventario.
+          </div>
+        </div>
+        <div class="pag" id="paginacion">
+          <span class="pag-info" id="pag-info"></span>
+          <div class="pag-btns" id="pag-btns"></div>
+          <div class="pj">Ir a página:<input type="number" id="pj-inp" min="1" onkeydown="if(event.key==='Enter')jumpPage()"/></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ofertas admin -->
+    <div class="acard">
+      <div class="acard-head">
+        <h3>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15"><path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+          Ofertas especiales
+          <span class="chip" id="of-badge">0</span>
+        </h3>
+        <div style="display:flex;gap:7px">
+          <button class="btn btn-g btn-sm" onclick="abrirMOf(null)">+ Nueva</button>
+          <label class="btn btn-out btn-sm" style="cursor:pointer">
+            📥 Importar
+            <input type="file" id="of-xl" accept=".xlsx,.xls,.csv" style="display:none" onchange="importOfXl(this)"/>
+          </label>
+        </div>
+      </div>
+      <div class="acard-body" style="padding:14px">
+        <div class="oac-grid" id="oac-grid">
+          <div id="of-empty" style="grid-column:1/-1;padding:28px;text-align:center;color:var(--text2);border:2px dashed var(--border);border-radius:var(--r);font-size:.82rem">
+            Sin ofertas. Hacé clic en "+ Nueva" para agregar.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Backup -->
+    <div class="backup-bar">
+      <div class="backup-left">
+        <div class="backup-ico">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="17"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <div>
+          <div style="font-size:.82rem;font-weight:700;color:var(--text)">Respaldo del inventario</div>
+          <div style="font-size:.7rem;color:var(--text2);margin-top:1px">Exportá para guardar · Importá para restaurar</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span id="stor-status" class="stor-ok">⬤ —</span>
+        <button class="btn btn-out btn-sm" onclick="exportJSON()">📤 Exportar JSON</button>
+        <label class="btn btn-g btn-sm" style="cursor:pointer">
+          📥 Importar JSON
+          <input type="file" id="json-inp" accept=".json" style="display:none" onchange="importJSON(this)"/>
+        </label>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+<!-- MODAL AUTH -->
+<div class="modal-bg" id="auth-modal">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-head">
+      <h3>Acceso Administrador</h3>
+      <button class="modal-close" onclick="cerrarAuth()">✕</button>
+    </div>
+    <div class="modal-body" style="text-align:center">
+      <div class="auth-ico">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="26"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      </div>
+      <p style="font-size:.82rem;color:var(--text2);margin-bottom:18px">Panel privado. Ingresá la clave para continuar.</p>
+      <div class="auth-inp-wrap">
+        <input type="password" id="auth-inp" class="auth-inp" placeholder="••••••••••" onkeydown="if(event.key==='Enter')checkPass()"/>
+        <button class="auth-eye" onclick="toggleEye()">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="17"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <div class="auth-err" id="auth-err"></div>
+      <button class="btn btn-g" style="width:100%;justify-content:center;margin-bottom:8px" onclick="checkPass()">Ingresar</button>
+      <button class="btn btn-out" style="width:100%;justify-content:center" onclick="cerrarAuth()">Cancelar</button>
+      <p style="font-size:.7rem;color:var(--text2);margin-top:8px" id="auth-hint"></p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR PRODUCTO -->
+<div class="modal-bg" id="edit-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>✏️ Editar producto</h3>
+      <button class="modal-close" onclick="cerrarEdit()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:.78rem;font-weight:600;color:var(--text);background:var(--bg);padding:9px 12px;border-radius:var(--r);border:1px solid var(--border);margin-bottom:14px" id="edit-lbl"></div>
+      <div class="img-prev" id="edit-prev"><div style="font-size:.77rem;color:var(--text2)">Sin imagen</div></div>
+      <div class="fg"><label>URL de imagen</label>
+        <input type="url" id="edit-img" class="fi" placeholder="https://raw.githubusercontent.com/..." oninput="prevEdit()"/>
+        <div style="font-size:.68rem;color:var(--text2);margin-top:4px">💡 Clic derecho sobre la imagen en GitHub → "Copiar dirección de imagen"</div>
+      </div>
+      <div class="fg"><label>Precio</label>
+        <input type="text" id="edit-price" class="fi" placeholder="Ej: 1250"/>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn btn-out" onclick="cerrarEdit()">Cancelar</button>
+        <button class="btn btn-g" onclick="guardarEdit()">
+          <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="13"><path d="M5 12l5 5L20 7"/></svg>
+          Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL OFERTA -->
+<div class="modal-bg" id="of-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="of-modal-title">Nueva oferta</h3>
+      <button class="modal-close" onclick="cerrarMOf()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="img-prev" id="of-prev"><div style="font-size:.77rem;color:var(--text2)">Sin imagen</div></div>
+      <div class="fg"><label>Nombre *</label><input type="text" id="of-nom" class="fi" placeholder="Actron 400mg x 20"/></div>
+      <div class="fgrow">
+        <div class="fg"><label>Precio original ($)</label><input type="number" id="of-old" class="fi" placeholder="2500" oninput="calcPct()"/></div>
+        <div class="fg"><label>Precio oferta ($) *</label><input type="number" id="of-new" class="fi" placeholder="1800" oninput="calcPct()"/></div>
+      </div>
+      <div class="pct-box"><span class="pct-lbl">Descuento calculado:</span><span class="pct-val" id="of-pct">—</span></div>
+      <div class="fgrow">
+        <div class="fg"><label>Categoría</label><input type="text" id="of-cat" class="fi" placeholder="Analgésicos"/></div>
+        <div class="fg"><label>¿Publicada?</label>
+          <select id="of-pub" class="fi" style="cursor:pointer">
+            <option value="SI">✅ Sí — visible</option>
+            <option value="NO">⚪ No — oculta</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label>URL de imagen</label>
+        <input type="url" id="of-img" class="fi" placeholder="https://..." oninput="prevOf()"/>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn btn-out" onclick="cerrarMOf()">Cancelar</button>
+        <button class="btn btn-g" onclick="guardarOf()">Guardar oferta</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+// ══════════ CONSTANTES ══════════
+const PASS     = 'alma3402!';
+const WA_NUM   = '541130858200';
+const PP       = 25;
+const GH_URLS  = [
+  'https://cdn.jsdelivr.net/gh/Pelu-garmendia/imagenes-farmacia@main/inventario.json',
+  'https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/inventario.json',
+  'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/inventario.json')
+];
+
+// ══════════ STORAGE ══════════
+const S = {
+  get(k){ try{return JSON.parse(localStorage.getItem('fg4_'+k))}catch{return null} },
+  set(k,v){ try{localStorage.setItem('fg4_'+k,JSON.stringify(v));return true}catch(e){if(e.name==='QuotaExceededError')toast('⚠ Almacenamiento lleno. Exportá el JSON.','err');return false} },
+  del(k){ try{localStorage.removeItem('fg4_'+k)}catch{} }
+};
+
+// ══════════ ESTADO ══════════
+// Inventario embebido — carga instantánea sin necesitar GitHub
+const INV_DEFAULT = [{"id":1778871621790.9788,"name":"Next Cap Bl","price":"","priceNum":0,"category":"Antigripal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/001_Next_Cap_Bl.jpg"},{"id":1778871621791.7502,"name":"Next","price":"","priceNum":0,"category":"Antigripal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/002_Next.jpg"},{"id":1778871621792.7524,"name":"Next Sob","price":"","priceNum":0,"category":"Antigripal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/003_Next_Sob.jpg"},{"id":1778871621793.9563,"name":"Tabcin Grip","price":"","priceNum":0,"category":"Antigripal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/004_Tabcin_Grip.jpg"},{"id":1778871621794.1992,"name":"Tabcin Plus","price":"","priceNum":0,"category":"Antigripal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/005_Tabcin_Plus.jpg"},{"id":1778871621795.9263,"name":"Bio-grip","price":"","priceNum":0,"category":"Antigripal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/006_Bio-grip.jpg"},{"id":1778871621796.461,"name":"Vivita Forte Sob","price":"","priceNum":0,"category":"Antigripal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/007_Vivita_Forte_Sob.jpg"},{"id":1778871621797.8179,"name":"Vick Te","price":"","priceNum":0,"category":"Antigripal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/008_Vick_Te.jpg"},{"id":1778871621798.8342,"name":"Vick Forte Te","price":"","priceNum":0,"category":"Antigripal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/009_Vick_Forte_Te.jpg"},{"id":1778871621799.52,"name":"Redoxon Vitamina C","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/010_Redoxon_Vitamina_C.jpg"},{"id":1778871621800.8855,"name":"Berocca Performance","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/011_Berocca_Performance.jpg"},{"id":1778871621801.8154,"name":"Total Magnesiano Vitalizante","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/012_Total_Magnesiano_Vitalizante.jpg"},{"id":1778871621802.1506,"name":"Supradyn Comp","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/013_Supradyn_Comp.jpg"},{"id":1778871621803.4778,"name":"Supradyn Eff","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/014_Supradyn_Eff.jpg"},{"id":1778871621804.6646,"name":"102 Mujer","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/015_102_Mujer.jpg"},{"id":1778871621805.8855,"name":"102 Plus","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/016_102_Plus.jpg"},{"id":1778871621806.6172,"name":"Vitaminway Magnesio","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/017_Vitaminway_Magnesio.jpg"},{"id":1778871621807.1042,"name":"Vitaminway Colageno","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/018_Vitaminway_Colageno.jpg"},{"id":1778871621808.0964,"name":"Vitaminway Bisciglinato","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/019_Vitaminway_Bisciglinato.jpg"},{"id":1778871621809.2363,"name":"Vaseline Lip","price":"","priceNum":0,"category":"Labiales","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/020_Vaseline_Lip.jpg"},{"id":1778871621810.4219,"name":"Nivea Labello","price":"","priceNum":0,"category":"Labiales","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/021_Nivea_Labello.jpg"},{"id":1778871621811.881,"name":"Dove Serum Corporal","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/022_Dove_Serum_Corporal.avif"},{"id":1778871621812.4727,"name":"Dermaglos Gel Dia y Noche","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/023_Dermaglos%20Gel_Dia_y_Noche.webp"},{"id":1778871621813.9678,"name":"Dermaglos Prot Sol Facial","price":"","priceNum":0,"category":"Protector Solar","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/024_Dermaglos_Prot_Sol_Facial.png"},{"id":1778871621814.093,"name":"La Roche-Posay Thermale","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/025_La_Roche-Posay_Thermale.jpg"},{"id":1778871621815.828,"name":"Dove Serum Spray","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/026_Dove_Serum_Spray.webp"},{"id":1778871621816.642,"name":"Neutrogena Hydro - Boost","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/027_Neutrogena_Hydro%20-%20Boost.jpg"},{"id":1778871621817.0396,"name":"Cetaphil Locion Limp","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/028_Cetaphil_Locion_Limp.webp"},{"id":1778871621818.4666,"name":"Dermaglos Leche de Limp","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/029_Dermaglos_Leche_de_Limp.jpg"},{"id":1778871621819.2617,"name":"Garnier Serum Vit C","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/030_Garnier_Serum_Vit_C.jpg"},{"id":1778871621820.2024,"name":"Garnier Serum Ac Salicilico","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/031_Garnier_%20Serum_Ac_Salicilico.png"},{"id":1778871621821.1448,"name":"Dermaglos Serum Niacindamida","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/032_Dermaglos_Serum_Niacindamida.webp"},{"id":1778871621822.293,"name":"Dermaglos Serum Ac Hialuronico","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/033_Dermaglos_Serum_Ac_Hialuronico.webp"},{"id":1778871621823.3225,"name":"Garnier Agua Micelar","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/034_Garnier_Agua_Micelar.jpg"},{"id":1778871621824.6716,"name":"Adermicina Agua Micelar","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/035_Adermicina_Agua_Micelar.jpg"},{"id":1778871621825.352,"name":"Aerotina (Loratadina)","price":"","priceNum":0,"category":"Alergias","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/036_Aerotina_Loratadina.jpg"},{"id":1778871621826.6143,"name":"Refenax Antialerigco","price":"","priceNum":0,"category":"Alergias","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/037_Refenax_Antialerigco.jpg"},{"id":1778871621827.8782,"name":"Alernix","price":"","priceNum":0,"category":"Alergias","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/038_Alernix.jpg"},{"id":1778871621828.1892,"name":"Gripaben Aller (cetirizina)","price":"","priceNum":0,"category":"Alergias","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/039_Gripaben_Aller_cetirizina.jpg"},{"id":1778871621829.9966,"name":"Alernix Spy","price":"","priceNum":0,"category":"Alergias","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/040_Alernix_Spray.webp"},{"id":1778871621830.6938,"name":"Refenax Gts Nas","price":"","priceNum":0,"category":"Alergias","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/041_Refenax_Gts_Nas.jpg"},{"id":1778871621831.5376,"name":"Actron 2%","price":"","priceNum":0,"category":"Pediatría","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/042_Actron_2.jpg"},{"id":1778871621832.679,"name":"Actron 4 %","price":"","priceNum":0,"category":"Pediatría","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/043_Actron_4.jpg"},{"id":1778871621833.409,"name":"Valmax 2 %","price":"","priceNum":0,"category":"Pediatría","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/044_Valmax_2.jpg"},{"id":1778871621834.358,"name":"Valmax 4 %","price":"","priceNum":0,"category":"Pediatría","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/045_Valmax_4.jpg"},{"id":1778871621835.2852,"name":"Ibupirac 2 %","price":"","priceNum":0,"category":"Pediatría","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/046_Ibupirac_2.jpg"},{"id":1778871621836.0996,"name":"Ibupirac 4 %","price":"","priceNum":0,"category":"Pediatría","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/047_Ibupirac_4.jpg"},{"id":1778871621837.0571,"name":"Novalgina Jbe","price":"","priceNum":0,"category":"Pediatría","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/048_Novalgina_Jbe.jpg"},{"id":1778871621838.738,"name":"Actron 600","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/049_Actron_600.jpg"},{"id":1778871621839.4863,"name":"Fabogesic 600","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/050_Fabogesic_600.jpg"},{"id":1778871621840.232,"name":"Actron 400","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/051_Actron_400.jpg"},{"id":1778871621841.2156,"name":"Fabogesic 400","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/052_Fabogesic_400.jpg"},{"id":1778871621842.6768,"name":"Bisolvon Ad","price":"","priceNum":0,"category":"Tos/Garganta","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/053_Bisolvon_Ad.jpg"},{"id":1778871621843.705,"name":"Bisolvon Ped","price":"","priceNum":0,"category":"Tos/Garganta","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/054_Bisolvon_Ped.jpg"},{"id":1778871621844.7642,"name":"Pulmosan Ad","price":"","priceNum":0,"category":"Tos/Garganta","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/055_Pulmosan_Ad.jpg"},{"id":1778871621845.0427,"name":"Pulmosan Ped","price":"","priceNum":0,"category":"Tos/Garganta","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/056_Pulmosan_Ped.jpg"},{"id":1778871621846.4285,"name":"Expectosan ad","price":"","priceNum":0,"category":"Tos/Garganta","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/057_Expectosan_ad.jpg"},{"id":1778871621847.8157,"name":"Expectosan Ped","price":"","priceNum":0,"category":"Tos/Garganta","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/058_Expectosan_Ped.jpg"},{"id":1778871621848.4387,"name":"Estrella Baby","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/059_Estrella_Baby.jpg"},{"id":1778871621849.8225,"name":"Pampers BabySan","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/060_Pampers_BabySan.jpg"},{"id":1778871621850.536,"name":"Hipoglós Cuidado Diario","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/061_Hipoglos_Cuidado_Diario.jpg"},{"id":1778871621851.7634,"name":"Hipoglos VL","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/062_Hipoglos_VL.png"},{"id":1778871621852.7883,"name":"Pampers Toallitas Húmedas","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/063_Pampers_Toallitas_Humedas.jpg"},{"id":1778871621853.058,"name":"Sancor Brik","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/064_Sancor_Brik.jpg"},{"id":1778871621854.9563,"name":"Sancor Polvo","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/065_Sancor_Polvo.jpg"},{"id":1778871621855.3813,"name":"Nutrilon Brik","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/066_Nutrilon_Brik.jpg"},{"id":1778871621856.6414,"name":"Nutrilon Polvo","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/067_Nutrilon_Polvo.jpg"},{"id":1778871621857.33,"name":"Vital Brik","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/068_Vital_Brik.jpg"},{"id":1778871621858.7065,"name":"Vital Polvo","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/069_Vital_Polvo.jpg"},{"id":1778871621859.3232,"name":"Nestum","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/070_Nestum.webp"},{"id":1778871621860.945,"name":"Vogue Maq Liq","price":"","priceNum":0,"category":"Maquillaje","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/071_Vogue_Maq_Liq.jpg"},{"id":1778871621861.894,"name":"Vogue Base","price":"","priceNum":0,"category":"Maquillaje","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/072_Vogue_Base.jpg"},{"id":1778871621862.0525,"name":"Vogue Corrector de Ojeras","price":"","priceNum":0,"category":"Maquillaje","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/073_Vogue_Corrector_de_Ojeras.jpg"},{"id":1778871621863.9844,"name":"Idi Labiales","price":"","priceNum":0,"category":"Maquillaje","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/074_Idi_Labiales.jpg"},{"id":1778871621864.9998,"name":"Ciel","price":"","priceNum":0,"category":"Perfumes Fem","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/075_Ciel.jpg"},{"id":1778871621865.257,"name":"Carocoure","price":"","priceNum":0,"category":"Perfumes Fem","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/076_Carocoure.jpg"},{"id":1778871621866.2432,"name":"Paula Cahen","price":"","priceNum":0,"category":"Perfumes Fem","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/077_Paula_Cahen.jpg"},{"id":1778871621867.9807,"name":"Kevin","price":"","priceNum":0,"category":"Perfumes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/078_Kevin.jpg"},{"id":1778871621868.4001,"name":"Kevigston 1989","price":"","priceNum":0,"category":"Perfumes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/079_Kevigston.jpg"},{"id":1778871621869.9243,"name":"Colbert","price":"","priceNum":0,"category":"Perfumes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/080_Colbert.jpg"},{"id":1778871621870.4153,"name":"Boos Intense Blue","price":"","priceNum":0,"category":"Perfumes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/081_Boos.jpg"},{"id":1778871621871.426,"name":"Acting Dupes","price":"","priceNum":0,"category":"Perf. Arabes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/082_Acting%20Dupes.webp"},{"id":1778871621872.28,"name":"Aveno Emul","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/083_Aveno_Emul.jpg"},{"id":1778871621873.254,"name":"Aveno Facial","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/084_Aveno_Facial.jpg"},{"id":1778871621874.0432,"name":"Aveno Jab","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/085_Aveno_Jab.jpg"},{"id":1778871621875.3757,"name":"Aveno Sh","price":"","priceNum":0,"category":"Capilares","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/086_Aveno_Sh.jpg"},{"id":1778871621876.9985,"name":"Aveno Acond","price":"","priceNum":0,"category":"Capilares","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/087_Aveno_Acond.jpg"},{"id":1778871621877.1045,"name":"Megacistin Sh","price":"","priceNum":0,"category":"Capilares","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/088_Megacistin_Sh.jpg"},{"id":1778871621878.171,"name":"Megacistin Max Sh","price":"","priceNum":0,"category":"Capilares","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/089_Megacistin_Max_Sh.jpg"},{"id":1778871621879.1497,"name":"Megacistin Max x 30","price":"","priceNum":0,"category":"Capilares","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/090_Megacistin_Max_x_30.jpg"},{"id":1778871621880.4219,"name":"Megacistin Blocker x 30","price":"","priceNum":0,"category":"Capilares","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/091_Megacistin_Blocker_x_30.jpg"},{"id":1778871621881.165,"name":"Iyosei Prot Termico","price":"","priceNum":0,"category":"Capilares","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/092_Iyosei_Prot_Termico.webp"},{"id":1778871621882.1453,"name":"Dove Bond Repair","price":"","priceNum":0,"category":"Capilares","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/093_Dove_Bond_Repair.jpg"},{"id":1778871621883.4404,"name":"Inecto Oleo","price":"","priceNum":0,"category":"Capilares","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/094_Inecto_Oleo.jpg"},{"id":1778871621884.7812,"name":"Biferdil Ampollas","price":"","priceNum":0,"category":"Capilares","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/095_Biferdil_Ampollas.jpg"},{"id":1778871621885.7727,"name":"Nivea Body Milk x 400","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/096_Nivea_Body_Milk.jpg"},{"id":1778871621886.4434,"name":"Nivea Hidratacion Express x 125","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/097_Nivea_Hidratacion_Express.webp"},{"id":1778871621887.471,"name":"Rexona All Body","price":"","priceNum":0,"category":"Desodorantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/098_Rexona_All_Body.jpg"},{"id":1778871621888.4617,"name":"Dove All Body","price":"","priceNum":0,"category":"Desodorantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/099_Dove_All_Body.jpg"},{"id":1778871621889.9304,"name":"Dove Clinical Cr","price":"","priceNum":0,"category":"Desodorantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/100_Dove_Clinical_Cr.jpg"},{"id":1778871621890.9849,"name":"Rexona Clinical Cr","price":"","priceNum":0,"category":"Desodorantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/101_Rexona_Clinical_Cr.jpg"},{"id":1778871621891.3687,"name":"Rexona Clinical Deo","price":"","priceNum":0,"category":"Desodorantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/102_Rexona_Clinical_Deo.jpg"},{"id":1778871621892.0613,"name":"Cerave Crema Hid","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/103_Cerave_Crema_Hid.jpg"},{"id":1778871621893.1816,"name":"Cerave Limp Hid","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/104_Cerave_Limp_Hid.jpg"},{"id":1778871621894.7024,"name":"Tensiometro Dig","price":"","priceNum":0,"category":"Tecno","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/105_Tensiometro_Dig.jpg"},{"id":1778871621895.5754,"name":"Sacaleche Dig","price":"","priceNum":0,"category":"Tecno","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/106_Sacaleche_Dig.jpg"},{"id":1778871621896.5,"name":"Aspirador Nasal Dig","price":"","priceNum":0,"category":"Tecno","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/107_Aspirador_Nasal_Dig.jpg"},{"id":1778871621897.8872,"name":"Balanza Dig","price":"","priceNum":0,"category":"Tecno","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/108_Balanza_Dig.jpg"},{"id":1778871621898.6199,"name":"Oximetro","price":"","priceNum":0,"category":"Tecno","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/109_Oximetro.jpg"},{"id":1778871621899.6057,"name":"Nebulizadores Coronet","price":"","priceNum":0,"category":"Tecno","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/110_Nebulizadores_Coronet.jpg"},{"id":1778871621900.64,"name":"Cintas Neuromusculares","price":"","priceNum":0,"category":"Rehabilitacion","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/111_Cintas_Neuromusculares.jpg"},{"id":1778871621901.7424,"name":"Plax","price":"","priceNum":0,"category":"Enj Bucal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/112_Plax.jpg"},{"id":1778871621902.5598,"name":"Listerine","price":"","priceNum":0,"category":"Enj Bucal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/113_Listerine.jpg"},{"id":1778871621903.1462,"name":"Nivea Body Milk x 250","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/096_Nivea_Body_Milk.jpg"},{"id":1778871621904.1821,"name":"Nivea Hidratacion Express x 250","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/097_Nivea_Hidratacion_Express.webp"},{"id":1778871621905.3071,"name":"Nivea Hidratacion Express x 400","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/097_Nivea_Hidratacion_Express.webp"},{"id":1778871621906.2173,"name":"Sensodyne Blanq","price":"","priceNum":0,"category":"Pasta Dental","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/114_Sensodyne_Blanq.jpg"},{"id":1778871621907.3357,"name":"Teatrical Coreana","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/115_Teatrical_Coreana.webp"},{"id":1778871621908.3809,"name":"Whey Protein","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/116_Whey.webp"},{"id":1778871621909.4783,"name":"Mujercitas Funny","price":"","priceNum":0,"category":"Perfumes Inf","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/117_Mujercitas_Funny.webp"},{"id":1778871621910.911,"name":"Adermicina Facial","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/118_Adermicina_Facial.webp"},{"id":1778871621911.0898,"name":"Club Pibes","price":"","priceNum":0,"category":"Perfumes Inf","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/119_Club_Pibes.jpeg"},{"id":1778871621912.1611,"name":"Ena Creatina","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/120_Ena_Creatina.webp"},{"id":1778871621913.474,"name":"Zona Libre","price":"","priceNum":0,"category":"Pediculicida","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/121_Zona_Libre.webp"},{"id":1778871621914.6467,"name":"One Touch Select","price":"","priceNum":0,"category":"Tecno","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/122_One_Touch_Select.webp"},{"id":1778871621915.1902,"name":"Caladryl Loc","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/123_Caladryl_Loc.webp"},{"id":1778871621916.4539,"name":"Cheeky Girl","price":"","priceNum":0,"category":"Perfumes Inf","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/124_Cheeky_Girl.webp"},{"id":1778871621917.694,"name":"Holomagnesio x350","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/125_Holomagnesio_x350.png"},{"id":1778871621918.7925,"name":"Colgate","price":"","priceNum":0,"category":"Pasta Dental","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/126_Colgate.webp"},{"id":1778871621919.1895,"name":"Ratisali Cbd","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/127_Ratisali_Cbd.webp"},{"id":1778871621920.018,"name":"One Touch Select Tiras","price":"","priceNum":0,"category":"Tecno","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/128_One_Touch_Select_Tiras.webp"},{"id":1778871621922.7747,"name":"Asepxia Jab Fte","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/129_Asepxia_Jab_Fte.webp"},{"id":1778871621923.7617,"name":"Ponds S","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/130_Ponds_S.jpg"},{"id":1778871621924.911,"name":"Mujercitas Sunny","price":"","priceNum":0,"category":"Perfumes Inf","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/131_Mujercitas_Sunny.webp"},{"id":1778871621925.689,"name":"Rayito Prot 65","price":"","priceNum":0,"category":"Protector Solar","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/132_Rayito_Fps_65.jpg"},{"id":1778871621926.9292,"name":"Rayito Prot Fac 50","price":"","priceNum":0,"category":"Protector Solar","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/133_Rayito_Prot_Fac_50.png"},{"id":1778871621927.4885,"name":"Adermicina Antiacne","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/134_Adermicina_Antiacne.webp"},{"id":1778871621928.961,"name":"Adermicina Serum Dia y Noche","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/138_Adermicina_Serum_Dia_y_Noche.webp"},{"id":1778871621929.8762,"name":"Atomo Cbd","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/139_Atomo_Cbd.jpg"},{"id":1778871621930.3958,"name":"Atomo Fte","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/140_Atomo_Fte.jpg"},{"id":1778871621931.977,"name":"Bagovit A Emul","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/141_Bagovit_Emul.jpg"},{"id":1778871621932.2654,"name":"Bagovit A Class Cr","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/142_Bagovit_A_Class_Cr.jpg"},{"id":1778871621933.1882,"name":"Bengue Gel","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/143_Bengue_Gel.png"},{"id":1778871621934.0588,"name":"Onduladora Silfab","price":"","priceNum":0,"category":"Tecno","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/144_Onduladora_Silfab.jpg"},{"id":1778871621935.2576,"name":"Paco Perf","price":"","priceNum":0,"category":"Perfumes Inf","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/145_Paco_Perf.png"},{"id":1778871621936.8833,"name":"Centrum Hombre","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/146_Centrum_Hombre.avif"},{"id":1778871621937.8171,"name":"Cheeky Boys","price":"","priceNum":0,"category":"Perfumes Inf","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/147_Cheeky_Boys.webp"},{"id":1778871621938.54,"name":"Colgate Herbal","price":"","priceNum":0,"category":"Pasta Dental","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/148_Colgate_Herbal.webp"},{"id":1778871621939.973,"name":"Bagovit A Light Cr","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/149_Bagovit_A_Light_Cr.jpg"},{"id":1778871621940.4355,"name":"Ponds Rejuveness","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/150_Ponds_Rejuve.jpg"},{"id":1778871621941.3867,"name":"Danielle Boys","price":"","priceNum":0,"category":"Perfumes Inf","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/151_Danielle_Boy.webp"},{"id":1778871621942.598,"name":"Optimize","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/152_Optimize.webp"},{"id":1778871621943.1345,"name":"Accucheck Tiras","price":"","priceNum":0,"category":"Tecno","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/153_Accucheck_Tiras.webp"},{"id":1778871621944.029,"name":"Rayito Ped 65","price":"","priceNum":0,"category":"Protector Solar","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/154_Rayito_65_Ped.webp"},{"id":1778871621945.5796,"name":"Asepxia Adapaleno","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/155_Asepxia_Adapaleno.webp"},{"id":1778871621946.8032,"name":"Plancha Pelo Ceramic","price":"","priceNum":0,"category":"Tecno","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/156_Plancha_Pelo_Ceramic_Shine.webp"},{"id":1778871621947.6057,"name":"Danielle Baby","price":"","priceNum":0,"category":"Perfumes Inf","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/157_Danielle_Baby.jpg"},{"id":1778871621948.847,"name":"Nopucid Touch","price":"","priceNum":0,"category":"Pediculicida","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/158_Nopucid_Touch.jpg"},{"id":1778871621949.5984,"name":"Nopucid Rep","price":"","priceNum":0,"category":"Pediculicida","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/159_Nopucid_Rep.jpg"},{"id":1778871621950.853,"name":"Zona Libre Kit","price":"","priceNum":0,"category":"Pediculicida","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/160_Zona_Libre_Kit.jpg"},{"id":1778871621951.3809,"name":"Zona Libre Bio Rep","price":"","priceNum":0,"category":"Pediculicida","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/161_Zona_Libre_Bio_Rep.jpg"},{"id":1778871621952.6003,"name":"Cicatricure Beauty","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/162_Cicatricure_Beauty_Care.jpg"},{"id":1778871621953.0256,"name":"Cicatricure Gel","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/163_Cicatricure_Gel.jpg"},{"id":1778871621954.3801,"name":"Cicatricure Antiarrugas","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/164_Cicatricure_Antiarrugas.jpg"},{"id":1778871621955.209,"name":"Cicatricure Antimanchas","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/165_Cicatricure_Antimanchas.jpg"},{"id":1778871621956.3162,"name":"Ensure Lata x 400","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/166_Ensure_Lata_x400.jpg"},{"id":1778871621957.716,"name":"Ensure Caja x 800","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/167_Ensure_Caja_x800.jpg"},{"id":1778871621958.964,"name":"Ensure Plus","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/168_Ensure_Plus.jpg"},{"id":1778871621959.5046,"name":"Asepxia Jab Carbon","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/169_Asepxia_Jab_Carbon.jpg"},{"id":1778871621960.4758,"name":"Asepxia Jab Azufre","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/170_Asepxia_Jab_Azufre.jpg"},{"id":1778871621961.4905,"name":"Dove Baby Jab Liq","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/172_Dove_Jab_Shampoo.jpg"},{"id":1778871621962.7163,"name":"Dove Baby Shampoo","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/172_Dove_Jab_Shampoo.jpg"},{"id":1778871621963.4165,"name":"Dove Jab","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/173_%20Dove_Jab.jpg"},{"id":1778871621964.2275,"name":"Nopucid Kit","price":"","priceNum":0,"category":"Pediculicida","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/174_Nopucid_Kit.jpg"},{"id":1778871621965.0962,"name":"Sensodyne Original","price":"","priceNum":0,"category":"Pasta Dental","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/175_Sensodyne_Original.png"},{"id":1778871621966.9375,"name":"Ratisali Cr","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/176_Ratisali_Cr.png"},{"id":1778871621967.2083,"name":"Bepanthol Ung","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/177_Bepanthol_Ung.png"},{"id":1778871621968.7505,"name":"Megacistin Therapy","price":"","priceNum":0,"category":"Capilares","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/178_Megacistin_Therapy.png"},{"id":1778871621969.9038,"name":"Tulipan Gel","price":"","priceNum":0,"category":"Gel Intimo","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/179_Tulipan_Gel.webp"},{"id":1778871621970.8884,"name":"Tulipan Gel Calor","price":"","priceNum":0,"category":"Gel Intimo","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/180_Tulipan_Gel_Calor.webp"},{"id":1778871621971.0186,"name":"Tulipan Gel Chocolate","price":"","priceNum":0,"category":"Gel Intimo","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/181_Tulipan_Gel_Chocolate.jpeg"},{"id":1778871621972.2258,"name":"Tulipan Gel Frio","price":"","priceNum":0,"category":"Gel Intimo","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/182_Tulipan_Gel_Frio.webp"},{"id":1778871621973.8625,"name":"Hinds Roll","price":"","priceNum":0,"category":"Desodorantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/183_Hinds_Roll.jpg"},{"id":1778871621974.8904,"name":"Hinds Rosa","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/184_Hinds_Rosa.jpg"},{"id":1778871621975.722,"name":"Holomagnesio x150","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/185_Holomagnesio_x150.png"},{"id":1778871621976.4321,"name":"Gripaben Car Ant","price":"","priceNum":0,"category":"Caramelos Anestesicos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/186_Gripaben_Car_Ant.png"},{"id":1778871621977.4,"name":"Fecofar Car Ant","price":"","priceNum":0,"category":"Caramelos Anestesicos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/187_Fecofar_Car_Ant.png"},{"id":1778871621978.9692,"name":"Optium Freestyle Tiras","price":"","priceNum":0,"category":"Tecno","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/188_Optium_Freestyle_Tiras.png"},{"id":1778871621979.441,"name":"Julie","price":"","priceNum":0,"category":"Perfumes Inf","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/189_Julie_.png"},{"id":1778871621980.7146,"name":"Teatrical Aclara","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/190_Teatrical_Aclara.webp"},{"id":1778871621981.7617,"name":"Teatrical Antiarrugas","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/191_Teatrical_Antiarrugas.webp"},{"id":1778871621982.632,"name":"Up For Woman","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/192_Up_For_Woman.webp"},{"id":1778871621983.7253,"name":"Vitamina B12 Veg","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/193_Vitamina_B12_Veg.webp"},{"id":1778871621984.3774,"name":"Teatrical Humecta","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/194_Teatrical_Humecta.webp"},{"id":1778871621985.9866,"name":"Atomo Crema","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/195_Atomo_Crema.jpg"},{"id":1778871621986.1658,"name":"Bengue Crema","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/195_Bengue_Crema.jpg"},{"id":1778871621987.9917,"name":"Caladryl Cr","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/196_Caladryl_Cr.jpg"},{"id":1778871621988.1956,"name":"Isoflavonas","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/197_Isoflavonas.jpg"},{"id":1778871621989.8684,"name":"Sophie","price":"","priceNum":0,"category":"Perfumes Inf","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/197_Sophie.jpg"},{"id":1778871621990.4104,"name":"Adermicina Jab 2x1","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/198_Adermicina_Jab_2x1.jpg"},{"id":1778871621991.7544,"name":"102 Gummies","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/199_102_Gummies.jpg"},{"id":1778871621992.94,"name":"Sensodyne Multiproteccion","price":"","priceNum":0,"category":"Pasta Dental","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/200_Sensodyne_Multiproteccion.png"},{"id":1778871621993.2505,"name":"Danielle Girl","price":"","priceNum":0,"category":"Perfumes Inf","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/201_Danielle_Girl.webp"},{"id":1778871621994.2476,"name":"Bepanthol Reg","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/202_Bepanthol_Reg.avif"},{"id":1778871621995.0898,"name":"Caladryl Cuidados Intensivos","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/203_Caladryl_Cuidados_Intensivos.png"},{"id":1778871621996.2563,"name":"OralB","price":"","priceNum":0,"category":"Pasta Dental","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/204_OralB.jpg"},{"id":1778871621997.1216,"name":"Paco Surf","price":"","priceNum":0,"category":"Perfumes Inf","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/205_Paco_Surf.webp"},{"id":1778871621998.6667,"name":"Ponds B3","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/206_Ponds_B3.webp"},{"id":1778871621999.4495,"name":"Multi O","price":"","priceNum":0,"category":"Gel Intimo","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/207_Multi_O.jpg"},{"id":1778871622000.8413,"name":"Centrum Essencial","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/208_Centrum_Essencial.png"},{"id":1778871622001.2744,"name":"Rayito 65","price":"","priceNum":0,"category":"Protector Solar","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/209_Rayito_65.jpg"},{"id":1778871622002.5598,"name":"Rayito Kids 50","price":"","priceNum":0,"category":"Protector Solar","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/210_Rayito_Kids_50.webp"},{"id":1778871622003.8901,"name":"Cicatricure Corpo Rep","price":"","priceNum":0,"category":"Cremas Corporales","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/211_Cicatricure_Corpo_Rep.webp"},{"id":1778871622004.7275,"name":"Cicatricure Corpo Firmeza","price":"","priceNum":0,"category":"Cremas Corporales","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/212_Cicatricure_Corpo_Firmeza.webp"},{"id":1778871622005.3005,"name":"Cicatricure Corpo Antiestrias","price":"","priceNum":0,"category":"Cremas Corporales","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/213_Cicatricure_Corpo_Antiestrias.webp"},{"id":1778871622006.5955,"name":"Centrum Mujer","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/214_Centrum_Mujer.jpg"},{"id":1778871622007.4668,"name":"Suerox","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/1.webp"},{"id":1778871622008.6199,"name":"Chia Caps","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/chia.jpg"},{"id":1778871622009.4448,"name":"Melatol","price":"","priceNum":0,"category":"Inductor del Sueño","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/melatol.jpg"},{"id":1778871622010.7622,"name":"Melatol Plus","price":"","priceNum":0,"category":"Sedante","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/melatolp.jpg"},{"id":1778871622011.544,"name":"Melatol Dia Relax","price":"","priceNum":0,"category":"Sedante","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/melatolr.jpg"},{"id":1778871622012.9177,"name":"Neuro Armonil","price":"","priceNum":0,"category":"Inductor del Sueño","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/nueroa.jpg"},{"id":1778871622013.0044,"name":"Cvp Flebo","price":"","priceNum":0,"category":"Flebotonico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/cvp.jpg"},{"id":1778871622014.9583,"name":"Nikzon","price":"","priceNum":0,"category":"Flebotonico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/nikzon.jpg"},{"id":1778871622015.8193,"name":"Contractil Crema","price":"","priceNum":0,"category":"Antihemorroidal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/contractilc.webp"},{"id":1778871622016.5654,"name":"Contractil x 30","price":"","priceNum":0,"category":"Antihemorroidal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/contractilcap.webp"},{"id":1778871622017.1418,"name":"Rifocina Spray","price":"","priceNum":0,"category":"Antiseptico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/rifamicin.jpg"},{"id":1778871622018.9783,"name":"Pervinox Inc Gts","price":"","priceNum":0,"category":"Antiseptico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/pervinoxgts.avif"},{"id":1778871622019.14,"name":"Pervinox Inc Spray","price":"","priceNum":0,"category":"Antiseptico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/pervinoxspy.webp"},{"id":1778871622020.7717,"name":"Pervinox Jab Liq","price":"","priceNum":0,"category":"Antiseptico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/pervinoxliq.jpg"},{"id":1778871622021.298,"name":"Pervinox Jab Solido","price":"","priceNum":0,"category":"Antiseptico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/pervinoxsol.jpg"},{"id":1778871622022.6958,"name":"Merthiolate Anestesico","price":"","priceNum":0,"category":"Antiseptico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/images.jpg"},{"id":1778871622023.602,"name":"Ibuevanol","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/ibu.jpg"},{"id":1778871622024.108,"name":"Ibuevanol Forte","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/ibuforte.jpg"},{"id":1778871622025.3242,"name":"ibuevanol Max","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/ibumax.jpg"},{"id":1778871622026.33,"name":"Ibuevanol Plus","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/ibuplus.jpg"},{"id":1778871622027.0286,"name":"Ibuevanol 600","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/ibu600.jpg"},{"id":1778871622028.4343,"name":"Vitadece Gts","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/imgProducto_299_0.02697200%201283372061.jpg"},{"id":1778871622029.9148,"name":"Actron Mujer","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/actronmujer.webp"},{"id":1778871622030.6196,"name":"Actron Migra","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/actronmigra.jpg"},{"id":1778871622031.8037,"name":"Buscapina Gts","price":"","priceNum":0,"category":"Antiespasmodico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/buscagts.jpg"},{"id":1778871622032.3472,"name":"Buscapina Duo","price":"","priceNum":0,"category":"Antiespasmodico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/buscapinaduo.jpg"},{"id":1778871622033.8672,"name":"Buscapina Compos","price":"","priceNum":0,"category":"Antiespasmodico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/3.png"},{"id":1778871622034.8103,"name":"Buscapina Simple","price":"","priceNum":0,"category":"Antiespasmodico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/buscasimple.jpg"},{"id":1778871622035.265,"name":"Buscapine Perlas","price":"","priceNum":0,"category":"Antiespasmodico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/buscaperlas.jpg"},{"id":1778871622036.253,"name":"Sertal","price":"","priceNum":0,"category":"Antiespasmodico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/sertalcomp.jpg"},{"id":1778871622037.9058,"name":"Sertal Cpto","price":"","priceNum":0,"category":"Antiespasmodico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/sertacto.jpg"},{"id":1778871622038.0051,"name":"Sertal Gts","price":"","priceNum":0,"category":"Antiespasmodico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/sertalgts.jpg"},{"id":1778871622039.1013,"name":"Sertal Caps","price":"","priceNum":0,"category":"Antiespasmodico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/sertaper.jpg"},{"id":1778871622040.305,"name":"Tafirol","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/product_picture_ca632e30783d45f697424e3780b3d15d_638778226876024514_0_m.jpeg"},{"id":1778871622041.5928,"name":"Tafirol Fte","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/product_picture_c5b349234a1e4fc080b7b7adc926d556_638959701410838596_0_m.jpeg"},{"id":1778871622042.22,"name":"Tafirol 1 gr","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/tafirol1.jpg"},{"id":1778871622043.0154,"name":"Tafirol Plus","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/tafirolplus.jpg"},{"id":1778871622044.0718,"name":"Tafirol Espasmo","price":"","priceNum":0,"category":"Antiespasmodico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/tafirolespasmo.jpg"},{"id":1778871622045.7239,"name":"Tafirol Duo","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/tafirolduo.jpg"},{"id":1778871622046.3608,"name":"Tafirol Migra","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/tafiromigra.jpg"},{"id":1778871622047.8157,"name":"Anaflex","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/anafle.jpg"},{"id":1778871622048.8132,"name":"Anaflex Plus","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/4.webp"},{"id":1778871622049.8555,"name":"Empecid","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/empecidcre.jpg"},{"id":1778871622050.6975,"name":"Empecid Spy","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/empecidspray.jpg"},{"id":1778871622051.3428,"name":"Empecid Pie","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/empecidpie.jpg"},{"id":1778871622052.1487,"name":"Sinamida Cr","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/sinamidacr.jpg"},{"id":1778871622053.0708,"name":"Sinamida Polvo","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/sinamidapolvo.jpg"},{"id":1778871622054.059,"name":"Sinamida Spray","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/sinamidaspy.jpg"},{"id":1778871622055.9058,"name":"Piecidex Cr","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/piecidexcre.jpg"},{"id":1778871622056.644,"name":"Piecidex Spy","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/piecidex%20spray.jpg"},{"id":1778871622057.4165,"name":"Piecidex Polvo","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/piecidexpolvo.jpg"},{"id":1778871622058.2922,"name":"Lafedryl","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/lafedryl.jpg"},{"id":1778871622059.315,"name":"Vitaminway Colageno Flex Polvo","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/11.jpg"},{"id":1778871622060.4937,"name":"Tostop Hedera","price":"","priceNum":0,"category":"Tos/Garganta","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/tostopnatu.jpg"},{"id":1778871622061.9556,"name":"Tostop Complex","price":"","priceNum":0,"category":"Tos/Garganta","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/tostopcpl.jpg"},{"id":1778871622062.9045,"name":"Tostop Forte","price":"","priceNum":0,"category":"Tos/Garganta","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/tostopfte.jpg"},{"id":1778871622063.623,"name":"Armonil","price":"","priceNum":0,"category":"Sedante","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/5.png"},{"id":1778871622064.6445,"name":"Curflex","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/9.jpg"},{"id":1778871622065.7078,"name":"Curflex Polvo","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/8.jpg"},{"id":1778871622066.178,"name":"Curflex Aliv","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/6.jpg"},{"id":1778871622067.9485,"name":"Curflex Triple Accion","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/7.jpg"},{"id":1778871622068.459,"name":"Curflex Advance","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/10.jpg"},{"id":1778871622069.3142,"name":"Vitaminway Colageno Flex","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/12.jpg"},{"id":1778871622070.0654,"name":"Vitaminway Ac Hialuronico","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/13.jpg"},{"id":1778871622071.2383,"name":"Vitaminway Colageno + Ac Hialuronico","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/14.jpg"},{"id":1778871622072.696,"name":"Vitaminway Citrato de Magnesio","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/15.webp"},{"id":1778871622073.6062,"name":"Vitaminway Probiotico + Vitaminas","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/16.jpg"},{"id":1778871622074.1377,"name":"Acting Dupes V2","price":"","priceNum":0,"category":"Perf. Arabes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/17.jpg"},{"id":1778871622075.4888,"name":"Acting Dupes V3","price":"","priceNum":0,"category":"Perf. Arabes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/18.jpg"},{"id":1778871622076.859,"name":"Acting Dupes V4","price":"","priceNum":0,"category":"Perf. Arabes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/19.jpg"},{"id":1778871622077.4087,"name":"Paula Cahen Alma","price":"","priceNum":0,"category":"Perfumes Fem","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/20.jpg"},{"id":1778871622078.722,"name":"Carocoure Amore","price":"","priceNum":0,"category":"Perfumes Fem","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/21.webp"},{"id":1778871622079.5986,"name":"Nivea Lata Chica","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/22.jpg"},{"id":1778871622080.428,"name":"Nivea Lata Grande","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/22.jpg"},{"id":1778871622081.5483,"name":"Dermaglos Crema","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/23.jpg"},{"id":1778871622082.9634,"name":"Dermaglos Emul","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/24.webp"},{"id":1778871622083.4404,"name":"Dermaglos Gel de Limpieza","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/25.webp"},{"id":1778871622084.5923,"name":"Adermicina Cr","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/27.png"},{"id":1778871622085.3455,"name":"Adermcina 2 x 1","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/26.webp"},{"id":1778871622086.1853,"name":"Berocca Plus Comp","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/28.jpg"},{"id":1778871622088.6377,"name":"Supradyn Magnesio","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/29.webp"},{"id":1778871622089.9111,"name":"Mamadera Gigante Disp","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/30.png"},{"id":1778871622090.3562,"name":"Dove Deo","price":"","priceNum":0,"category":"Desodorantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/31.jpg"},{"id":1778871622091.4805,"name":"Rexona Deo","price":"","priceNum":0,"category":"Desodorantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/32.webp"},{"id":1778871622092.208,"name":"Dove Men","price":"","priceNum":0,"category":"Desodorantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/33.webp"},{"id":1778871622093.204,"name":"Rexona Men","price":"","priceNum":0,"category":"Desodorantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/34.jpeg"},{"id":1778871622094.8696,"name":"Secret Clinical","price":"","priceNum":0,"category":"Desodorantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/35.jpg"},{"id":1778871622095.9636,"name":"Secret","price":"","priceNum":0,"category":"Desodorantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/36.jpg"},{"id":1778871622096.356,"name":"Kevin Deo","price":"","priceNum":0,"category":"Desodorantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/37.jpg"},{"id":1778871622097.6355,"name":"Lomecan Cr Vag","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/38.jpg"},{"id":1778871622098.8838,"name":"Lomecan Fluco","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/39.jpg"},{"id":1778871622099.7178,"name":"Lomecan Ov x 1","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/40.jpg"},{"id":1778871622100.0703,"name":"Lomecan Ov x 3","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/41.jpg"},{"id":1778871622101.507,"name":"Fenogynol Ov x 6","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/42.jpg"},{"id":1778871622102.1409,"name":"Evatest","price":"","priceNum":0,"category":"Test","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/43.jpg"},{"id":1778871622103.3574,"name":"Evatest Easy","price":"","priceNum":0,"category":"Test","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/45.jpg"},{"id":1778871622104.079,"name":"Evatest Digital","price":"","priceNum":0,"category":"Test","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/44.jpg"},{"id":1778871622105.9368,"name":"B-Quick","price":"","priceNum":0,"category":"Test","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/46.jpg"},{"id":1778871622106.0999,"name":"Agarol Pur Sob","price":"","priceNum":0,"category":"Laxante","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/47.jpg"},{"id":1778871622107.8977,"name":"Agarol Gel","price":"","priceNum":0,"category":"Laxante","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/49.png"},{"id":1778871622108.3645,"name":"Agarol Liq","price":"","priceNum":0,"category":"Laxante","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/48.jpg"},{"id":1778871622109.924,"name":"Dulcolax","price":"","priceNum":0,"category":"Laxante","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/51.jpg"},{"id":1778871622110.7952,"name":"Dulcolax Gts","price":"","priceNum":0,"category":"Laxante","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/52.webp"},{"id":1778871622111.603,"name":"Hepatalgina Comp","price":"","priceNum":0,"category":"Antiespasmodico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/55.jpg"},{"id":1778871622112.7734,"name":"Hepatalgina Gts Ch","price":"","priceNum":0,"category":"Antiespasmodico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/53.jpg"},{"id":1778871622113.8945,"name":"Hepatalgina Gts Gr","price":"","priceNum":0,"category":"Antiespasmodico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/53.jpg"},{"id":1778871622114.9248,"name":"Hepatalgina 9 Yerbas","price":"","priceNum":0,"category":"Antiespasmodico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/56.jpg"},{"id":1778871622115.2947,"name":"Curitas Aqua 8x10","price":"","priceNum":0,"category":"Primeros Aux","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/57.jpg"},{"id":1778871622116.013,"name":"Aceite JyJ","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/59.jpg"},{"id":1778871622117.3933,"name":"Colonia JyJ","price":"","priceNum":0,"category":"Bebé","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/60.jpg"},{"id":1778871622118.8232,"name":"Sulfatiazol Pvo","price":"","priceNum":0,"category":"Primeros Aux","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/61.webp"},{"id":1778871622119.46,"name":"Alcohol","price":"","priceNum":0,"category":"Primeros Aux","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/62.jpg"},{"id":1778871622120.8108,"name":"Agua Oxigenada","price":"","priceNum":0,"category":"Primeros Aux","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/63.webp"},{"id":1778871622121.3167,"name":"Iodopovidona","price":"","priceNum":0,"category":"Primeros Aux","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/64.webp"},{"id":1778871622122.6482,"name":"Loreal Serum Retinol","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/65.jpg"},{"id":1778871622123.0715,"name":"Loreal Cr Dia Glicolico","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/66.webp"},{"id":1778871622124.4922,"name":"Cepage Crema Glicolico","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/67.webp"},{"id":1778871622125.869,"name":"Formuly Antimanchas","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/68.webp"},{"id":1778871622126.9587,"name":"Dermaglos Reg Intensivas","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/69.jpg"},{"id":1778871622127.5518,"name":"Roby Fijador","price":"","priceNum":0,"category":"Fijador","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/70.jpg"},{"id":1778871622128.244,"name":"Roby Fijador Fte","price":"","priceNum":0,"category":"Fijador","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/70.jpg"},{"id":1778871622129.163,"name":"Roby Fijador Extra Forte","price":"","priceNum":0,"category":"Fijador","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/70.jpg"},{"id":1778871622130.1238,"name":"Lord Chess Frasco","price":"","priceNum":0,"category":"Fijador","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/72.jpg"},{"id":1778871622131.962,"name":"Lord Chess Tubo","price":"","priceNum":0,"category":"Fijador","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/71.jpg"},{"id":1778871622132.1694,"name":"Capilatis Cera Barba y Pelo","price":"","priceNum":0,"category":"Fijador","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/73.jpg"},{"id":1778871622133.815,"name":"Cera Capilar Iyosei","price":"","priceNum":0,"category":"Fijador","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/74.jpg"},{"id":1778871622134.5503,"name":"Preal Humedo","price":"","priceNum":0,"category":"Fijador","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/75.jpg"},{"id":1778871622135.6665,"name":"Preal Fijacion Forte","price":"","priceNum":0,"category":"Fijador","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/75.jpg"},{"id":1778871622136.6978,"name":"Preal Brillo","price":"","priceNum":0,"category":"Fijador","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/75.jpg"},{"id":1778871622137.1033,"name":"Cif Gel Cloro + Lavadina","price":"","priceNum":0,"category":"Limpieza","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/76.jpg"},{"id":1778871622138.7397,"name":"Cif Crema Multi Uso","price":"","priceNum":0,"category":"Limpieza","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/77.jpg"},{"id":1778871622139.7559,"name":"Procenex","price":"","priceNum":0,"category":"Limpieza","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/78.jpg"},{"id":1778871622140.704,"name":"Lysoform Aer","price":"","priceNum":0,"category":"Limpieza","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/79.webp"},{"id":1778871622141.8916,"name":"Fuyi Electrico","price":"","priceNum":0,"category":"Repelentes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/81.jpg"},{"id":1778871622142.6873,"name":"Fuyi Repuesto","price":"","priceNum":0,"category":"Repelentes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/80.jpg"},{"id":1778871622143.5254,"name":"Raid","price":"","priceNum":0,"category":"Repelentes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/82.webp"},{"id":1778871622144.7258,"name":"Ariel Jab Liq x 3 L","price":"","priceNum":0,"category":"Limpieza","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/83.jpg"},{"id":1778871622145.0376,"name":"Skip Jab Liq x L","price":"","priceNum":0,"category":"Limpieza","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/84.png"},{"id":1778871622146.8618,"name":"Issue Tint","price":"","priceNum":0,"category":"Tinturas","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/85.png"},{"id":1778871622147.7969,"name":"919 Tint","price":"","priceNum":0,"category":"Tinturas","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/86.webp"},{"id":1778871622148.0366,"name":"Nutrisse Tint","price":"","priceNum":0,"category":"Tinturas","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/87.jpg"},{"id":1778871622149.8591,"name":"Otowil Tint","price":"","priceNum":0,"category":"Tinturas","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/88.webp"},{"id":1778871622150.2427,"name":"Socorro Capilar","price":"","priceNum":0,"category":"Capilares","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/89.webp"},{"id":1778871622151.397,"name":"Issue Shampoo Tint","price":"","priceNum":0,"category":"Capilares","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/90.png"},{"id":1778871622152.3574,"name":"Evacare Ov","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/91.jpg"},{"id":1778871622153.3667,"name":"Evacare Cr","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/92.jpg"},{"id":1778871622154.1726,"name":"Evacare Comp x 1","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/93.jpg"},{"id":1778871622156.5261,"name":"Glade Difusor","price":"","priceNum":0,"category":"Tecno","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/94.jpg"},{"id":1778871622157.841,"name":"Saphirus Textil","price":"","priceNum":0,"category":"Fragancias","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/95.jpg"},{"id":1778871622158.3435,"name":"Saphirus Aer","price":"","priceNum":0,"category":"Fragancias","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/96.jpg"},{"id":1778871622159.3562,"name":"Dermaglos Prot Sol 50","price":"","priceNum":0,"category":"Protector Solar","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/97.jpg"},{"id":1778871622160.7808,"name":"Dermaglos Prot Sol 65","price":"","priceNum":0,"category":"Protector Solar","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/100.webp"},{"id":1778871622161.6514,"name":"Dermaglos Prot Sol 80","price":"","priceNum":0,"category":"Protector Solar","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/98.jpg"},{"id":1778871622162.3325,"name":"Dermaglos Prot Sol Bebé 65","price":"","priceNum":0,"category":"Protector Solar","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/99.jpg"},{"id":1778871622163.9062,"name":"Headshoulder Carbon","price":"","priceNum":0,"category":"Anticaspa","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/102.jpg"},{"id":1778871622164.442,"name":"Headshoulder 3 en1","price":"","priceNum":0,"category":"Anticaspa","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/101.jpg"},{"id":1778871622165.6636,"name":"Headshoulder Old Spice","price":"","priceNum":0,"category":"Anticaspa","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/103.webp"},{"id":1778871622166.0547,"name":"102 Focus","price":"","priceNum":0,"category":"Suplementos","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/104.webp"},{"id":1778871622167.168,"name":"Neutrogena Acne Proofing","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/105.jpg"},{"id":1778871622168.736,"name":"Cepillo Innova Digital","price":"","priceNum":0,"category":"Tecno","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/106.webp"},{"id":1778871622169.1772,"name":"Aerocamaras Silfab","price":"","priceNum":0,"category":"Aerocamaras","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/shopping%20(1).webp"},{"id":1778871622170.3777,"name":"Tobillera Profit","price":"","priceNum":0,"category":"Ortopedia","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/108.jpg"},{"id":1778871622171.775,"name":"Muslera Profit","price":"","priceNum":0,"category":"Ortopedia","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/109.webp"},{"id":1778871622172.9639,"name":"Muñequera Profit","price":"","priceNum":0,"category":"Ortopedia","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/110.webp"},{"id":1778871622173.0442,"name":"Rodillera Profit","price":"","priceNum":0,"category":"Ortopedia","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/111.webp"},{"id":1778871622174.9248,"name":"Faja Elast Antar x 28 cm","price":"","priceNum":0,"category":"Ortopedia","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/112.jpg"},{"id":1778871622175.8115,"name":"Algabo Espuma Afeitar","price":"","priceNum":0,"category":"Higiene Personal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/113.png"},{"id":1778871622176.5588,"name":"Algabo After Shave","price":"","priceNum":0,"category":"Higiene Personal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/114.jpg"},{"id":1778871622177.7983,"name":"Vick Lata","price":"","priceNum":0,"category":"Tos/Garganta","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/115.jpg"},{"id":1778871622178.9604,"name":"Vick Pote","price":"","priceNum":0,"category":"Tos/Garganta","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/116.jpg"},{"id":1778871622179.4194,"name":"Buscapina Fem","price":"","priceNum":0,"category":"Antiespasmodico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/buscafem.jpg"},{"id":1778871622180.712,"name":"Oralsone","price":"","priceNum":0,"category":"Anestesico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/118.jpg"},{"id":1778871622181.2097,"name":"Oralsone Max","price":"","priceNum":0,"category":"Anestesico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/117.jpg"},{"id":1778871622182.6829,"name":"FarmX Polvo","price":"","priceNum":0,"category":"Cicatrizante","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/119.jpeg"},{"id":1778871622183.711,"name":"FarmX Crema","price":"","priceNum":0,"category":"Cicatrizante","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/120.jpg"},{"id":1778871622184.0435,"name":"Espadol Jabon","price":"","priceNum":0,"category":"Antibacterial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/123.webp"},{"id":1778871622185.0205,"name":"Espadol Liq","price":"","priceNum":0,"category":"Antibacterial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/122.jpg"},{"id":1778871622186.8477,"name":"Espadol Toallitas","price":"","priceNum":0,"category":"Antibacterial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/121.jpg"},{"id":1778871622187.5044,"name":"Dove Jabon","price":"","priceNum":0,"category":"Higiene Personal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/124.jpg"},{"id":1778871622188.1086,"name":"Lux Jabon Rosas","price":"","priceNum":0,"category":"Higiene Personal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/125.jpg"},{"id":1778871622189.772,"name":"Lux Jabon","price":"","priceNum":0,"category":"Higiene Personal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/126.jpg"},{"id":1778871622190.947,"name":"Efficiente Polvo","price":"","priceNum":0,"category":"Higiene Personal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/127.jpg"},{"id":1778871622191.7173,"name":"Efficient Polvo Gr","price":"","priceNum":0,"category":"Higiene Personal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/127.jpg"},{"id":1778871622192.3962,"name":"Efficient Deo","price":"","priceNum":0,"category":"Higiene Personal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/128.avif"},{"id":1778871622193.6667,"name":"Palatrobil Gts","price":"","priceNum":0,"category":"Antiespasmodico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/130.jpg"},{"id":1778871622194.5627,"name":"Palatrobil Comp","price":"","priceNum":0,"category":"Antiespasmodico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/129.jpg"},{"id":1778871622195.3284,"name":"Viasek Gel","price":"","priceNum":0,"category":"Gel Intimo","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/131.webp"},{"id":1778871622196.6975,"name":"Evagina Jab Liq","price":"","priceNum":0,"category":"Higiene Personal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/132.jpg"},{"id":1778871622197.5269,"name":"Evagina Gel","price":"","priceNum":0,"category":"Gel Intimo","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/134.jpg"},{"id":1778871622198.2563,"name":"Evagina Deo","price":"","priceNum":0,"category":"Higiene Personal","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/133.jpg"},{"id":1778871622199.6765,"name":"Pervinox Iodo","price":"","priceNum":0,"category":"Antiseptico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/pervinoxiodo.jpg"},{"id":1778871622200.612,"name":"Tafirol Resaca","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/tafirolresaca.jpg"},{"id":1778871622201.9333,"name":"Tafirol 1 gr Frasco","price":"","priceNum":0,"category":"Analgésico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/tafirolfrasco.jpg"},{"id":1778871622202.9294,"name":"Tostop Niños","price":"","priceNum":0,"category":"Tos/Garganta","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/refs/heads/main/tostopni%C3%B1os.jpg"},{"id":1778871622203.5283,"name":"Tostop Adultos","price":"","priceNum":0,"category":"Tos/Garganta","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/tostop.jpg"},{"id":1778871622204.521,"name":"Termometro Digital","price":"","priceNum":0,"category":"Primeros Aux","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/135.webp"},{"id":1778871622205.1711,"name":"Termometro Galio","price":"","priceNum":0,"category":"Primeros Aux","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/136.webp"},{"id":1778871622206.5906,"name":"Garnier Agua Micelar Rosas","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/137.webp"},{"id":1778871622207.7058,"name":"Nivea Rose","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/138.webp"},{"id":1778871622208.9426,"name":"Cicatricure Regeneplast","price":"","priceNum":0,"category":"Cuidado Piel","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/139.webp"},{"id":1778871622209.629,"name":"Boos Intense Night","price":"","priceNum":0,"category":"Perfumes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/140.jpg"},{"id":1778871622210.7886,"name":"Boos Red","price":"","priceNum":0,"category":"Perfumes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/141.jpg"},{"id":1778871622211.793,"name":"Kevingston 20","price":"","priceNum":0,"category":"Perfumes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/142.jpg"},{"id":1778871622212.3354,"name":"Unesia","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/143.jpg"},{"id":1778871622213.0154,"name":"Unesia Amorf","price":"","priceNum":0,"category":"Antimicotico","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/144.webp"},{"id":1778871622214.9014,"name":"Off Family","price":"","priceNum":0,"category":"Repelentes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/145.webp"},{"id":1778871622215.9019,"name":"Pedialyte","price":"","priceNum":0,"category":"Pediatría","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/146.jpg"},{"id":1778871622216.983,"name":"Cleanex Dermolimpiador","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/147.jpg"},{"id":1778871622217.2083,"name":"Crema Ordeñe","price":"","priceNum":0,"category":"Cremas Hidratantes","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/148.webp"},{"id":1778871622218.263,"name":"Mascara de Pestañas Maybellin Great Lash","price":"","priceNum":0,"category":"Maquillaje","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/150.png"},{"id":1778871622219.6326,"name":"Delineador Maybelline Gel Lasting","price":"","priceNum":0,"category":"Maquillaje","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/149.jpg"},{"id":1778871622220.9653,"name":"Garnier Gel de Limpieza","price":"","priceNum":0,"category":"Facial","published":true,"img":"https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/shopping.webp"}];
+
+let inv      = (function(){
+  const g = S.get('inv');
+  // Si hay datos guardados con productos reales, usarlos
+  if (g && Array.isArray(g) && g.length > 0) return g;
+  // Primera vez o localStorage vacío → usar embebido
+  S.set('inv', INV_DEFAULT);
+  return INV_DEFAULT.slice();
+})();
+let ofs      = S.get('ofs') || [];
+let adminOK  = false;
+let authFail = 0;
+let locked   = false;
+let invFil   = [...inv];
+let invPg    = 1;
+let editIdx  = -1;
+let ofIdx    = -1;
+
+// ══════════ INIT ══════════
+document.addEventListener('DOMContentLoaded', () => {
+  if (location.search.includes('reset=1')) { localStorage.clear(); location.href=location.pathname; return; }
+  const su = S.get('sheets_url');
+  if (su) { const el=document.getElementById('sheets-url'); if(el) el.value=su; }
+  const dz = document.getElementById('drop-zone');
+  if (dz) {
+    dz.addEventListener('dragover', e=>{e.preventDefault();dz.classList.add('drag')});
+    dz.addEventListener('dragleave', ()=>dz.classList.remove('drag'));
+    dz.addEventListener('drop', e=>{e.preventDefault();dz.classList.remove('drag');const f=e.dataTransfer.files[0];if(f)procXL(f)});
+  }
+  showTab('tienda');
+});
+
+// ══════════ TABS ══════════
+function showTab(t) {
+  document.getElementById('sec-tienda').classList.toggle('hidden', t!=='tienda');
+  document.getElementById('sec-admin').classList.toggle('hidden', t!=='admin');
+  document.getElementById('tab-tienda').classList.toggle('active', t==='tienda');
+  document.getElementById('tab-admin').classList.toggle('active', t==='admin');
+  if (t==='tienda') { renderTienda(); renderOfsPub(); updateCatSel(); }
+  if (t==='admin')  { invFil=[...inv]; renderInv(); renderCatAdmin(); renderOfsAdmin(); checkStor(); syncGithub(0); }
+}
+
+// ══════════ AUTH ══════════
+function pedirClave() { if(adminOK){showTab('admin');return}; document.getElementById('auth-inp').value=''; document.getElementById('auth-err').textContent=''; document.getElementById('auth-modal').classList.add('open'); setTimeout(()=>document.getElementById('auth-inp').focus(),100); }
+function cerrarAuth() { document.getElementById('auth-modal').classList.remove('open'); }
+function toggleEye() { const i=document.getElementById('auth-inp'); i.type=i.type==='password'?'text':'password'; }
+function checkPass() {
+  if (locked) { document.getElementById('auth-err').textContent='⛔ Bloqueado 30s.'; return; }
+  if (document.getElementById('auth-inp').value===PASS) {
+    adminOK=true; authFail=0; cerrarAuth();
+    document.getElementById('tab-admin').classList.remove('hidden');
+    document.getElementById('lock-btn').style.display='none';
+    showTab('admin'); toast('✅ Acceso concedido','suc');
+  } else {
+    authFail++;
+    const r=5-authFail;
+    document.getElementById('auth-err').textContent='❌ Clave incorrecta.'+(r>0?' '+r+' intentos restantes.':'');
+    if (authFail>=5) { locked=true; document.getElementById('auth-err').textContent='⛔ Bloqueado 30 segundos.'; setTimeout(()=>{locked=false;authFail=0;document.getElementById('auth-err').textContent=''},30000); }
+    document.getElementById('auth-inp').value='';
+  }
+}
+function cerrarAdmin() { adminOK=false; document.getElementById('tab-admin').classList.add('hidden'); document.getElementById('lock-btn').style.display=''; showTab('tienda'); }
+
+// ══════════ GITHUB SYNC ══════════
+function syncGithub(idx) {
+  const badge=document.getElementById('sync-badge'), sub=document.getElementById('sync-sub');
+  if (badge) { badge.className='sbadge loading'; badge.textContent='⏳ Sincronizando...'; }
+  if (sub)   sub.textContent='Conectando...';
+  if (idx>=GH_URLS.length) {
+    if (badge) { badge.className='sbadge err'; badge.textContent='⚠ Sin conexión — datos locales'; }
+    if (sub)   sub.textContent='GitHub no disponible. Datos locales intactos.';
+    if (inv.length) { invFil=[...inv]; renderInv(); renderCatAdmin(); }
+    return;
+  }
+  const url = GH_URLS[idx] + (GH_URLS[idx].includes('?')?'&':'?') + 'nc='+Date.now();
+  fetch(url)
+    .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
+    .then(data=>{
+      const prods=Array.isArray(data)?data:(data.productos||[]);
+      const ofsList=data.ofertas||[];
+      if (!prods.length) throw new Error('vacío');
+      inv=prods; S.set('inv',inv);
+      if (ofsList.length) { ofs=ofsList; S.set('ofs',ofs); }
+      invFil=[...inv]; renderInv(); renderCatAdmin(); renderTienda(); renderOfsPub(); renderOfsAdmin(); checkStor();
+      const ahora=new Date().toLocaleString('es-AR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+      const ofMsg=ofsList.length?' · '+ofsList.length+' ofertas':'';
+      if (badge) { badge.className='sbadge ok'; badge.textContent='✅ '+prods.length+' productos'+ofMsg; }
+      if (sub)   sub.textContent='Última sync: '+ahora;
+      toast('✅ GitHub: '+prods.length+' productos'+ofMsg,'suc');
+    })
+    .catch(()=>syncGithub(idx+1));
+}
+
+// ══════════ GOOGLE SHEETS ══════════
+function saveSheets() {
+  let url=document.getElementById('sheets-url').value.trim();
+  if (!url||!url.includes('docs.google.com')) { toast('Pegá una URL válida de Google Sheets','err'); return; }
+  if (!url.includes('output=csv')) url+=(url.includes('?')?'&':'?')+'output=csv';
+  S.set('sheets_url',url); document.getElementById('sheets-url').value=url;
+  toast('✅ URL guardada. Hacé clic en Sincronizar.','suc');
+}
+function syncSheets() {
+  const url=S.get('sheets_url')||document.getElementById('sheets-url').value.trim();
+  if (!url||!url.includes('docs.google.com')) { toast('Primero guardá la URL de Google Sheets','err'); return; }
+  toast('⏳ Conectando con Google Sheets...');
+  const proxies=['https://api.allorigins.win/raw?url='+encodeURIComponent(url),'https://corsproxy.io/?'+encodeURIComponent(url),url];
+  function try_(i) {
+    if (i>=proxies.length) { toast('No se pudo conectar. Verificá que la planilla esté publicada como CSV.','err'); return; }
+    fetch(proxies[i])
+      .then(r=>{if(!r.ok)throw new Error();return r.text()})
+      .then(csv=>{
+        const lines=csv.replace(/\r/g,'').trim().split('\n').filter(Boolean);
+        if (lines.length<2||!csv.includes(',')) throw new Error();
+        const prods=parseCSV(csv);
+        if (!prods.length) throw new Error('sin prods');
+        inv=prods; S.set('inv',inv); invFil=[...inv]; renderInv(); renderCatAdmin(); renderTienda(); checkStor();
+        toast('✅ '+prods.length+' productos desde Google Sheets','suc');
+      })
+      .catch(()=>try_(i+1));
+  }
+  try_(0);
+}
+function parseCSV(csv) {
+  csv=csv.replace(/^\uFEFF/,'').replace(/\r/g,'');
+  const lines=csv.trim().split('\n').filter(Boolean);
+  if (lines.length<2) return [];
+  const hdr=parseRow(lines[0]).map(h=>h.toLowerCase().trim().replace(/^#$/,'num'));
+  const iN=hdr.findIndex(h=>h.includes('nombre')||h.includes('name')||h.includes('product'));
+  const iP=hdr.findIndex(h=>h.includes('precio')||h.includes('price')||h.includes('valor'));
+  const iC=hdr.findIndex(h=>h.includes('categ')||h.includes('rubro'));
+  const iI=hdr.findIndex(h=>h==='imagen'||h==='img'||h==='foto'||h==='url'||h.includes('imagen')||h.includes('img'));
+  const iPub=hdr.findIndex(h=>h.includes('publicado')||h.includes('activo')||h.includes('visible')||h.includes('pub'));
+  console.log('Sheets cols:',{nombre:iN,precio:iP,cat:iC,img:iI,pub:iPub});
+  const prods=[];
+  for (let i=1;i<lines.length;i++) {
+    const cols=parseRow(lines[i]);
+    const name=iN>=0?(cols[iN]||'').trim():'';
+    if (!name) continue;
+    const pRaw=iP>=0?(cols[iP]||'').trim():'';
+    const num=parseP(pRaw);
+    const pub=iPub>=0?['si','sí','yes','1','true','publicado','activo','x'].includes((cols[iPub]||'').trim().toLowerCase()):true;
+    const img=iI>=0?(cols[iI]||'').trim():'';
+    prods.push({id:Date.now()+i+Math.random(),name,price:num>0?'$'+num.toLocaleString('es-AR',{minimumFractionDigits:0}):pRaw,priceNum:num,category:iC>=0?(cols[iC]||'').trim():'',published:pub,img:img.startsWith('http')?img:null});
+  }
+  return prods;
+}
+function parseRow(line) {
+  const cols=[];let col='',inQ=false;
+  for (const ch of line) { if(ch==='"'){inQ=!inQ}else if(ch===','&&!inQ){cols.push(col.trim().replace(/^"|"$/g,''));col=''}else col+=ch; }
+  cols.push(col.trim().replace(/^"|"$/g,'')); return cols;
+}
+
+// ══════════ EXCEL IMPORT ══════════
+function importExcel(input) { const f=input.files[0]; if(f) procXL(f); input.value=''; }
+function procXL(f) {
+  toast('⏳ Procesando...');
+  const reader=new FileReader();
+  reader.onload=e=>setTimeout(()=>{
+    try {
+      const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array',cellText:false,cellDates:false});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:'',blankrows:false});
+      if (rows.length<2) { toast('Archivo vacío','err'); return; }
+      const hdr=rows[0].map(h=>String(h).toLowerCase().trim());
+      const iN=hdr.findIndex(h=>h.includes('nombre')||h.includes('product')||h.includes('name')||h.includes('articul'));
+      const iP=hdr.findIndex(h=>h.includes('precio')||h.includes('price')||h.includes('valor'));
+      const iC=hdr.findIndex(h=>h.includes('categ')||h.includes('rubro'));
+      const iI=hdr.findIndex(h=>h==='imagen'||h==='img'||h.includes('imagen')||h.includes('img')||h.includes('foto'));
+      const iPub=hdr.findIndex(h=>h.includes('publicado')||h.includes('activo')||h.includes('visible'));
+      const start=iN>=0?1:0; const nCol=iN>=0?iN:0;
+      const existe=new Set(inv.map(p=>p.name.toLowerCase()));
+      const nuevos=[];
+      for (let i=start;i<rows.length;i++) {
+        const row=rows[i]; const name=String(row[nCol]||'').trim();
+        if (!name||name.length<2||existe.has(name.toLowerCase())) continue;
+        const rawP=iP>=0?row[iP]:''; const num=typeof rawP==='number'?rawP:parseP(String(rawP));
+        const pub=iPub>=0?['si','sí','yes','1','true','publicado','activo'].includes(String(row[iPub]||'').toLowerCase().trim()):false;
+        const img=iI>=0?String(row[iI]||'').trim():'';
+        nuevos.push({id:Date.now()+i+Math.random(),name,price:num>0?'$'+num.toLocaleString('es-AR',{minimumFractionDigits:0}):String(rawP||'').trim(),priceNum:num,category:iC>=0?String(row[iC]||'').trim():'',published:pub,img:img.startsWith('http')?img:null});
+        existe.add(name.toLowerCase());
+      }
+      inv=[...inv,...nuevos]; S.set('inv',inv); invFil=[...inv]; renderInv(); renderCatAdmin(); checkStor();
+      const dup=rows.length-start-nuevos.length;
+      toast('✅ '+nuevos.length+' productos importados'+(dup>0?' ('+dup+' duplicados)':''),'suc');
+    } catch(err) { toast('Error al leer el archivo','err'); console.error(err); }
+  },50);
+  reader.readAsArrayBuffer(f);
+}
+function parseP(raw) {
+  if (!raw&&raw!==0) return 0; if(typeof raw==='number') return raw;
+  const s=String(raw).replace(/\s|\$/g,'');
+  if (/^\d{1,3}(\.\d{3})*(,\d+)?$/.test(s)) return parseFloat(s.replace(/\./g,'').replace(',','.'))||0;
+  if (/^\d{1,3}(,\d{3})*(\.\d+)?$/.test(s)) return parseFloat(s.replace(/,/g,''))||0;
+  return parseFloat(s.replace(/[^0-9.]/g,''))||0;
+}
+
+// ══════════ INVENTARIO TABLE ══════════
+function buscarInv() {
+  const q=(document.getElementById('inv-search')?.value||'').toLowerCase();
+  const qC=document.getElementById('inv-cat')?.value||'';
+  invFil=inv.filter(p=>p.name.toLowerCase().includes(q)&&(!qC||p.category===qC));
+  invPg=1; renderInv();
+}
+function renderInv() {
+  const total=invFil.length, pages=Math.max(1,Math.ceil(total/PP));
+  invPg=Math.min(invPg,pages);
+  const start=(invPg-1)*PP, pageData=invFil.slice(start,start+PP);
+  const pubTotal=inv.filter(p=>p.published).length;
+  const badge=document.getElementById('inv-badge'), info=document.getElementById('inv-info'), pubLbl=document.getElementById('pub-lbl'), empty=document.getElementById('inv-empty');
+  if(badge) badge.textContent=inv.length;
+  if(info)  info.textContent=total+' resultados · Pág. '+invPg+'/'+pages;
+  if(pubLbl)pubLbl.textContent=pubTotal+' publicados';
+  if(empty) empty.classList.toggle('hidden',inv.length>0);
+  const tbody=document.getElementById('inv-tbody');
+  if (!tbody) return;
+  if (!pageData.length) { tbody.innerHTML='<tr><td colspan="6" style="padding:24px;text-align:center;color:var(--text2)">Sin resultados</td></tr>'; }
+  else {
+    tbody.innerHTML=pageData.map((p,i)=>{
+      const gIdx=inv.indexOf(p), pub=p.published;
+      const thumb=p.img?'<img src="'+esc(p.img)+'" class="tbl-img" alt="" onerror="this.style.display=\'none\'"/>':'<span class="tbl-ph">IMG</span>';
+      return '<tr>'+
+        '<td style="text-align:center"><input type="checkbox" data-idx="'+gIdx+'" '+(pub?'checked':'')+' onchange="tglPub('+gIdx+',this.checked)"/></td>'+
+        '<td style="color:var(--text2);font-size:.7rem">'+(start+i+1)+'</td>'+
+        '<td><div style="display:flex;align-items:center;gap:7px">'+thumb+'<div><div style="font-weight:600;max-width:165px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(p.name)+'">'+esc(p.name)+'</div>'+(p.category?'<div style="font-size:.6rem;color:var(--g);text-transform:uppercase">'+esc(p.category)+'</div>':'')+'</div></div></td>'+
+        '<td><input type="text" class="ep-inp" value="'+esc(p.price||'')+'" placeholder="Precio" onchange="updP('+gIdx+',this.value)"/></td>'+
+        '<td><span class="badge '+(pub?'bp':'bh')+'">'+(pub?'🟢 Publicado':'⚪ Oculto')+'</span></td>'+
+        '<td><div style="display:flex;gap:4px;flex-wrap:wrap">'+
+          '<button class="rb '+(pub?'rb-hid':'rb-pub')+'" onclick="tglBtn('+gIdx+')">'+(pub?'⊘ Despub.':'✓ Pub.')+'</button>'+
+          '<button class="rb rb-edit" onclick="abrirEdit('+gIdx+')">✏️ Editar</button>'+
+          '<button class="rb rb-del" onclick="delProd('+gIdx+')">🗑</button>'+
+        '</div></td>'+
+      '</tr>';
+    }).join('');
+  }
+  renderPag(pages); renderSelAll();
+}
+function renderPag(pages) {
+  const info=document.getElementById('pag-info'), btns=document.getElementById('pag-btns');
+  const tot=invFil.length, s=(invPg-1)*PP+1, e=Math.min(invPg*PP,tot);
+  if(info) info.textContent=tot?s+'–'+e+' de '+tot:'';
+  if(!btns||pages<=1){if(btns)btns.innerHTML='';return}
+  let nums=[];
+  if(pages<=7){for(let i=1;i<=pages;i++)nums.push(i);}
+  else{nums=[1];if(invPg>3)nums.push('…');for(let i=Math.max(2,invPg-2);i<=Math.min(pages-1,invPg+2);i++)nums.push(i);if(invPg<pages-2)nums.push('…');nums.push(pages);}
+  btns.innerHTML='<button class="pb" onclick="goP('+(invPg-1)+')" '+(invPg===1?'disabled':'')+'>‹</button>'+
+    nums.map(n=>n==='…'?'<span style="padding:6px 4px;color:var(--text2)">…</span>':'<button class="pb '+(n===invPg?'active':'')+'" onclick="goP('+n+')">'+n+'</button>').join('')+
+    '<button class="pb" onclick="goP('+(invPg+1)+')" '+(invPg===pages?'disabled':'')+'>›</button>';
+}
+function goP(n){const p=Math.max(1,Math.ceil(invFil.length/PP));if(n<1||n>p)return;invPg=n;renderInv();document.querySelector('.tbl-wrap')?.scrollTo(0,0);}
+function jumpPage(){const n=parseInt(document.getElementById('pj-inp').value);if(!isNaN(n))goP(n);document.getElementById('pj-inp').value='';}
+function renderSelAll(){const p=invFil.slice((invPg-1)*PP,invPg*PP);const cb=document.getElementById('sel-all');if(cb)cb.checked=p.length>0&&p.every(x=>x.published);}
+function renderCatAdmin(){const cats=[...new Set(inv.map(p=>p.category).filter(Boolean))].sort();const sel=document.getElementById('inv-cat');if(!sel)return;sel.innerHTML='<option value="">Todas las categorías</option>'+cats.map(c=>'<option value="'+esc(c)+'">'+esc(c)+'</option>').join('');}
+function tglPub(idx,val){inv[idx].published=val;S.set('inv',inv);renderInv();renderTienda();}
+function tglBtn(idx){inv[idx].published=!inv[idx].published;S.set('inv',inv);buscarInv();renderTienda();toast((inv[idx].published?'✅ Publicado: ':'⊘ Despublicado: ')+inv[idx].name,inv[idx].published?'suc':'');}
+function delProd(idx){const n=inv[idx].name;inv.splice(idx,1);S.set('inv',inv);invFil=invFil.filter((_,i)=>i!==invFil.findIndex(p=>p===inv[idx]));buscarInv();renderTienda();toast('🗑 Eliminado: '+n);}
+function pubSel(){document.querySelectorAll('#inv-tbody input[type=checkbox]').forEach(cb=>{if(cb.checked)inv[+cb.dataset.idx].published=true});S.set('inv',inv);renderInv();renderTienda();toast('✅ Publicados','suc');}
+function despubTodos(){if(!confirm('¿Despublicar todos?'))return;inv.forEach(p=>p.published=false);S.set('inv',inv);renderInv();renderTienda();toast('Todos despublicados');}
+function limpiarInv(){if(!confirm('¿Borrar todo el inventario?'))return;inv=[];invFil=[];S.set('inv',inv);renderInv();renderTienda();checkStor();toast('Inventario limpiado');}
+function toggleAll(cb){invFil.slice((invPg-1)*PP,invPg*PP).forEach(p=>{const i=inv.indexOf(p);if(i>=0)inv[i].published=cb.checked});S.set('inv',inv);renderInv();renderTienda();}
+function updP(idx,val){val=val.trim();if(!val)return;const n=parseP(val);inv[idx].price=n>0?'$'+n.toLocaleString('es-AR',{minimumFractionDigits:0}):val;inv[idx].priceNum=n;S.set('inv',inv);renderTienda();toast('✅ Precio actualizado','suc');}
+
+// ══════════ EDITAR PRODUCTO ══════════
+function abrirEdit(idx) {
+  editIdx=idx; const p=inv[idx];
+  document.getElementById('edit-lbl').textContent=p.name+(p.category?' · '+p.category:'');
+  document.getElementById('edit-price').value=p.price||'';
+  document.getElementById('edit-img').value=p.img||'';
+  prevEdit(); document.getElementById('edit-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('edit-price').focus(),100);
+}
+function cerrarEdit(){editIdx=-1;document.getElementById('edit-modal').classList.remove('open');}
+function prevEdit(){
+  const url=document.getElementById('edit-img').value.trim(), wrap=document.getElementById('edit-prev');
+  if(!url||!url.startsWith('http')){wrap.classList.remove('has');wrap.innerHTML='<div style="font-size:.77rem;color:var(--text2)">Sin imagen</div>';return;}
+  wrap.classList.add('has');
+  const img=document.createElement('img');img.src=url;img.alt='Preview';img.style.cssText='width:100%;height:100%;object-fit:contain;padding:8px';
+  img.onerror=()=>{wrap.classList.remove('has');wrap.innerHTML='<div style="font-size:.74rem;color:var(--g);text-align:center">✅ URL guardada<br><small style="color:var(--text2)">Se verá en la tienda</small></div>';};
+  wrap.innerHTML='';wrap.appendChild(img);
+}
+function guardarEdit(){
+  if(editIdx<0)return;
+  const price=document.getElementById('edit-price').value.trim(), img=document.getElementById('edit-img').value.trim(), name=inv[editIdx].name;
+  if(price){const n=parseP(price);inv[editIdx].price=n>0?'$'+n.toLocaleString('es-AR',{minimumFractionDigits:0}):price;inv[editIdx].priceNum=n;}
+  inv[editIdx].img=img||null; S.set('inv',inv); buscarInv(); renderTienda(); cerrarEdit(); toast('✅ Guardado: '+name,'suc');
+}
+
+// ══════════ BACKUP ══════════
+function checkStor(){const n=inv.length,pub=inv.filter(p=>p.published).length,el=document.getElementById('stor-status');if(!el)return;if(!n){el.className='stor-warn';el.textContent='⚠ Sin productos';}else{el.className='stor-ok';el.textContent=n+' productos · '+pub+' pub.';}}
+function exportJSON(){
+  if(!inv.length){toast('No hay productos','err');return;}
+  const data={version:4,fecha:new Date().toISOString(),farmacia:'Farmacia Garmendia',total:inv.length,productos:inv,ofertas:ofs};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='inventario-garmendia-'+new Date().toLocaleDateString('es-AR').replace(/\//g,'-')+'.json';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  toast('✅ Exportado ('+inv.length+' productos)','suc');
+}
+function importJSON(input){
+  const f=input.files[0];if(!f)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      const prods=Array.isArray(data)?data:(data.productos||[]);
+      const ofList=data.ofertas||[];
+      if(!prods.length){toast('Sin productos válidos','err');return;}
+      inv=prods.filter(p=>p&&typeof p.name==='string'&&p.name.trim());S.set('inv',inv);
+      if(ofList.length){ofs=ofList;S.set('ofs',ofs);renderOfsAdmin();renderOfsPub();}
+      invFil=[...inv];invPg=1;renderInv();renderCatAdmin();renderTienda();checkStor();
+      toast('✅ '+inv.length+' productos'+(ofList.length?' · '+ofList.length+' ofertas':''),'suc');
+    }catch{toast('Error al leer el JSON','err');}
+  };
+  reader.readAsText(f);input.value='';
+}
+
+// ══════════ TIENDA PÚBLICA ══════════
+function updateCatSel(){
+  const cats=[...new Set(inv.filter(p=>p.published).map(p=>p.category).filter(Boolean))].sort();
+  const sel=document.getElementById('t-cat');if(!sel)return;
+  const cur=sel.value;
+  sel.innerHTML='<option value="">Todas las categorías</option>'+cats.map(c=>'<option value="'+esc(c)+'"'+(c===cur?' selected':'')+'>'+esc(c)+'</option>').join('');
+}
+function renderTienda(){
+  const grid=document.getElementById('prod-grid'),countEl=document.getElementById('t-count');
+  if(!grid)return;
+  const q=(document.getElementById('t-search')?.value||'').toLowerCase();
+  const qC=document.getElementById('t-cat')?.value||'';
+  const pubs=inv.filter(p=>p.published&&p.name.toLowerCase().includes(q)&&(!qC||p.category===qC));
+  if(countEl)countEl.textContent=pubs.length+' producto'+(pubs.length!==1?'s':'');
+  updateCatSel();
+  if(!pubs.length){
+    grid.innerHTML='<div class="empty-grid"><svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>'+(inv.filter(p=>p.published).length===0?'📦 No hay productos publicados.':'🔍 Sin resultados para esa búsqueda.')+'</div>';
+    return;
+  }
+  grid.innerHTML=pubs.map(p=>{
+    const waMsg=encodeURIComponent('Hola! Consulto por:\n*'+p.name+'*\n¿Tiene stock y cuál es el precio?');
+    const imgH = p.img
+      ? '<img src="' + esc(p.img) + '" alt="' + esc(p.name) + '" style="width:100%;height:100%;object-fit:contain;padding:8px" onerror="imgError(this)">'
+      : '<div class="prod-img-ph"><svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24" width="36"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>';
+    return '<div class="prod-card">'+
+      '<div class="prod-img">'+imgH+'</div>'+
+      '<div class="prod-body">'+
+        (p.category?'<div class="prod-cat">'+esc(p.category)+'</div>':'')+
+        '<div class="prod-name">'+esc(p.name)+'</div>'+
+        '<div class="prod-price'+(p.price?'':' consultar')+'">'+esc(p.price||'Consultar precio')+'</div>'+
+        '<button class="wa-btn" onclick="consultarProd(\''+waMsg+'\')">'+
+          '<svg fill="currentColor" viewBox="0 0 24 24" width="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>'+
+          'Consultar por WhatsApp'+
+        '</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function imgError(el){
+  el.onerror=null;
+  el.style.display='none';
+}
+
+function consultarProd(msg){window.open('https://wa.me/'+WA_NUM+'?text='+msg,'_blank');}
+
+// ══════════ OFERTAS ══════════
+function renderOfsPub(){
+  const sec=document.getElementById('ofertas-pub'),grid=document.getElementById('ofertas-pub-grid');
+  if(!sec||!grid)return;
+  const pubs=ofs.filter(o=>o.publicada!=='NO');
+  sec.style.display=pubs.length?'block':'none';
+  if(!pubs.length)return;
+  grid.innerHTML=pubs.map(o=>{
+    const pct=o.precioOld>0?Math.round((1-o.precioNew/o.precioOld)*100):0;
+    const waMsg=encodeURIComponent('Hola! Quiero aprovechar la oferta:\n*'+o.nombre+'* a $'+o.precioNew.toLocaleString('es-AR')+'\n¿Está disponible?');
+    const imgH = o.img
+      ? '<img src="' + esc(o.img) + '" alt="' + esc(o.nombre) + '" style="width:100%;height:100%;object-fit:contain;padding:8px" onerror="imgError(this)">'
+      : '<div class="prod-img-ph"><svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24" width="32"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>';
+    return '<div class="oferta-card">'+
+      (pct>0?'<div class="oferta-badge">-'+pct+'%</div>':'')+
+      '<div class="oferta-img">'+imgH+'</div>'+
+      '<div class="oferta-body">'+
+        '<div class="oferta-nombre">'+esc(o.nombre)+'</div>'+
+        '<div class="oferta-precios">'+(o.precioOld>0?'<span class="precio-old">$'+o.precioOld.toLocaleString('es-AR')+'</span>':'')+'<span class="precio-new">$'+o.precioNew.toLocaleString('es-AR')+'</span></div>'+
+        '<button class="wa-btn" onclick="consultarProd(\''+waMsg+'\')">'+
+          '<svg fill="currentColor" viewBox="0 0 24 24" width="13"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>'+
+          'Quiero esta oferta'+
+        '</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+function renderOfsAdmin(){
+  const grid=document.getElementById('oac-grid'),badge=document.getElementById('of-badge');
+  if(!grid)return;
+  if(badge)badge.textContent=ofs.length;
+  if(!ofs.length){grid.innerHTML='<div id="of-empty" style="grid-column:1/-1;padding:28px;text-align:center;color:var(--text2);border:2px dashed var(--border);border-radius:var(--r);font-size:.82rem">Sin ofertas. Hacé clic en "+ Nueva" para agregar.</div>';return;}
+  grid.innerHTML=ofs.map((o,i)=>{
+    const pct=o.precioOld>0?Math.round((1-o.precioNew/o.precioOld)*100):0;
+    const imgH=o.img?'<img src="'+esc(o.img)+'" alt="'+esc(o.nombre)+'"/>':'<div class="prod-img-ph"><svg fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24" width="28"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>';
+    const pub=o.publicada!=='NO';
+    return '<div class="oac">'+(pct>0?'<div class="oac-badge">-'+pct+'%</div>':'')+
+      '<div class="oac-img">'+imgH+'</div>'+
+      '<div class="oac-body"><div class="oac-nombre">'+esc(o.nombre)+'</div>'+
+        '<div class="oac-ps">'+(o.precioOld>0?'<span class="oac-old">$'+o.precioOld.toLocaleString('es-AR')+'</span>':'')+'<span class="oac-new">$'+o.precioNew.toLocaleString('es-AR')+'</span></div>'+
+        '<span class="badge '+(pub?'bp':'bh')+'">'+(pub?'🟢 Publicada':'⚪ Oculta')+'</span>'+
+      '</div>'+
+      '<div class="oac-acts"><button class="rb rb-edit" onclick="abrirMOf('+i+')" style="flex:1">✏️ Editar</button><button class="rb rb-del" onclick="delOf('+i+')">🗑</button></div>'+
+    '</div>';
+  }).join('');
+}
+function abrirMOf(idx){
+  ofIdx=idx!==null?idx:-1; const o=idx!==null?ofs[idx]:null;
+  document.getElementById('of-modal-title').textContent=o?'Editar oferta':'Nueva oferta';
+  document.getElementById('of-nom').value=o?o.nombre:'';
+  document.getElementById('of-old').value=o?o.precioOld:'';
+  document.getElementById('of-new').value=o?o.precioNew:'';
+  document.getElementById('of-cat').value=o?(o.categoria||''):'';
+  document.getElementById('of-pub').value=o?(o.publicada||'SI'):'SI';
+  document.getElementById('of-img').value=o?(o.img||''):'';
+  calcPct();prevOf();document.getElementById('of-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('of-nom').focus(),100);
+}
+function cerrarMOf(){ofIdx=-1;document.getElementById('of-modal').classList.remove('open');}
+function calcPct(){const a=parseFloat(document.getElementById('of-old').value)||0,b=parseFloat(document.getElementById('of-new').value)||0,el=document.getElementById('of-pct');if(a>0&&b>0&&b<a){el.textContent='-'+Math.round((1-b/a)*100)+'%';el.style.color='#ef4444';}else{el.textContent='—';el.style.color='#9ca3af';}}
+function prevOf(){
+  const url=document.getElementById('of-img').value.trim(),wrap=document.getElementById('of-prev');
+  if(!url||!url.startsWith('http')){wrap.classList.remove('has');wrap.innerHTML='<div style="font-size:.77rem;color:var(--text2)">Sin imagen</div>';return;}
+  wrap.classList.add('has');
+  const img=document.createElement('img');img.src=url;img.alt='Preview';img.style.cssText='width:100%;height:100%;object-fit:contain;padding:8px';
+  img.onerror=()=>{wrap.classList.remove('has');wrap.innerHTML='<div style="font-size:.74rem;color:var(--g);text-align:center">✅ URL guardada</div>';};
+  wrap.innerHTML='';wrap.appendChild(img);
+}
+function guardarOf(){
+  const nom=document.getElementById('of-nom').value.trim(),pN=parseFloat(document.getElementById('of-new').value)||0;
+  if(!nom){toast('Ingresá el nombre','err');return;}if(!pN){toast('Ingresá el precio oferta','err');return;}
+  const of={id:ofIdx>=0?ofs[ofIdx].id:Date.now(),nombre:nom,precioOld:parseFloat(document.getElementById('of-old').value)||0,precioNew:pN,categoria:document.getElementById('of-cat').value.trim(),publicada:document.getElementById('of-pub').value,img:document.getElementById('of-img').value.trim()||null};
+  if(ofIdx>=0){ofs[ofIdx]=of;toast('✅ Oferta actualizada','suc');}else{ofs.push(of);toast('✅ Oferta agregada','suc');}
+  S.set('ofs',ofs);renderOfsAdmin();renderOfsPub();cerrarMOf();
+}
+function delOf(i){const n=ofs[i].nombre;ofs.splice(i,1);S.set('ofs',ofs);renderOfsAdmin();renderOfsPub();toast('🗑 Eliminada: '+n);}
+function importOfXl(input){
+  const f=input.files[0];if(!f)return;toast('⏳ Importando ofertas...');
+  const reader=new FileReader();
+  reader.onload=e=>setTimeout(()=>{
+    try{
+      const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array',cellText:false});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:'',blankrows:false});
+      if(rows.length<2){toast('Archivo vacío','err');return;}
+      const hdr=rows[0].map(h=>String(h).toLowerCase().trim());
+      const iN=hdr.findIndex(h=>h.includes('nombre')||h.includes('product'));
+      const iO=hdr.findIndex(h=>h.includes('original')||h.includes('anterior')||h.includes('viejo'));
+      const iNw=hdr.findIndex(h=>h.includes('oferta')||h.includes('nuevo')||h.includes('descuento'));
+      const iC=hdr.findIndex(h=>h.includes('categ'));
+      const iI=hdr.findIndex(h=>h.includes('imagen')||h.includes('img'));
+      const nuevas=[];
+      for(let i=1;i<rows.length;i++){
+        const row=rows[i];const nom=iN>=0?String(row[iN]||'').trim():'';if(!nom)continue;
+        const nw=parseP(String(row[iNw]||''));if(!nw)continue;
+        nuevas.push({id:Date.now()+i+Math.random(),nombre:nom,precioOld:parseP(String(row[iO]||'')),precioNew:nw,categoria:iC>=0?String(row[iC]||'').trim():'',publicada:'SI',img:iI>=0&&String(row[iI]||'').startsWith('http')?String(row[iI]).trim():null});
+      }
+      ofs=[...ofs,...nuevas];S.set('ofs',ofs);renderOfsAdmin();renderOfsPub();toast('✅ '+nuevas.length+' ofertas importadas','suc');
+    }catch{toast('Error al leer el archivo','err');}
+  },50);
+  reader.readAsArrayBuffer(f);input.value='';
+}
+
+// ══════════ TOAST Y UTILS ══════════
+let toastT;
+function toast(msg,type=''){clearTimeout(toastT);const el=document.getElementById('toast');el.textContent=msg;el.className='toast show'+(type?' '+type:'');toastT=setTimeout(()=>el.className='toast',type==='err'?4500:2800);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
+// Cerrar modales con Escape
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){['auth-modal','edit-modal','of-modal'].forEach(id=>document.getElementById(id)?.classList.remove('open'));editIdx=-1;ofIdx=-1;}});
+['edit-modal','of-modal'].forEach(id=>{document.getElementById(id)?.addEventListener('click',e=>{if(e.target.id===id){if(id==='edit-modal')cerrarEdit();else cerrarMOf();}});});
+</script>
+</body>
+</html>

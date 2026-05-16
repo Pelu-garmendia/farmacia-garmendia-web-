@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Farmacia Garmendia · Laferrere</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* ═══ PALETA AZUL MARINO ═══ */
+html{
+  --g:#22c55e;
+  --g2:#16a34a;
+  --navy:#1e3a5f;
+  --navy2:#2d5282;
+  --navy3:#e8f4ff;
+  --navy4:#dbeafe;
+  --navy5:#dbeafe;
+  --text:#e8f0fe;
+  --text2:#94afd4;
+  --border:#dbeafe;
+  --green-glow:rgba(34,197,94,.35);
+  --sh:0 2px 12px rgba(30,58,95,.1);
+  --sh2:0 4px 32px 0 2px 12px rgba(30,58,95,.1);
+  --r:12px;
+  --r2:20px;
+}
+
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f7ff;color:#0f2744;line-height:1.6;overflow-x:hidden}
+
+/* ─── NAV ─── */
+nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#1e3a5f;border-bottom:1px solid #dbeafe;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 20px 0 2px 12px rgba(30,58,95,.1)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-svg{width:50px;height:50px;filter:drop-shadow(0 2px 8px rgba(34,197,94,.3))}
+.nav-wb{display:flex;flex-direction:column;line-height:1.1}
+.nav-wb-top{font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#22c55e}
+.nav-wb-bot{font-size:.95rem;font-weight:800;color:#22c55e}
+.nav-links{display:flex;gap:26px;list-style:none}
+.nav-links a{font-size:.82rem;font-weight:500;color:#22c55e;text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:#22c55e}
+.nav-pill{display:inline-flex;align-items:center;gap:7px;background:#22c55e;color:#052e16;padding:9px 20px;border-radius:100px;font-size:.8rem;font-weight:800;text-decoration:none;transition:background .2s,transform .2s;white-space:nowrap;box-shadow:0 4px 14px rgba(34,197,94,.4)}
+.nav-pill:hover{background:#4ade80;transform:translateY(-1px)}
+.hb{display:none;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:4px}
+.hb span{width:22px;height:2px;background:#e8f0fe;border-radius:2px;display:block;transition:.3s}
+
+/* ─── HERO ─── */
+#hero{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 68px);background:#1e3a5f;overflow:hidden;position:relative}
+#hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 70% 50%,rgba(21,40,71,.9) 0%,transparent 70%);pointer-events:none}
+.hero-left{display:flex;flex-direction:column;justify-content:center;padding:72px 6% 72px 8%;position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#22c55e;padding:6px 14px;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;width:fit-content;margin-bottom:28px;animation:up .7s .1s both}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#22c55e;animation:blink 2s infinite}
+.hero-h1{font-size:clamp(2.6rem,4.5vw,4.2rem);font-weight:800;color:#0f2744;line-height:1.06;letter-spacing:-.03em;margin-bottom:20px;animation:up .7s .2s both}
+.hero-h1 mark{background:none;color:#22c55e}
+.hero-p{font-size:1rem;color:#5b7fa6;line-height:1.75;max-width:420px;margin-bottom:36px;animation:up .7s .3s both}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px;animation:up .7s .4s both}
+.btn-g{display:inline-flex;align-items:center;gap:8px;background:#22c55e;color:#052e16;padding:14px 28px;border-radius:100px;font-size:.88rem;font-weight:800;text-decoration:none;border:none;cursor:pointer;font-family:inherit;transition:background .2s,transform .2s;box-shadow:0 4px 16px rgba(34,197,94,.4)}
+.btn-g:hover{background:#4ade80;transform:translateY(-2px)}
+.btn-o{display:inline-flex;align-items:center;gap:8px;background:transparent;color:#0f2744;border:1.5px solid #dbeafe;padding:14px 28px;border-radius:100px;font-size:.88rem;font-weight:600;text-decoration:none;cursor:pointer;font-family:inherit;transition:border-color .2s,color .2s,transform .2s}
+.btn-o:hover{border-color:#22c55e;color:#22c55e;transform:translateY(-2px)}
+.hero-stats{display:flex;gap:24px;flex-wrap:wrap;animation:up .7s .5s both}
+.hstat{background:#f0f7ff;border:1px solid #dbeafe;border-radius:12px;padding:14px 18px}
+.hstat-n{font-size:1.4rem;font-weight:800;color:#22c55e;line-height:1}
+.hstat-l{font-size:.7rem;color:#5b7fa6;margin-top:3px}
+
+.hero-right{background:#f0f7ff;display:flex;align-items:center;justify-content:center;padding:48px 5%;position:relative;overflow:hidden}
+.hero-right::before{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(34,197,94,.06) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+
+/* ─── HORARIO STRIP (ÚNICA) ─── */
+.hora-strip{background:#22c55e;padding:14px 5%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.hora-items{display:flex;gap:28px;flex-wrap:wrap;align-items:center}
+.hora-item{display:flex;align-items:center;gap:7px;font-size:.82rem;font-weight:600;color:#052e16}
+.hora-item svg{width:15px;flex-shrink:0}
+.hora-btn{display:inline-flex;align-items:center;gap:7px;background:#052e16;color:#22c55e;padding:9px 20px;border-radius:100px;font-size:.78rem;font-weight:800;text-decoration:none;white-space:nowrap;transition:background .2s}
+.hora-btn:hover{background:#0a3d1f}
+.hora-btn svg{width:15px}
+
+/* ─── SECCIONES BASE ─── */
+.sec{padding:88px 5%}
+.sec-alt{background:#f0f7ff}
+.lbl{font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#22c55e;margin-bottom:10px}
+.h2{font-size:clamp(1.8rem,3vw,2.6rem);font-weight:800;color:#0f2744;letter-spacing:-.03em;line-height:1.1;margin-bottom:12px}
+.subp{color:#5b7fa6;font-size:.95rem;line-height:1.7;max-width:500px}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .65s,transform .65s}
+.reveal.vis{opacity:1;transform:none}
+.sec-top{margin-bottom:48px}
+
+
+/* ─── SERVICIOS ─── */
+.srv-featured{background:linear-gradient(135deg,#16a34a,#15803d);border-radius:var(--r2);padding:36px 40px;margin-bottom:24px;display:flex;gap:28px;align-items:flex-start;position:relative;overflow:hidden}
+.srv-featured::after{content:'';position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.06)}
+.sf-ico{width:54px;height:54px;border-radius:14px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff}
+.sf-ico svg{width:24px}
+.sf-tag{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px}
+.sf-h{font-size:1.2rem;font-weight:800;color:#fff;margin-bottom:7px}
+.sf-p{font-size:.86rem;color:rgba(255,255,255,.75);line-height:1.7;max-width:520px}
+.srv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+.srv-card{background:#ffffff;border:1px solid #dbeafe;border-radius:var(--r2);padding:24px 20px;transition:border-color .25s,transform .25s,box-shadow .25s}
+.srv-card:hover{border-color:#22c55e;transform:translateY(-4px);box-shadow:0 12px 40px rgba(34,197,94,.12)}
+.sc-ico{width:42px;height:42px;border-radius:10px;background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;color:#22c55e;margin-bottom:14px}
+.sc-ico svg{width:18px}
+.srv-card h3{font-size:.9rem;font-weight:700;color:#0f2744;margin-bottom:6px}
+.srv-card p{font-size:.78rem;color:#5b7fa6;line-height:1.6}
+
+/* ─── PRODUCTOS ─── */
+.prod-toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px;align-items:center}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.prod-card:hover 
+
+
+
+/* Upload buttons */
+
+
+
+
+
+/* Modal producto */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;align-items:center;justify-content:center;padding:16px}
+.modal-bg.open{display:flex}
+.modal-box{background:#f0f7ff;border:1px solid #dbeafe;border-radius:var(--r2);padding:32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:up .3s both;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.modal-box h3{font-size:1.15rem;font-weight:800;color:#0f2744;margin-bottom:6px}
+.modal-box>p{font-size:.8rem;color:#5b7fa6;margin-bottom:22px}
+.fg{margin-bottom:14px}
+.fg label{font-size:.67rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#22c55e;display:block;margin-bottom:5px}
+.fg input,.fg textarea,.fg select{width:100%;background:#ffffff;border:1.5px solid #dbeafe;color:#0f2744;padding:10px 14px;border-radius:10px;font-family:inherit;font-size:.87rem;outline:none;transition:border-color .2s}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:#22c55e}
+.fg textarea{min-height:80px;resize:vertical}
+.fgrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+
+
+
+
+.prod-img-preview-ph p{font-size:.75rem;margin-top:6px}
+
+.btn-cancel{background:none;color:#5b7fa6;border:1.5px solid #dbeafe;padding:9px 20px;border-radius:100px;font-size:.82rem;cursor:pointer;font-family:inherit;transition:color .2s}
+.btn-cancel:hover{color:#0f2744}
+/* Excel import info */
+.excel-hint{background:#ffffff;border:1px solid #dbeafe;border-radius:10px;padding:14px 16px;margin-top:12px;font-size:.78rem;color:#5b7fa6;line-height:1.7}
+.excel-hint strong{color:#22c55e;display:block;margin-bottom:4px}
+
+/* ─── PUBLICIDAD ─── */
+.pub-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ad-slot{border:2px dashed #bfdbfe;border-radius:var(--r2);min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;cursor:pointer;transition:border-color .2s,background .2s;position:relative;overflow:hidden;padding:24px;text-align:center}
+.ad-slot:hover{border-color:#22c55e;background:#ffffff}
+.ad-tag{font-size:.6rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#5b7fa6}
+.ad-title{font-size:.9rem;font-weight:700;color:#0f2744}
+.ad-sub{font-size:.72rem;color:#5b7fa6}
+.ad-slot img{max-width:100%;max-height:120px;object-fit:contain;border-radius:8px}
+.ad-del{position:absolute;top:8px;right:8px;background:rgba(11,21,36,.8);border:none;color:#5b7fa6;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.78rem;display:none;align-items:center;justify-content:center}
+.ad-slot:hover .ad-del{display:flex}
+
+/* ─── NOVEDADES ─── */
+.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px}
+.nc{background:#f0f7ff;border:1px solid #dbeafe;border-radius:var(--r2);overflow:hidden;transition:transform .25s,box-shadow .25s;position:relative}
+.nc:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.nc-img{width:100%;height:185px;background:#ffffff;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.nc-img img{width:100%;height:185px;object-fit:cover}
+.nc-body{padding:22px}
+.nc-tag{font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#22c55e;margin-bottom:7px}
+.nc-title{font-size:.95rem;font-weight:700;color:#0f2744;margin-bottom:7px;line-height:1.3}
+.nc-text{font-size:.8rem;color:#5b7fa6;line-height:1.65}
+.nc-del{position:absolute;top:10px;right:10px;background:rgba(11,21,36,.85);border:none;color:#5b7fa6;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:.8rem;display:none;align-items:center;justify-content:center}
+.nc:hover .nc-del{display:flex}
+.empty-state{grid-column:1/-1;padding:60px;text-align:center;color:#5b7fa6;border:2px dashed #bfdbfe;border-radius:var(--r2)}
+
+/* ─── VALORACIONES ─── */
+#valoraciones{background:#ffffff;overflow:hidden;position:relative}
+#valoraciones::after{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:rgba(34,197,94,.04);bottom:-150px;right:-100px;pointer-events:none}
+.val-layout{display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start;margin-bottom:44px}
+.val-score-box{background:#f0f7ff;border:1px solid #dbeafe;border-radius:var(--r2);padding:26px;text-align:center}
+.val-num{font-size:4rem;font-weight:800;color:#22c55e;line-height:1}
+.val-stars{display:flex;justify-content:center;gap:4px;margin:8px 0}
+.val-stars svg{width:18px;height:18px;fill:#22c55e}
+.val-lbl{font-size:.72rem;color:#5b7fa6}
+.val-bars{display:flex;flex-direction:column;gap:8px}
+.vb-row{display:flex;align-items:center;gap:10px}
+.vb-n{font-size:.7rem;color:#5b7fa6;width:10px;text-align:right}
+.vb-tr{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
+.vb-fi{height:100%;border-radius:3px;background:#22c55e;transition:width .8s ease}
+.vb-c{font-size:.68rem;color:#5b7fa6;width:16px}
+.rev-scroll{display:flex;gap:16px;overflow-x:auto;padding-bottom:6px;margin-bottom:28px;scrollbar-width:none}
+.rev-scroll::-webkit-scrollbar{display:none}
+.rev-card{background:#f0f7ff;border:1px solid #dbeafe;border-radius:var(--r2);padding:22px;min-width:270px;max-width:310px;flex-shrink:0;transition:background .2s,transform .2s}
+.rev-card:hover{background:#ffffff;transform:translateY(-3px)}
+.rev-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.rev-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:.85rem;flex-shrink:0}
+.rev-name{font-size:.85rem;font-weight:700;color:#0f2744}
+.rev-loc{font-size:.65rem;color:#5b7fa6;margin-top:1px}
+.rev-stars-s{display:flex;gap:2px;margin-bottom:10px}
+.rev-stars-s svg{width:12px;height:12px}
+.rev-stars-s svg.on{fill:#fbbf24}.rev-stars-s svg.off{fill:#bfdbfe}
+.rev-text{font-size:.8rem;color:#5b7fa6;line-height:1.65}
+.rev-vc{display:flex;align-items:center;gap:4px;margin-top:10px;font-size:.63rem;color:#93c5fd}
+.rev-vc svg{width:10px;fill:#93c5fd}
+.rev-footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.btn-opinion{display:inline-flex;align-items:center;gap:7px;background:rgba(34,197,94,.1);color:#22c55e;border:1.5px solid rgba(34,197,94,.3);padding:11px 22px;border-radius:100px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s}
+.btn-opinion:hover{background:rgba(34,197,94,.18)}
+
+/* ─── MODAL REVIEW ─── */
+.star-row{display:flex;gap:8px;margin-bottom:18px}
+.star-row button{background:none;border:none;cursor:pointer;padding:2px;transition:transform .15s}
+.star-row button:hover{transform:scale(1.15)}
+.star-row svg{width:28px;height:28px;fill:#bfdbfe;transition:fill .15s}
+.star-row button.on svg,.star-row button.hv svg{fill:#fbbf24}
+
+/* ─── INFO ─── */
+.info-layout{display:grid;grid-template-columns:1fr 1.6fr;gap:44px;align-items:start}
+.info-stack{display:flex;flex-direction:column;gap:16px}
+.icard{background:#f0f7ff;border:1px solid #dbeafe;border-radius:var(--r2);overflow:hidden}
+.icard-hd{background:#ffffff;color:#0f2744;padding:13px 18px;display:flex;align-items:center;gap:9px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid #dbeafe}
+.icard-hd svg{width:14px;color:#22c55e}
+.irow{display:flex;gap:12px;padding:15px 18px;border-bottom:1px solid #dbeafe;align-items:flex-start}
+.irow:last-child{border-bottom:none}
+.iico{width:32px;height:32px;border-radius:8px;background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#22c55e}
+.iico svg{width:14px}
+.ilbl{font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#5b7fa6;margin-bottom:2px}
+.ival{font-size:.84rem;color:#0f2744;line-height:1.5}
+.ival a{color:#22c55e;text-decoration:none;font-weight:600}
+.ival a:hover{text-decoration:underline}
+.ival small{font-size:.72rem;color:#5b7fa6;display:block}
+.cnt-btns{display:flex;flex-direction:column;gap:10px}
+.cnt-btn{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:14px;text-decoration:none;font-size:.85rem;font-weight:700;transition:transform .2s}
+.cnt-btn:hover{transform:translateX(4px)}
+.cnt-btn svg{width:20px;flex-shrink:0}
+.cnt-btn.wa{background:rgba(34,197,94,.1);color:#22c55e;border:1.5px solid rgba(34,197,94,.25)}
+.cnt-btn.ig{background:rgba(168,85,247,.1);color:#c084fc;border:1.5px solid rgba(168,85,247,.25)}
+.cnt-sub{font-size:.68rem;font-weight:400;color:#5b7fa6;display:block;margin-top:1px}
+.cnt-form{background:#ffffff;border:1px solid #dbeafe;border-radius:var(--r2);padding:24px}
+.cnt-form h4{font-size:.95rem;font-weight:800;color:#0f2744;margin-bottom:4px}
+.cnt-form>p{font-size:.78rem;color:#5b7fa6;margin-bottom:18px}
+.btn-send{width:100%;background:#22c55e;color:#052e16;border:none;padding:13px;border-radius:100px;font-weight:800;font-size:.85rem;cursor:pointer;font-family:inherit;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-send:hover{background:#4ade80}
+.info-map{border-radius:var(--r2);overflow:hidden;border:1px solid #dbeafe;height:100%;min-height:560px}
+.info-map iframe{width:100%;height:100%;border:none;display:block}
+
+/* ─── FOOTER ─── */
+footer{background:#1e3a5f;border-top:1px solid #dbeafe;padding:40px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.f-brand{font-size:1rem;font-weight:800;color:#0f2744}
+.f-copy{font-size:.72rem;color:#93c5fd;margin-top:3px}
+.f-links{display:flex;gap:22px;flex-wrap:wrap}
+.f-links a{color:#93c5fd;text-decoration:none;font-size:.75rem;font-weight:500;transition:color .2s}
+.f-links a:hover{color:#22c55e}
+
+/* ─── CONFIG ─── */
+#cfg-panel{position:fixed;bottom:24px;right:24px;z-index:300}
+.cfg-btn{width:46px;height:46px;border-radius:50%;background:#ffffff;border:1px solid #dbeafe;color:#0f2744;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.4);transition:background .2s,transform .2s}
+.cfg-btn:hover{background:#f0f7ff;transform:scale(1.08)}
+.cfg-drawer{position:absolute;bottom:58px;right:0;width:280px;background:#f0f7ff;border:1px solid #dbeafe;border-radius:var(--r2);padding:20px;display:none;box-shadow:0 20px 60px rgba(0,0,0,.6);max-height:80vh;overflow-y:auto}
+.cfg-drawer.open{display:block;animation:up .2s both}
+.cfg-drawer h5{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#22c55e;margin-bottom:14px}
+.cfg-item{margin-bottom:13px}
+.cfg-item label{font-size:.68rem;color:#5b7fa6;display:block;margin-bottom:4px}
+.cfg-item input{width:100%;background:#ffffff;border:1.5px solid #dbeafe;color:#0f2744;padding:8px 12px;border-radius:8px;font-size:.8rem;font-family:inherit;outline:none;transition:border-color .2s}
+.cfg-item input:focus{border-color:#22c55e}
+.up-lbl{display:flex;align-items:center;gap:7px;background:#ffffff;border:1.5px dashed #dbeafe;border-radius:8px;padding:9px 12px;cursor:pointer;font-size:.76rem;color:#5b7fa6;transition:border-color .2s}
+.up-lbl:hover{border-color:#22c55e;color:#0f2744}
+.cfg-save{width:100%;background:#22c55e;color:#052e16;border:none;padding:10px;border-radius:100px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:8px;transition:background .2s}
+.cfg-save:hover{background:#4ade80}
+
+/* ─── WA FLOAT ─── */
+.wa-float{position:fixed;bottom:80px;left:20px;z-index:200;display:flex;align-items:center;gap:8px;background:#22c55e;color:#052e16;padding:11px 18px;border-radius:100px;text-decoration:none;font-size:.78rem;font-weight:800;box-shadow:0 4px 20px rgba(34,197,94,.5);transition:transform .2s}
+.wa-float:hover{transform:translateY(-2px)}
+.wa-float svg{width:17px}
+
+/* ─── LIGHTBOX ─── */
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:600;display:none;align-items:center;justify-content:center}
+.lb.open{display:flex}
+.lb img{max-width:90vw;max-height:90vh;border-radius:var(--r)}
+.lb-x{position:absolute;top:18px;right:22px;background:rgba(255,255,255,.1);border:none;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center}
+
+/* ─── TOAST ─── */
+.toast{position:fixed;bottom:76px;right:22px;z-index:400;background:#ffffff;color:#0f2744;border:1px solid #dbeafe;padding:11px 18px;border-radius:100px;font-size:.8rem;font-weight:600;transform:translateY(8px);opacity:0;transition:all .3s;pointer-events:none}
+.toast.on{transform:translateY(0);opacity:1}
+.toast.err{background:#450a0a;color:#fca5a5;border-color:#7f1d1d}
+
+/* ─── ANIMATIONS ─── */
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:960px){
+  #hero{grid-template-columns:1fr;min-height:auto}
+  .hero-right{min-height:320px;padding:40px}
+  .info-layout{grid-template-columns:1fr}
+  .info-map{min-height:340px}
+  .val-layout{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .nav-links.mob{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:#ffffff;padding:14px 5%;border-bottom:1px solid #dbeafe;gap:12px;z-index:99}
+  .hb{display:flex}
+  .fgrow{grid-template-columns:1fr}
+  .pub-grid{grid-template-columns:1fr}
+  .hora-items{flex-direction:column;gap:8px;align-items:flex-start}
+}
+@media(max-width:500px){
+  .hero-ctas{flex-direction:column}
+  .hero-stats{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo" style="gap:10px">
+    <img
+      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAA6CAYAAAAdrmHiAAAg2klEQVR42sV6eXhV1bn+u/Z05ik552SeQyaSMEMCQWYBkYpDogLVFtRKfw6917baem2IVVRqHbDUAScUJ9KCiCCDEOYZEgiZ55DxnJOced57r98fgNZ723ttf/6eu57nPM/ZZ6+91vee91vf+r53L4J/vTGUUkoIoQAAHUpvXX7nwknFUydZjdosk07PUUEJ++jISGf/lfqjZ48dO7P1wFcA7CzDQJJlAoDif71RSgghAICc6fm3PLvxjzuPnjrqckXClF46TunyQko//g293sKREG1oaaIfb/+s6fafrfwlAM21kcj/Ko7Kykrm2tfE3zz/+/cOHD0u+f0hKkZEGggEZd/mF+XIVMiRHxvl4G9nycETn8oSleRwwEe9Thdt72ynL7z58t7EvMRYSin5XwN0bXKULii2vrHl05pTF5ppW0ev3NtzRRoKhGTHmhU0aAYVZ7OU3spTaS5ocMMKKlJK/R4n7evvFbvaWqWLDReppSRnBgCUl5ezP5R93D/RlwBAZnGm9Sern/7MrLfOdjmdopIHy6mVDMNyIHHJiOQXyaLUB77ZSeR1GwhXsgQ0GoREAEkUCcexZKjfNmiva+1lCEF1dfUPtm6Yf4IVhhBCV9738zVj8ifN7rvSLYYjES4UihARoOERhxxd/RBURy4x2oeeYxTLHiSqsgqZj88MclQVZqEVlbxRtsTGklHvaF92craNYRj8kEHgezOzFmspAPS1t1zWLmRC+liL4PN6qV6npm5fgNFotUSnN7uDo2L7ucL5gw0pab4rX76kIOyQj4NCy4qkWKu0WIrSbo6equ2pbW9vD18NhuQHA0P+2TVDCMGWL7Z/mpNfVnHh2GHRYrVyeVnZg7ZR+8ktx6rkwdDeJKvVn5ZqhSExDmqzEUSvIxjop6cG7ehIidMvtHXNGKh+V1pzYt++k2srQaqqIH+/+a/aey2Q0n/ZzQBg7dq1hGEYuvHV9c+Hw05vUlY+Ryjd/Yv3Vux49vC4YnXyNmP5IuMf777J2Lh4HqcpyuRomlUlx8fowkIkoXt6btapzPTQtrvuHCouW5C6hgB07drvTwwhoISAMgClFCzdWs7SvyGE/AsRjSGEyOvf3PhqYWFJ2k2/nCLdvVq+bdZktcsgG14QNM5VoHK6SiHxAkOpkucJy7DQmqJwuaII+FhvrClWV/PlzFO/uuevZSxLJEmi32sDfZVSRffJBs3L0yeOApFvbdpazpKKaon7p/2SEFBKibYk951gzqb3QDQTx5jZUDTsFfyC7bmAVzohsGgkBAs5NaOMiJKsVEVk91BRdSL3+4720JNxUaZppTEmkgKoLaIYsBECgkpQNIKUoxzVBdUUf+N6lIJMPk+5Wz8o3B3LR/J/d+bmbjHCn7WJ8XvGznplPyFE/Mf/PkAorWSu7yvfaVf3BaK7fcrN6qo7KAp1kYffiBvZ3MrQN44mv+e00Q9pmB453/9A9Y5OhA8MMHRvh6F71OX/WhJplIbohQMdYz//6Mg0yZhRVswSgCH/2EVqKmdxAMjR3cvKHC/HUPoOKD1joXS3mtItcdT7cf75jj2Lb6+pqeSYv7fICEAJqZIJIfTaomOug6NbCyjLEhrT09/PgwZYhZL3jFKlFJb7Fmbs1RotWHmu5WwyO/roRCaS4fVFZbDiBBIOyjFPvfrb2hAN5xVZX08A53QjNjJOokiUqS6HGtPHcflFN6TNu3ER0tImXA84c6sOiwCor0DTsW179OIzz7Fi9R/80bqjol8ecUS03U0TUVu71S63Z3H/mRFCQAsoFXa+ce/4r1u8VwjZPngNHICqb/r2nBvoRUl4CBEmras1QhdxnD1GnzLD7/d+3NXb1njoWLtl6T2TV3giXSDRKBcfr33w4vEW5+mSc+/Nmj4lL8bEjrxUlbZelNKjarWgEgQoOV5WKlQhrqlxqvfpKuVcQsg5CBhTeNtdnpR1p+dYJDommJ7AWgUWH77YJ/05lXXdNY1nE3Jpf0Pm/B7uO2FvbSU5vNQQX7AodVvsPXeU3D3XOvDAnJ/P4n/yoaXigexfZ2WpEIwETUa9IDJgBHA+GpqQMZKaGlQE/M1qWY4KHMsO3HnzymczE3+bMnGRt0KdAIRkd8yVBrTv+mrbvTNvm5w1a/qMoCPUxuSVtseraBxYwoNSDgz0UAsWWW2QdOMnJBfrirMH17+w4aAu2n/iyowbbp64OlatrHyUyhvfIDOPEEXdkGytOx+pOxgKPbouY1XoW2bWzmJJVZW4pyV3ceTCQElUuyukWz0vMVjfuCG1Qh0ovc2xzKgPIU6ng4JTgyUEomhDVA4gKHvQ3hcmfc4zPYUpi0ppEp0zNOYv5Tp9Gu8LAxq+R/lZw6r9qXeOU902d5XsDhzVp+gzOEVEoDZ/M43KEqEAAlEgVpVJGTaNJqUFUscn3ZepVumTpZALxg1bVKLVLocvNzO8N0hjIMozLYwt7sGfNkfWvDv8rJKAvR6h1h7qlvfu/UBDGWPChZ3HpyUNjFiUBreoSLFmOrzho196OqcYlAGX0+9SDLscGHIN0xGfE26/j0Dk6NikbKU/cppV8kV5+RNK5sycYU0wJRxNiEQ8DEGYxieOxD+67KcyFAcSaod+qVALqrBWaVaERQ8Jy2EiU5ZEZRBfJACZZRnXoNJ37rD5k5RUNt7jFzOTy25IMoydTQPahUQcdyfcgoFpic8+NPXpd5YmcHh0+Y9/PEiuR6z33//csGDB1L1JSYljulpbD7RMGFe8aCbNkeck43K97dz9mfFnN63ekFA3/Da6gn9drOEYQcGBEEKRG5tJ9RoV6XH0DNhcojs3Y0y+M9ANf9QDjQBwDCADCEUAwmCY9Zl+F4iGKkxxwXmIQpYkMFEZCEaBiMjIskLHDNYlND/z4+aic6f2TQ5EtMey0+IYMzNM7KKZRjUWcunypbZRt++TOJ1ucXxCUh6k0IfcVWKIvGdPTXxr19BUUWIQl5NzR8Pc+VubW2s43aoHBc3ULN3OrFk2a2rMmizTggOVh7kWpQXFgQiVeRZMk60DhIPMhQ39seGspYPtMZWCQZ5GpG7O6fIplAompBYSQwXW8qDCufSK/Ys5HwzcIawllEFEooiIFBHxKphAhBK3zw+nPJoKwGrMmHCDXmJZvdor0uMbOYtiMrqjaUGWNdbdu+ym3wDywOXmtk9PNTQ8xRFC5Gs5V/P23TW/OnvRtVDV1hk4kZJzIvp/nph+86IZ8TzA9Q/0Tjl4omOQJwwbpaDBCMCIFBIFBBaEiRLZEBeY4nN2zcrtrN9SmOsvjInXaAGEcJUYo8cRjd2w+YXWcMbCMQUME+cPRiHLYCIiEIoS+MOAL0zhClJ4ZL98z+8nqXqqHr01a/JMCHNzSJRPBgb9pAtu6bLb1a9Wnx9ISU5MYxjufgTcf+Kuu9lHH31kTktKuG1CcW4pANvE8bnej/6y3+8YdLAJcSZZq9FOGxnq3Xxg8E+moJWUsl5QjgWjkAGJI+AZEKcrSk1azWO3302qlBreUjq1TJuanKSVITO9nZ2+xnOnlN1hFHxwNucmou1g3E5Ikgw2EAGCEUr9YSAQBqQoxUAgIj2Uw0zqePrjCVmqWpk3pzLiSVF2JZUydqPmzH3L58/kONa+/8iZlogoU4vR4vjGzXp6egy7as5MrG/p6Bw3NlcXY9TcHg2Fdp9r6MxZmjBVNhhiYjMyBMWb73427YYbFQohJSxzABF5QOQpFBwYUQRVKQNTH9tUcO+Z+xuN95yusQwegXhFgnCLEkJYIkpZG3MuOUu4vWVIgiwTIlMgKIF6oyDuMIEvTODxENj8ULpHemdblVAoEhIRGe6Fyt4kNe48gMvBLC550hTzDXnpaZOL892Nrc3Tb5q/bOC6mzHA2q701PmP5GRmrNZplP2dPX0nGUGRdGVohPQO2KIKQWBDIbaI8MQ16pZkv5WICo4yHAfCAoQDIQSEOEYi1FpmW/bs6qL+/C/6RdxgViAkAqKoHN8YqrGdKDE5fAenBPyQeY4wpxs5NHRSIkbpsM8Hf9ANEhhldNFIxKFfs3q/cflBpe3jA2OdPHKJUjBcdFBoPR3Tm+6avun0w69mTMzNXEQlyUQpJdz1zJmQKnn73vnlQw7f1LTkJDicLvPwcM/zRr12zp5D5xI5AjBCcBdYei+vYZghryxwhAUHgmgQkMMEkwokaJSEOGwO4fQTQpJ3Wk5H/OZBTidKrNOs9JDduZqg+sy9fcM+WaaAxDBwednWM2+LX4FnyhCRElmOs0gKSZ5X9qN3l8x7dt5W5QVxV1bNSMLAqTfG2+tjFKHuvHwfihMn6nMumUzxHqft32//0U0nKivp1TLnelp/+Gzd6rbuobf7BwaPhQO+pt6BgRKzUXcsb0yORWC5qMGKU3etv/VxXbzQL+hQA4naowHic4eYC0a19OjiRXR5QkxUYkFYjUBhSdQgSZXi1VKlL8iFNaOBK3q73QfCEISilPICRzr6VN373oo8L6tjxnXLcSVS1KdKN+d8emb9Lu2lnt+nnD7f2Z5hWfXLi+31Ck6jPZVqVXRls31NcsrYSxGvqnPJgtn11zL5q2UzIUSurKTMrCnknWO1lxmFwD1pG3aUxcUlweUeLbrU2Nx5x5Ibk8DLOvESFQJtnMktimlSkPAqI3N48XyWryXyAYePLGc5QtU8hSwTiL1+uBXNOkEBnSwCERGUsIREoxQREYSXZWi1nD6siMydWeRd9sXPSi8QuaDVyOoL+lwrso827Rn74c7RwYr5sW+Xjls82+Ucdemgfbm6u6jnjfKFNgDYunUrW1FRIX1HA6iqInJlZSVTNqFw04EDB44Y1MkPOZ2eCQJjELLTU6fEx8bZdtau30nHJGWHaDQPYWJItSh3x8cNbOxxylscTrkukK+AjRNZg1JCRKLQKghCEsCFQBkWhAIkGqagFHAGCWQZslknx8TkKavr2sMxr2z/Yv749D0l0aiMS60hnKwFFBZl+hdNb8USVphXEJvB376iou9v9bvrQP5upVlDKTeHEPHx5yrTk6y57/K8oigrJaPto70vHEgf8/mPF81c1nakJdU2Ly8QJNz+G5/e2Bna8SH7GYmV0qavMt4CrVev4cNUI4CoeUDJATyLa3UFIMlAMEoQERkoeFlMshq5I0ej9598KvB2wUOpP2aJ527CiOnRMENUCq6HF3TVpXEPffzyY48F/1aH+HuVKflHpTHDMHL1zp2ZM0pnqSqeLlwwYut52aIHbp3LY1J2PEYlD/56wB3a21v4ou2y59/plX7HpPti1LIxaCbUR3VKQhQshcBeTWcYBpCvTR8SCWSZAaWSOC4rhqs/S1/b+yvnI1cNYnHPyyuNLriw4992unCt4Ly+H/53ag75H5QbCgCLni2zBL19r/jcjgpKQxwvSPCHNQOD9fTX7sIZy6jku0Pad9Kde7dZVqZLJo93lOo1hAgMBccALAOwLAG5lgoQQiFJDIbdsrRoQgw71MAfqX5keEFlDeSqOZCBb0pmUr4VTHUF5O+jEXD/vXZBSXV1NVNRUWEHyIqi+7PfUyUELVcuhJNdfZp9gbrui6rs8BwxJZ5KCgUXcEWDsUolbE4g7KVQCYDAXGfmmo5CAJmCKnggLZ5jc1K1GLkSTIUBmqfnwolvel21oboC0g8iAl6jVAJAQCnqSdvX3961AxQEy3z9zIQxBFoVH3QHIwLHYHwuT7psMkQqQ+YAmb9KjyyDsoQhHEsIDwaCLIc+32eTrnQSs2mMKcl5zulCORhUfz8mvj+Y8nJ2a3k5ysvLKc9xMmUBwlxX2gii0ShhWZZqygKnpORUGhk3VpCcdXR4MCCZjbJkAkN8QSUT8oN63BIjRrgIE1Ug4hXDcki+JAbg9/lVZZQRBIVPfuE+y4S2PzP7KdkGibKAKIqkoqKCAYBqALiqScs/hKLJADADiAHQA0B57dkogEW6/7jrTTFGLwY/+9SEkNdtNaUFoqKscA5d0RNBT+NN8dFAKMi67f0sqOKttPSsmGDYw9uEqA/BwCWcd315bbwAACcA8drnm8YSBjIoKKX/FBhSjnJmR97+xcsWLC0dm5VviTcnJBlM+rihkX6ry+XtS0lOUZysO009Hrf3zsUVWTqOEWON5kBb/xW1UWdkiUIW42PjQsfPnRILcwsMCqXgMWj16gPHj/hKxk1RDDtsJoNezz332nMNPrev98HVD5VoVBrR4/dKvUO9IQWv9Pb0dfe/9sGb5wsLCkIj7tHh/pq2DgD119zve7kgwxACGPhJm7d9MLLt4F9sz7z/O+dPn7/Lf9Njc/qpFBnYsPUF+4qq5cMX2y4MUkrdq9bf3pezKmE4faV+oPzpRcNdfW09Gct1weS7dU5K6fDmvRu7MB3BJzY93Eop9f/bxnuvGG5mvA++cnf3yOjI4OnLp0ZXPlvuLlidOHrTEze46zvq2n7z5i/6Dtd+PbL78B7H8drjrp0HdvVv+fwTe/7cokcJIf/wnQ7z3WVSTmRKMXH21Jljc3Lle9ffQdZ9+nTg5OUjTelx6YPHLh0L/Pumx5WfHP849ljjThEAe6zlr4ayonzfhp+9NXCgcY+l+vibTROLzEF9jNe4vvqBkW2n13PjpoKJsxC1GIn6Lw58zC2YkdtU2/2pNsZklN77+ln5izPV0VtKbmunstje09/peHv/K7rdZ7dEFt+wUPWnHc847nzmVoOgDwd/vnJNOaVU2L5tm/T3vOo7YLZu3UoBYOa4GfnOwJCsMRLdUysfGdj0b58Jrz6yKe6TI6/ELJ6R03z77Mzmus59PACnQamI9vZ3J2499E5uQUJMT0nWPJXL6eYzjEkHthzclM+IikYdyzWyhOMPXfwyMDIS5SrLN4eozGi2HXp7pL2vQV4ydZJz3X2v5e1+4XjRouk35+Zns2K8VcFChqvXc1CTlUO639n3tDx1/ORkdZppniTLQPl/Ff3/9gfCc5wMQJWXnZPbMXg5LAWp4vn3NxTMvHemdt/ZncM7Dn+lVofHxNp6jJavamq1/YPdru5mVnO5ztG25YP9IYs8nZ1WODv9wK5RfnHx4xpnq/XQz2/cEG6qY+MvX7T7Nn70FnfxILib19zCnjkoed/e9pFZE8rt+GJnXdqp+sOh+rY6r91p8/Z3cmRoKETPNB4O9PSGlRvu+2y0q69b6Y4McPfdc9/iq2I5/W9faZBrt815mVkx+48eVzg6mKEn7/rDoebtbSN7ju8z9Z+J4sip8z2NDd09fecD3EdfbHbYGwKuB5c8Enxr7cber/cdZPYd29Mfr4zryknMyr2ydyBu7rTZZSn6fE/Uz9naOq4MPnn/E0Mn3j9XVLnqyYHzJy/jmTXPMLnmsa2lP5otFpdO8B08tv/SQCelR481hf+05S2x7xTUy3/1oLb1nKz/dN/W4Mpl5bmU0liO5eT/7GrfXlSCIVWQjZlxhWf3H9qcv6wwO1ZvHB485hhDpSDG/mjS2bHphajeuDXd6Y+4X9z05+bZs+b5wyIJFo7JNqUblap2e7ATsp/Xm/RetSAYwr6RBI4XHISQgRHbkE6lVoesMYl6BjCFgUCPzT8Sb9bkahjINXUdIxSicc743LyX33/d6Qv5nbV1J8zhgFe5/tcvRP/jj7+NfLljb1LdkbP2Z19a/3D1e9XHKisrmaqqKvlv2KhkcOgQ02C3MoUV1ZG6uuMTzNb4z1f84uddq37ykLx88c3JTq+7yRcMX86wajHac0gl99aEzBqWuIfbVSpXG+t3DqpDTrvSbFGoPQGdTiU5GFaG7IywgoqhlAo6nujMjMzxLDvS4Y7KNMTLoqiM0ZBgKOyOMlpRZ7BGCLQBpy4jGld6eygS4IWQdbIIbbpBD0zzAJ4nn3jGdlf5gsKc5OS/WuOTf08vb+Vh3yhX2620vLxaJt/xOELRa3dOVWmFB8xiR2vgxOvGwdpd2hiL1SKMdieJA/ZY0WQxChNWGKX6nWq1vQPcXa+ASSwAnL0I79sExf3vAueqEfn6DQiV9QgceBusORlMyiSMdjSC1FXD+tN1wMEXEWo9B+WiX8N/Zhs0024FXF0IndqMQG9jWC6a72O6j9lpKGQLSOgRktPclrmr3L64edSrHTeUrDNsvGr3t0kB13+uYqLGO5AbsffOPHPYmdD2h/SXp7CupKF+LGbHliZmrdyEKDHDc/kYmPOPQFP+IpQl98BOkjD4eZVsnfQTevaVtZi05pcYHEuQxGogjauAT8iGVTCToRCgJQKox4PeE19Da6unBl4Jdt7jtN/3ATEqk+DWj4clsRR1hy6RyffvJe7Xf6FIWP6WIvr6ilix/nBeyu+2g7Ychv2VSrBc5aBCj4vbf2XuSoiVl+dPzThDkzJP+SRlB6eE6wWD+/J8T4MLfV0YKCmJS9SNsItG1TmwPlyNg6+/JHnaW2DQgmTGZYAm5ZCL1S+RwsnFGN6TyFidXRh/21I4Lh3F8PHtMOdlY7hnAElF49Fbuws8EUGCo4gqTQhFJZhoFJGBFrReaKRFy5YTX1staMQD1t0GxZZn4J85CfyMOxB09lJvIEilnPlg4idJ1JBBgnu2ceor7QkKgU+IhCI7fDbvCr3CtQJhF/xj59zGeSbdXa7obv2KZKomJ7pErn8g4o73SRHMuZH39dcT974P2bnvbKPh7mYyeikJyfEaxKdZqSbeCLZgFhAZoZ2tPXJ2bgJxaRVUrVeg78u30PYXQibdXQ4vJaChIAQhCEtBNvy9ERBOwuiuN6g9zQhrooXYoyEo9QpiLb8N5hQjqd3xNTEkmUkwQoh53kJ4anczvNEEbvIC6mtuAcPw9og34tbnmcOiibJ+SftqUuq727kM8lOX7YviTyzm8DRts0vdPETZ8QqEPC6nkJZmQtZNS+EdaJMjokxjZi3EmS3vM3379jK+lT+Bi5gQ2rOXRA5/zHSVLIbH4ULDnypRyh4Hz0bQvd+F4KgHIVlEWBMLlueg8Qyi4aXLKItpR+/HlRhKmgbB2YfOk1YoSm/BhV1fw/Hl20ibVCCFkoupPi8b7rYeRquUCDe2GIMcIYRKgV4biU4qU/IkxYhuJvN9Si8SrpxSVvNJ0n3RiwPE3QbtaDRGoTYytvqafRqxqERMWnKLYLtQxzZ/sQOxFh2sg6dQxofl+j/9yq7kMSICjtwUuLr3vO1S68HovPD1Gw0krDPB03NhNNEEL8MzjOjvBqvUqLwsx8lem8luVUAT7hRtJzti9XqobK8fUQYprAYB1slxjOnMut+oGKUBvqErcBz4EnJCNsqee0Fk0vPBhRodki5WGDx3hclHP8ZkiI8QQh4goyfLfm7qu7RxuDkYutjNdhxzKNf8IiHwWrQ/Mq4+yMIlqKOqoLdpSgpOBCT0DKgUo/0xJR5f3HiDT5Gh9fOxOpk3xiUnWOO9EeoIE67eojVIIb9rbpxJPYWKEsKSFCIsJ/U7XOfiFI760dGIcUiVo4kTm5oSDCHnhf7YhJRYPjli6/Dpo4Pd/lOvSfNV3pA6hHiXG4VqkzDV5ZHGXGGTNdlCEBbVaMOWqOmBYpX39fGpYr6lwMQP5pRNJV27i55UeIf6BoLKY5Pu7e0kDEPb71O2KGXaz5uEaoMmdPiGS6meMw2uR2DX73h0weCylBlPmAxJN6xOi9MhMzUJvBRCp912MFHNDOQUjpsPMPGXz5/5Kj0jw8qqBKhU6iK3wzXiW3djb9K8KdPCR45Ee7oDp5On5ZSoM1K5ls9OnHQ9viMrJtZsPXFi/66Gv6wO/uGi4XMQ8U74hT24vfydBn11vHJgaAoNkTuoWp025t1A6aQ37ud/4dpTtHQyNy2oSnT8l8zzzQfAs2Li5PveHTx5vWxIK0zIs0uBpsBI9OiRJ6xfxhdPnms3b0hIjqHFSgU5fcAT6toVMBU0tvtV748NakeGHSNvXB46mLF49pjdA6qkqWGbfZ2iMUIrFs22TIhXORk91GYLaHsz1D4PdXRFHc7dNc26gpn50aZf1wxd2D049em+bF2CcNPiBDqarMAtL33uPHY9aXnstrw07UhTf9VhyNdSMhEAOErBoBoEDaBrAfysikQ/u9f14uZy1eeEsM0BStSMVVnrDkcvfdTEWOauc5yu+2PDrXrr4dqgb2bMyqMOuz2p+C4JQFuTM7qx/av1LywfnfSU9+uZP2ucmt4SNpqcrb37X7wni9ZrE7sD8TfkD2TmiOBVREibRU2dzdwoaexTxWZZOeeFvb6O/ROe2e7cvGCiesmNqdFQ0Cud7PEq215bpn1Qx0XDKkL8Et/zvJRsngE4BikFXfuTNOXa9J4IR8i3W2hlJRiAQqcmr8co6D2ukDQ+HOJrzraQ4cwEceuaYjzhzFH89mLt8FM5zB83Z96Y8E5Lsy7X1tkG9PW6i0Z37HvzqdqVGPCmGbsuovTST5tOkCfPv7zEF9Eklizsf+Txnb6HHlUmzSvJGFWqoZAltO89bHP+4c99ZQm8K7Dv4enNDY7nytKiK6xamFoH6Lp11foXzz0QJ9a620iMkl2g4RkLePnPRxzWEUod1/TAnlDVP3t25oHFpqKxiWSdM8yfyLUwPeOnJTwzIuS+vuStcbQ0VblkZe55xxLPh0tDbmDYg8sXjPOOJi1dN25cXuochjCSn2GDR959e2fCE0+kmVlM6OIUDR0P/75m7qqsGEPj82UttYMbN1+IMFZ19IH9TXistdG5p7wcbHX195Ob/i6YreX4TllaUQ15azmYimuD3rYobumxfk33z/JHzHcvSakyJMa7OpX3yG5uqsr/9WsnBwY7c2Nm3W8pKp5wQ156PO/3+0EphZIT4AGP/TWna+w7dh5Pu3ccpmqPT5Daj2k/329785c7Q9k5GQpV60XvB4hE2iiFfP04VuUscLMB2K2gFhvInMMQ/5/Om1VWglkLgFRB1mRo4vweORUjwfAnv0m6eXKRvlSbkKVw6UscPcEc3qhOHa/Xmxm9PtbLMISRpDAiYVeUjQx42fDlMPxnZLGvSTh3rvfcqjds272SRmOIh+xu8deQb0+M/P87PPed8zUElADQ5CSYfa2DIcQoSh+7UVk8p0g9NjnZaJUZhYpXG2WzyeACoYzb79eIAT/j9bjDI8NO+54LAfd7NZ5d/lG0Iy/Ry7QMjMj0G02Y+Z80sh8MzH96llIKYixONbrr7SogaASH2IwxijGZFsFIWCZHwZIAFaXuYZfYc74u2HzVXgEosV5hz/QFJfmb8ci/AuJ6+7/P2WhFun0F8AAAAABJRU5ErkJggg=="
+      alt="Farmacia Garmendia"
+      style="height:58px;width:auto;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(34,197,94,.3))"
+    />
+    <div class="nav-wb">
+      <span class="nav-wb-top">Farmacia</span>
+      <span class="nav-wb-bot">Garmendia</span>
+    </div>
+  </a>
+  <ul class="nav-links" id="nl">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#valoraciones">Opiniones</a></li>
+    <li><a href="#info">Contacto</a></li>
+    <li><a href="tienda.html" style="color:#22c55e;font-weight:700">🛒 Tienda</a></li>
+    <li><a href="farmaclick.html" style="color:#22c55e;font-weight:700">💊 Turnos</a></li>
+  </ul>
+  <a href="tienda.html" class="nav-pill">
+    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="14"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    Tienda
+  </a>
+  <button class="hb" id="hb"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-badge">Farmacia de barrio · Laferrere</div>
+    <h1 class="hero-h1">Salud y bienestar,<br><mark>a tu alcance</mark></h1>
+    <p class="hero-p">Más que medicamentos — atención personalizada, trato cercano y profesionales que te escuchan. Garmendia 3402, Laferrere.</p>
+    <div class="hero-ctas">
+      <a href="tienda.html" class="btn-g">
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="15"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        Ver productos
+      </a>
+      <a href="#servicios" class="btn-o">Ver servicios →</a>
+      <a href="tienda.html" class="btn-o" style="border-color:rgba(34,197,94,.4);color:#22c55e">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        Tienda online
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-n">+10</div><div class="hstat-l">Años en el barrio</div></div>
+      <div class="hstat"><div class="hstat-n">+500</div><div class="hstat-l">Familias atendidas</div></div>
+      <div class="hstat"><div class="hstat-n">100%</div><div class="hstat-l">Profesional</div></div>
+    </div>
+  </div>
+    <div class="hero-right" style="background:#f0f7ff;display:flex;align-items:center;justify-content:center;padding:40px 5%;position:relative;overflow:hidden">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 70% at 50% 50%,rgba(34,197,94,.06) 0%,transparent 70%);pointer-events:none"></div>
+    <div style="position:relative;z-index:1;width:100%;max-width:400px;display:flex;flex-direction:column;gap:14px">
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(34,197,94,.18);border-radius:20px;padding:26px">
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:18px">
+          <div style="width:9px;height:9px;border-radius:50%;background:#22c55e;animation:blink 2s infinite"></div>
+          <span style="font-size:.76rem;font-weight:700;color:#22c55e;letter-spacing:.06em;text-transform:uppercase">Abierto ahora</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:13px">
+          <div style="display:flex;align-items:flex-start;gap:11px">
+            <div style="width:32px;height:32px;border-radius:8px;background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#22c55e"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div><div style="font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#5b7fa6;margin-bottom:2px">Lun – Sáb</div><div style="font-size:.86rem;font-weight:600;color:#0f2744">9:00–13:00 · 17:00–20:00 hs</div><div style="font-size:.7rem;color:#5b7fa6">Horario de invierno</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:11px">
+            <div style="width:32px;height:32px;border-radius:8px;background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#22c55e"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div><div style="font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#5b7fa6;margin-bottom:2px">Dom y Feriados</div><div style="font-size:.86rem;font-weight:600;color:#0f2744">9:00–13:00 hs</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:11px">
+            <div style="width:32px;height:32px;border-radius:8px;background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#22c55e"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="15"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div><div style="font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#5b7fa6;margin-bottom:2px">Dirección</div><div style="font-size:.86rem;font-weight:600;color:#0f2744">Garmendia 3402</div><div style="font-size:.72rem;color:#5b7fa6">Laferrere, La Matanza</div></div>
+          </div>
+        </div>
+      </div>
+      <a href="tienda.html" style="background:linear-gradient(135deg,rgba(34,197,94,.14),rgba(34,197,94,.07));border:1px solid rgba(34,197,94,.28);border-radius:14px;padding:16px 18px;text-decoration:none;display:flex;align-items:center;gap:12px;transition:all .2s" onmouseover="this.style.background='linear-gradient(135deg,rgba(34,197,94,.22),rgba(34,197,94,.12))'" onmouseout="this.style.background='linear-gradient(135deg,rgba(34,197,94,.14),rgba(34,197,94,.07))'">
+        <div style="width:40px;height:40px;border-radius:10px;background:#22c55e;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg fill="none" stroke="#052e16" stroke-width="2.5" viewBox="0 0 24 24" width="19"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+        <div><div style="font-size:.86rem;font-weight:800;color:#22c55e">Tienda Online</div><div style="font-size:.72rem;color:#5b7fa6;margin-top:1px">Pedidos con ticket automático →</div></div>
+      </a>
+      <a href="farmaclick.html" style="background:linear-gradient(135deg,rgba(34,197,94,.08),rgba(34,197,94,.04));border:1px solid rgba(34,197,94,.2);border-radius:14px;padding:16px 18px;text-decoration:none;display:flex;align-items:center;gap:12px;transition:all .2s" onmouseover="this.style.background='linear-gradient(135deg,0 4px 24px rgba(34,197,94,.15),rgba(34,197,94,.08))'" onmouseout="this.style.background='linear-gradient(135deg,rgba(34,197,94,.08),rgba(34,197,94,.04))'">
+        <div style="width:40px;height:40px;border-radius:10px;background:0 4px 24px rgba(34,197,94,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem">💊</div>
+        <div><div style="font-size:.86rem;font-weight:800;color:#22c55e">Turnos de guardia</div><div style="font-size:.72rem;color:#5b7fa6;margin-top:1px">Farmacias de turno en La Matanza →</div></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FRANJA HORARIO (única) -->
+<div class="hora-strip">
+  <div class="hora-items">
+    <div class="hora-item">
+      <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span><strong>Lun–Sáb</strong> 9–13 hs · 17–20 hs (invierno)</span>
+    </div>
+    <div class="hora-item">
+      <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span><strong>Dom y Feriados</strong> 9–13 hs</span>
+    </div>
+    <div class="hora-item">
+      <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span><strong>Garmendia 3402</strong>, Laferrere</span>
+    </div>
+  </div>
+  <a href="https://wa.me/541130858200?text=Hola!%20Tengo%20una%20consulta" target="_blank" class="hora-btn">
+      <svg fill="currentColor" viewBox="0 0 24 24" width="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Dudas y consultas
+    </a>
+</div>
+
+
+<!-- SERVICIOS -->
+<section id="servicios" class="sec sec-alt">
+  <div class="sec-top reveal">
+    <p class="lbl">Lo que ofrecemos</p>
+    <h2 class="h2">Más que una farmacia,<br>un lugar de confianza</h2>
+    <p class="subp">Cada persona recibe atención real — con tiempo, dedicación y profesionalismo.</p>
+  </div>
+  <div class="srv-featured reveal">
+    <div class="sf-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+    <div>
+      <div class="sf-tag">⭐ Nuestro diferencial</div>
+      <h3 class="sf-h">Atención personalizada</h3>
+      <p class="sf-p">No somos una farmacia más. Nos tomamos el tiempo para escucharte, orientarte y acompañarte. Farmacéuticos matriculados, trato cercano y sin apuros.</p>
+    </div>
+  </div>
+  <div class="srv-grid reveal">
+    <div class="srv-card"><div class="sc-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg></div><h3>Medicamentos</h3><p>Stock completo de venta libre y receta.</p></div>
+    <div class="srv-card"><div class="sc-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>Dermocosmética</h3><p>Las mejores marcas con asesoramiento personalizado.</p></div>
+    <div class="srv-card"><div class="sc-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><h3>Perfumería</h3><p>Marcas nacionales e importadas a tu alcance.</p></div>
+    <div class="srv-card"><div class="sc-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><h3>Toma de glucosa</h3><p>Medición sin cargo. Prevención real.</p></div>
+    <div class="srv-card"><div class="sc-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><h3>Toma de presión</h3><p>Control cardiovascular sin cargo.</p></div>
+    <div class="srv-card"><div class="sc-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><h3>Carga virtual</h3><p>Recargá saldo de celular en la farmacia.</p></div>
+    <div class="srv-card"><div class="sc-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div><h3>Masoterapia</h3><p>Servicio profesional. Consultá disponibilidad.</p></div>
+  </div>
+</section>
+
+<!-- PUBLICIDAD -->
+<section class="sec sec-alt" style="padding-top:52px;padding-bottom:52px">
+  <div class="sec-head reveal">
+    <div><p class="lbl">Promociones</p><h2 class="h2" style="font-size:1.6rem;margin-bottom:0">Espacio publicitario</h2></div>
+    <label class="btn-up btn-up-alt" style="cursor:pointer">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Subir aviso
+      <input type="file" accept="image/*" multiple style="display:none" id="ad-up"/>
+    </label>
+  </div>
+  <div class="pub-grid reveal">
+    <div class="ad-slot" id="ad-0"><div class="ad-tag">Espacio 1</div><div class="ad-title">Tu promo aquí</div><div class="ad-sub">Hacé clic para subir</div></div>
+    <div class="ad-slot" id="ad-1"><div class="ad-tag">Espacio 2</div><div class="ad-title">Tu promo aquí</div><div class="ad-sub">Hacé clic para subir</div></div>
+  </div>
+</section>
+
+
+<!-- VALORACIONES -->
+<section id="valoraciones" class="sec">
+  <div class="val-layout reveal">
+    <div class="val-score-box">
+      <div class="val-num" id="vn">4.9</div>
+      <div class="val-stars" id="vs"></div>
+      <div class="val-lbl" id="vl">0 opiniones</div>
+    </div>
+    <div>
+      <p class="lbl">Lo que dice el barrio</p>
+      <h2 class="h2" style="margin-bottom:18px">La confianza de<br>nuestra comunidad</h2>
+      <div class="val-bars">
+        <div class="vb-row"><span class="vb-n">5</span><div class="vb-tr"><div class="vb-fi" style="width:0%" data-s="5"></div></div><span class="vb-c" id="b5">0</span></div>
+        <div class="vb-row"><span class="vb-n">4</span><div class="vb-tr"><div class="vb-fi" style="width:0%" data-s="4"></div></div><span class="vb-c" id="b4">0</span></div>
+        <div class="vb-row"><span class="vb-n">3</span><div class="vb-tr"><div class="vb-fi" style="width:0%" data-s="3"></div></div><span class="vb-c" id="b3">0</span></div>
+        <div class="vb-row"><span class="vb-n">2</span><div class="vb-tr"><div class="vb-fi" style="width:0%" data-s="2"></div></div><span class="vb-c" id="b2">0</span></div>
+        <div class="vb-row"><span class="vb-n">1</span><div class="vb-tr"><div class="vb-fi" style="width:0%" data-s="1"></div></div><span class="vb-c" id="b1">0</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="rev-scroll reveal" id="rev-sc"></div>
+  <div class="rev-footer reveal">
+    <button class="btn-opinion" id="op-rev">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Dejá tu opinión
+    </button>
+    <span style="font-size:.75rem;color:#5b7fa6" id="rev-sub"></span>
+  </div>
+</section>
+
+<!-- MODAL REVIEW -->
+<div class="modal-bg" id="rev-modal">
+  <div class="modal-box">
+    <h3>Tu opinión importa</h3>
+    <p>Contanos tu experiencia en Farmacia Garmendia.</p>
+    <div class="fgrow"><div class="fg"><label>Nombre *</label><input type="text" id="rv-n" placeholder="María G."/></div><div class="fg"><label>Barrio</label><input type="text" id="rv-l" placeholder="Laferrere"/></div></div>
+    <label style="font-size:.67rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#22c55e;display:block;margin-bottom:10px">Puntuación *</label>
+    <div class="star-row" id="sr">
+      <button type="button" data-v="1"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+      <button type="button" data-v="2"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+      <button type="button" data-v="3"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+      <button type="button" data-v="4"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+      <button type="button" data-v="5"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+    </div>
+    <div class="fg"><label>Comentario *</label><textarea id="rv-t" placeholder="¿Cómo fue tu experiencia?"></textarea></div>
+    <div class="modal-footer"><button class="btn-cancel" id="cls-rev">Cancelar</button><button class="btn-up" id="sub-rev">Publicar</button></div>
+  </div>
+</div>
+
+<!-- INFO -->
+<section id="info" class="sec sec-alt">
+  <div style="margin-bottom:44px" class="reveal">
+    <p class="lbl">Encontranos</p>
+    <h2 class="h2">Contacto, horarios<br>y ubicación</h2>
+  </div>
+  <div class="info-layout reveal">
+    <div class="info-stack">
+      <div class="icard">
+        <div class="icard-hd"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Horarios</div>
+        <div class="irow"><div class="iico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="ilbl">Lun – Sáb</div><div class="ival">9:00–13:00 · 17:00–20:00 hs<small>Horario de invierno</small></div></div></div>
+        <div class="irow"><div class="iico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="ilbl">Dom y Feriados</div><div class="ival">9:00–13:00 hs</div></div></div>
+      </div>
+      <div class="icard">
+        <div class="icard-hd"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Dónde estamos y contacto</div>
+        <div class="irow"><div class="iico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="ilbl">Dirección</div><div class="ival">Garmendia 3402, Laferrere<small>La Matanza, Buenos Aires</small></div></div></div>
+        <div class="irow"><div class="iico" style="background:rgba(34,197,94,.1);color:#22c55e"><svg fill="currentColor" viewBox="0 0 24 24" width="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div><div><div class="ilbl">WhatsApp</div><div class="ival"><a href="https://wa.me/541130858200" target="_blank">11 3085-8200</a></div></div></div>
+        <div class="irow"><div class="iico" style="background:rgba(168,85,247,.1);color:#c084fc"><svg fill="currentColor" viewBox="0 0 24 24" width="14"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></div><div><div class="ilbl">Instagram</div><div class="ival"><a href="https://instagram.com/farma.garmendia" target="_blank">@farma.garmendia</a></div></div></div>
+      </div>
+      <div class="cnt-btns">
+        <a href="https://wa.me/541130858200?text=Hola!%20Tengo%20una%20consulta" target="_blank" class="cnt-btn wa">
+          <svg fill="currentColor" viewBox="0 0 24 24" width="20"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <div>Escribinos por WhatsApp<span class="cnt-sub">Respondemos a la brevedad</span></div>
+        </a>
+        <a href="https://instagram.com/farma.garmendia" target="_blank" class="cnt-btn ig">
+          <svg fill="currentColor" viewBox="0 0 24 24" width="20"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          <div>Seguinos en Instagram<span class="cnt-sub">@farma.garmendia</span></div>
+        </a>
+      </div>
+      <div class="cnt-form">
+        <h4>Envianos un mensaje</h4>
+        <p>Te respondemos por WhatsApp al instante.</p>
+        <div class="fgrow"><div class="fg"><label>Nombre</label><input type="text" id="cf-n" placeholder="Tu nombre"/></div><div class="fg"><label>Teléfono</label><input type="tel" id="cf-p" placeholder="11 1234-5678"/></div></div>
+        <div class="fg" style="margin-bottom:14px"><label>Mensaje *</label><textarea id="cf-m" placeholder="¿En qué te podemos ayudar?"></textarea></div>
+        <button class="btn-send" id="snd-wa">
+          <svg fill="currentColor" viewBox="0 0 24 24" width="15"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Enviar por WhatsApp
+        </button>
+      </div>
+    </div>
+    <div class="info-map">
+      <iframe src="https://maps.google.com/maps?q=Garmendia+3402+Laferrere+Buenos+Aires+Argentina&z=16&output=embed" allowfullscreen loading="lazy"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div><div class="f-brand">Farmacia Garmendia</div><div class="f-copy">© 2025 · Garmendia 3402, Laferrere</div></div>
+  <div class="f-links">
+    <a href="#servicios">Servicios</a>
+    <a href="#valoraciones">Opiniones</a><a href="#info">Contacto</a>
+  </div>
+</footer>
+
+<!-- CONFIG (solo mapa) -->
+<div id="cfg-panel">
+  <div class="cfg-drawer" id="cfg-d">
+    <h5>⚙️ Configuración</h5>
+    <div class="cfg-item"><label>Google Maps embed URL (opcional)</label><input type="text" id="c-map" placeholder="https://maps.google.com/maps?q=..."/></div>
+    <button class="cfg-save" id="cfg-sv">Guardar</button>
+  </div>
+  <button class="cfg-btn" id="cfg-btn">⚙️</button>
+</div>
+
+<!-- WA FLOAT -->
+<a href="https://wa.me/541130858200?text=Hola!%20Tengo%20una%20consulta" target="_blank" class="wa-float">
+  <svg fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  Consultar
+</a>
+
+<div class="lb" id="lb"><button class="lb-x" id="lb-x">✕</button><img id="lb-img" src="" alt=""/></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+(function(){
+// ── STORAGE ──
+const S={
+  get(k){try{return JSON.parse(localStorage.getItem('fg4_'+k));}catch(e){return null;}},
+  set(k,v){try{localStorage.setItem('fg4_'+k,JSON.stringify(v));return true;}catch(e){return false;}}
+};
+
+// ── COMPRESS ──
+function compress(file,mx,q,cb){
+  const r=new FileReader();r.onerror=()=>cb(null);
+  r.onload=e=>{const i=new Image();i.onerror=()=>cb(null);i.onload=()=>{
+    let w=i.width,h=i.height;
+    if(w>mx||h>mx){if(w>h){h=Math.round(h*mx/w);w=mx;}else{w=Math.round(w*mx/h);h=mx;}}
+    const c=document.createElement('canvas');c.width=w;c.height=h;
+    c.getContext('2d').drawImage(i,0,0,w,h);
+    try{cb(c.toDataURL('image/jpeg',q));}catch(e){cb(null);}
+  };i.src=e.target.result;};r.readAsDataURL(file);
+}
+
+// ── TOAST ──
+function toast(m,err){
+  const t=document.getElementById('toast');
+  t.textContent=m;t.className='toast on'+(err?' err':'');
+  setTimeout(()=>t.className='toast',err?4000:2600);
+}
+
+// ── NAV ──
+document.getElementById('hb').addEventListener('click',()=>document.getElementById('nl').classList.toggle('mob'));
+
+// ── REVEAL ──
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ── CONFIG ──
+const cfg=S.get('cfg')||{};
+if(cfg.mapUrl){
+  const mapInput=document.getElementById('c-map');
+  if(mapInput)mapInput.value=cfg.mapUrl;
+  const mapFrame=document.querySelector('.info-map iframe');
+  if(mapFrame)mapFrame.src=cfg.mapUrl;
+}
+document.getElementById('cfg-btn').addEventListener('click',()=>document.getElementById('cfg-d').classList.toggle('open'));
+document.getElementById('cfg-sv').addEventListener('click',()=>{
+  const old=S.get('cfg')||{};
+  const mu=document.getElementById('c-map').value.trim();
+  S.set('cfg',{...old,mapUrl:mu});
+  if(mu){const f=document.querySelector('.info-map iframe');if(f)f.src=mu;}
+  document.getElementById('cfg-d').classList.remove('open');
+  toast('✅ Guardado');
+});
+
+// ── PUBLICIDAD ──
+let ads=S.get('ads')||[null,null];while(ads.length<2)ads.push(null);
+function rAds(){[0,1].forEach(i=>{const s=document.getElementById('ad-'+i);if(!s)return;if(ads[i]){s.innerHTML=`<img src="${ads[i]}" alt="Promo"/><button class="ad-del" data-i="${i}">✕</button>`;s.querySelector('.ad-del').addEventListener('click',e=>{e.stopPropagation();ads[+e.target.dataset.i]=null;S.set('ads',ads);rAds();});s.onclick=null;}else{s.innerHTML=`<div class="ad-tag">Espacio ${i+1}</div><div class="ad-title">Tu promo aquí</div><div class="ad-sub">Hacé clic para subir</div>`;s.onclick=()=>document.getElementById('ad-up').click();}});}
+rAds();
+let adT=0;document.getElementById('ad-up').addEventListener('change',function(){[...this.files].forEach(f=>{compress(f,1000,.85,data=>{if(!data)return;const idx=ads.indexOf(null);if(idx!==-1)ads[idx]=data;else{ads[adT%2]=data;adT++;}S.set('ads',ads);rAds();toast('✅ Aviso guardado');});});this.value='';});
+
+// ── REVIEWS ──
+const SEED=[
+  {name:'Laura M.',loc:'Laferrere',stars:5,text:'Excelente atención, siempre tienen lo que necesito. Muy amables.',date:'2025-03-12'},
+  {name:'Carlos R.',loc:'González Catán',stars:5,text:'La mejor farmacia de la zona. Me asesoraron perfectamente.',date:'2025-02-28'},
+  {name:'Fernanda T.',loc:'Laferrere',stars:4,text:'Muy buena atención y variedad de productos.',date:'2025-04-05'},
+  {name:'Diego P.',loc:'Isidro Casanova',stars:5,text:'Siempre me ayudan a encontrar alternativas más económicas.',date:'2025-01-17'},
+  {name:'Silvia N.',loc:'Laferrere',stars:5,text:'Llevo años viniendo acá. La confianza que transmiten es incomparable.',date:'2025-03-30'},
+  {name:'Martín G.',loc:'Rafael Castillo',stars:4,text:'Buena farmacia de barrio. La toma de glucosa sin cargo es un gran detalle.',date:'2025-04-19'},
+];
+let revs=S.get('reviews');if(!revs||!revs.length){revs=SEED;S.set('reviews',revs);}
+const AV=['#1d6b3e','#1e4d8c','#5b21b6','#b45309','#0f766e','#be185d'];
+function stH(n,sz=13){let h='';for(let i=1;i<=5;i++)h+=`<svg width="${sz}" height="${sz}" viewBox="0 0 24 24" class="${i<=n?'on':'off'}"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;return h;}
+function ini(n){return n.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();}
+function fRD(d){if(!d)return '';const p=d.split('-');return new Date(p[0],p[1]-1,p[2]).toLocaleDateString('es-AR',{day:'numeric',month:'short',year:'numeric'});}
+function rRevs(){
+  const sc=document.getElementById('rev-sc');sc.innerHTML='';
+  revs.forEach((r,i)=>{
+    const c=document.createElement('div');c.className='rev-card';
+    c.innerHTML=`<div class="rev-top"><div class="rev-av" style="background:${AV[i%AV.length]}">${ini(r.name)}</div><div><div class="rev-name">${r.name}${r.loc?` <span style="opacity:.4;font-size:.7rem;font-weight:300">· ${r.loc}</span>`:''}</div><div class="rev-loc">${fRD(r.date)}</div></div></div><div class="rev-stars-s">${stH(r.stars)}</div><div class="rev-text">${r.text}</div><div class="rev-vc"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Cliente verificado</div>`;
+    sc.appendChild(c);
+  });
+  const tot=revs.length;if(!tot)return;
+  const avg=(revs.reduce((a,r)=>a+r.stars,0)/tot).toFixed(1);
+  document.getElementById('vn').textContent=avg;
+  document.getElementById('vl').textContent=`${tot} opinión${tot!==1?'es':''}`;
+  document.getElementById('vs').innerHTML=stH(Math.round(parseFloat(avg)),18);
+  const rs=document.getElementById('rev-sub');if(rs)rs.textContent=`${avg}/5 · ${tot} opiniones`;
+  for(let s=1;s<=5;s++){const cnt=revs.filter(r=>r.stars===s).length;const pct=tot?(cnt/tot*100).toFixed(1):0;const fi=document.querySelector(`.vb-fi[data-s="${s}"]`);const lb=document.getElementById(`b${s}`);if(fi)setTimeout(()=>fi.style.width=pct+'%',400);if(lb)lb.textContent=cnt;}
+}
+rRevs();
+
+let sel=0;const sbs=document.querySelectorAll('#sr button');
+sbs.forEach(b=>{
+  b.addEventListener('mouseenter',()=>{const v=+b.dataset.v;sbs.forEach(x=>x.classList.toggle('hv',+x.dataset.v<=v));});
+  b.addEventListener('mouseleave',()=>sbs.forEach(x=>x.classList.remove('hv')));
+  b.addEventListener('click',()=>{sel=+b.dataset.v;sbs.forEach(x=>x.classList.toggle('on',+x.dataset.v<=sel));});
+});
+document.getElementById('op-rev').addEventListener('click',()=>document.getElementById('rev-modal').classList.add('open'));
+document.getElementById('cls-rev').addEventListener('click',()=>document.getElementById('rev-modal').classList.remove('open'));
+document.getElementById('rev-modal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
+document.getElementById('sub-rev').addEventListener('click',()=>{
+  const name=document.getElementById('rv-n').value.trim(),loc=document.getElementById('rv-l').value.trim(),text=document.getElementById('rv-t').value.trim();
+  if(!name){toast('Ingresá tu nombre',true);return;}if(!sel){toast('Seleccioná una puntuación',true);return;}if(!text){toast('Escribí tu comentario',true);return;}
+  revs.unshift({name,loc,stars:sel,text,date:new Date().toISOString().split('T')[0]});
+  S.set('reviews',revs);rRevs();
+  document.getElementById('rev-modal').classList.remove('open');
+  ['rv-n','rv-l','rv-t'].forEach(id=>document.getElementById(id).value='');
+  sel=0;sbs.forEach(b=>b.classList.remove('on','hv'));
+  toast('⭐ ¡Gracias por tu opinión!');
+});
+
+// ── CONTACTO WA ──
+document.getElementById('snd-wa').addEventListener('click',()=>{
+  const n=document.getElementById('cf-n').value.trim(),p=document.getElementById('cf-p').value.trim(),m=document.getElementById('cf-m').value.trim();
+  if(!m){toast('Escribí tu mensaje',true);return;}
+  window.open(`https://wa.me/541130858200?text=${encodeURIComponent(`Hola! Soy ${n||'un cliente'}${p?' ('+p+')':''}.\n\n${m}`)}`,'_blank');
+});
+
+// ── LIGHTBOX ──
+document.getElementById('lb-x').addEventListener('click',()=>document.getElementById('lb').classList.remove('open'));
+document.getElementById('lb').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
+
+})();
+</script>
+</body>
+</html>
