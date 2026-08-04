@@ -77,6 +77,10 @@ button{font-family:'Inter',sans-serif}
 .vito-svg{width:104px;height:110px;flex-shrink:0}
 .vito-wrap{position:relative;width:100%;height:100%}
 .vito-wrap img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 16px rgba(4,65,10,.28))}
+.vito-wrap.saludando img{animation:saludo-mano 1.2s ease-in-out infinite}
+@keyframes saludo-mano{0%,100%{transform:none}15%{transform:rotate(-8deg) translateX(-3px)}25%{transform:rotate(12deg) translateX(3px)}40%{transform:rotate(-6deg) translateX(-2px)}50%{transform:rotate(8deg) translateX(2px)}65%{transform:rotate(0)}}
+.vito-wrap.flotando img{animation:flotar-lento 4s ease-in-out infinite}
+@keyframes flotar-lento{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 .vito-badge{position:absolute;top:-4px;right:-6px;font-size:20px;z-index:2;animation:latir 2s ease-in-out infinite}
 .vito-flotando{animation:flotar 3.2s ease-in-out infinite}
 @keyframes flotar{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
@@ -449,7 +453,7 @@ button{font-family:'Inter',sans-serif}
     <div class="seccion-tit">Historial</div>
     <div class="card historial" id="historial"></div>
 
-    <button class="btn btn-borde btn-block btn-sm" style="margin-top:16px;color:var(--texto-suave)" onclick="abrirAdmin()">🔒 Acceso farmacia</button>
+    <button class="btn btn-borde btn-block btn-sm" id="btnAdminAcceso" style="margin-top:16px;color:var(--texto-suave)" onclick="abrirAdmin()">🔒 Acceso farmacia</button>
   </main>
 
   <!-- ===== PANEL FARMACIA ===== -->
@@ -565,7 +569,7 @@ button{font-family:'Inter',sans-serif}
   <!-- MODAL ONBOARDING -->
   <div class="overlay" id="ovNombre">
     <div class="modal" style="text-align:center">
-      <div class="vito-svg" id="vitoOnboarding" style="margin:0 auto 10px"></div>
+      <div id="vitoOnboarding" style="margin:0 auto 10px"></div>
       <h2 style="color:var(--azul);font-size:19px">¡Hola! Soy Turnin 👋</h2>
       <p style="font-size:13px;color:var(--texto-suave);margin:8px 0 16px">Sumate al club de beneficios de tu farmacia de barrio. Son 20 segundos:</p>
       <div class="campo" style="text-align:left"><label>Nombre y apellido</label><input type="text" id="inputNombre" placeholder="Ej: Pablo García"></div>
@@ -573,6 +577,7 @@ button{font-family:'Inter',sans-serif}
       <div class="campo" style="text-align:left"><label>WhatsApp</label><input type="tel" id="inputWsp" inputmode="numeric" placeholder="Con código de área, ej: 1130858200" onkeydown="if(event.key==='Enter')guardarRegistro()"></div>
       <button class="btn btn-verde btn-block" onclick="guardarRegistro()">¡Hacerme socio! 🚀</button>
       <p style="font-size:10.5px;color:var(--texto-suave);margin-top:10px">Tus datos quedan en la farmacia, no se comparten con nadie.</p>
+      <button class="btn btn-borde btn-sm" style="margin-top:6px;width:100%;background:transparent;border-color:var(--celeste-med);color:var(--texto-suave)" onclick="mostrarCambiarDatos()">¿Ya estás registrado? Cambiar datos</button>
     </div>
   </div>
 
@@ -770,10 +775,11 @@ function rango(nivel){
 }
 
 /* ================== VITO (imagen oficial) ================== */
-function vitoHTML(animo){
+function vitoHTML(animo, enOnboarding){
   const badge = animo === 'dormido' ? '💤' : animo === 'euforico' ? '✨' : animo === 'nostalgico' ? '🥺' : '';
   const filtro = animo === 'dormido' ? 'grayscale(.45) brightness(.92)' : animo === 'nostalgico' ? 'saturate(.75)' : 'none';
-  return `<div class="vito-wrap">${badge ? `<span class="vito-badge">${badge}</span>` : ''}<img src="${VITO_IMG}" alt="Turnin" style="filter:${filtro}"></div>`;
+  const clase = enOnboarding ? 'saludando' : 'flotando';
+  return `<div class="vito-wrap ${clase}">${badge ? `<span class="vito-badge">${badge}</span>` : ''}<img src="${VITO_IMG}" alt="Turnin" style="filter:${filtro}"></div>`;
 }
 function animoActual(){
   const h = new Date().getHours();
@@ -1053,7 +1059,7 @@ function cerrarModal(id){ $(id).classList.remove('abierto'); }
 /* ================== RENDER ================== */
 function renderInicio(){
   const animo = animoActual();
-  $('vitoInicio').innerHTML = vitoHTML(animo);
+  $('vitoInicio').innerHTML = vitoHTML(animo, false);
   const f = fraseVito();
   $('vitoSaludo').textContent = f.t;
   $('vitoFrase').textContent = f.p;
@@ -1106,6 +1112,8 @@ function renderPerfil(){
       ${m.d !== 0 ? `<span class="m-delta ${m.d>0?'m-mas':'m-menos'}">${m.d>0?'+':''}${m.d}</span>` : ''}
     </div>`).join('')
     : '<p style="font-size:12.5px;color:var(--texto-suave);text-align:center;padding:12px">Todavía no hay movimientos</p>';
+  // Control de acceso admin: solo visible si el DNI es autorizado
+  $('btnAdminAcceso').style.display = (S.dni === DNI_ADMIN) ? 'block' : 'none';
 }
 function renderTodo(){
   $('hdrPuntos').textContent = S.puntos.toLocaleString('es-AR');
@@ -1132,6 +1140,13 @@ function asignarNumeroSocio(){
   const franjas = Math.max(0, Math.floor((Date.now() - LANZAMIENTO) / (20*60*1000)));
   return 7 + franjas + Math.floor(Math.random()*3); // pequeño jitter anti-choque
 }
+function mostrarCambiarDatos(){
+  $('inputNombre').value = S.nombre || '';
+  $('inputDni').value = S.dni || '';
+  $('inputWsp').value = S.whatsapp || '';
+  $('ovNombre').classList.add('abierto');
+  setTimeout(()=> $('inputNombre').focus(), 250);
+}
 function guardarRegistro(){
   const n = $('inputNombre').value.trim();
   const dni = $('inputDni').value.replace(/\D/g,'');
@@ -1139,16 +1154,17 @@ function guardarRegistro(){
   if(!n){ toast('Contanos tu nombre 🙂'); $('inputNombre').focus(); return; }
   if(dni.length < 7 || dni.length > 8){ toast('Revisá el DNI (7 u 8 números, sin puntos)','error'); $('inputDni').focus(); return; }
   if(wsp.length < 10){ toast('Revisá el WhatsApp (con código de área, sin 0 ni 15)','error'); $('inputWsp').focus(); return; }
+  const esReregistro = S.socioNum && S.puntos > 0;
   S.nombre = n.charAt(0).toUpperCase() + n.slice(1);
   S.dni = dni;
   S.whatsapp = wsp;
-  S.socioNum = asignarNumeroSocio();
+  if(!S.socioNum) S.socioNum = asignarNumeroSocio();
   guardar();
   cerrarModal('ovNombre');
-  confetti(70);
-  toast(`🎉 ¡Sos el socio N° ${S.socioNum} de Garmendia!`, 'ok');
+  confetti(esReregistro ? 30 : 70);
+  toast(esReregistro ? `✔ Datos actualizados` : `🎉 ¡Sos el socio N° ${S.socioNum} de Garmendia!`, 'ok');
   renderTodo();
-  checkin();
+  if(!esReregistro) checkin();
 }
 
 /* ================== DEMO ================== */
@@ -1186,10 +1202,15 @@ function demoReset(){
 
 /* ================== PANEL FARMACIA: ACCESO Y USUARIOS ================== */
 const PASS_ADMIN = 'alma3402!';
+const DNI_ADMIN = '38042020';
 let adminOk = sessionStorage.getItem('fc1_admin') === '1';
 let tabAdmin = 'cupones';
 
 function abrirAdmin(){
+  if(S.dni !== DNI_ADMIN){
+    toast('🔒 Acceso reservado para administrador','error');
+    return;
+  }
   if(!adminOk){
     $('ovPassAdmin').classList.add('abierto');
     setTimeout(()=> $('inputPassAdmin').focus(), 250);
@@ -1550,9 +1571,10 @@ if(new URLSearchParams(location.search).get('demo') !== '1'){
   document.querySelector('.demo-pill').style.display = 'none';
 }
 cargar();
-$('vitoOnboarding').innerHTML = vitoHTML('feliz');
+$('vitoOnboarding').innerHTML = vitoHTML('feliz', true);
+const esNuevo = !S.nombre || !S.socioNum;
 renderTodo();
-if(!S.nombre){
+if(esNuevo){
   $('ovNombre').classList.add('abierto');
   setTimeout(()=> $('inputNombre').focus(), 350);
 } else {
