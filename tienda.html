@@ -88,15 +88,16 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .ofertas-sec{margin-bottom:28px}
 .sec-eyebrow{font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--g);margin-bottom:4px}
 .sec-title{font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:14px}
-.oferta-carousel-wrap{position:relative;overflow:hidden;margin-bottom:4px}
-.oferta-carousel-wrap::before,.oferta-carousel-wrap::after{content:'';position:absolute;top:0;bottom:0;width:40px;z-index:2;pointer-events:none}
-.oferta-carousel-wrap::before{left:0;background:linear-gradient(to right,var(--bg),transparent)}
-.oferta-carousel-wrap::after{right:0;background:linear-gradient(to left,var(--bg),transparent)}
-.oferta-grid{display:flex;gap:12px;width:max-content;animation:scroll-ofertas 35s linear infinite}
-.oferta-grid:hover{animation-play-state:paused}
-@keyframes scroll-ofertas{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.oferta-carousel-wrap{position:relative;margin-bottom:4px}
+.oferta-carousel-track{overflow:hidden;border-radius:var(--r)}
+.oferta-grid{display:flex;gap:12px;transition:transform .4s cubic-bezier(.25,.46,.45,.94)}
 .oferta-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);overflow:hidden;position:relative;transition:all .22s;box-shadow:var(--sh);width:165px;flex-shrink:0}
 .oferta-card:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
+.carousel-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:10;width:36px;height:36px;border-radius:50%;background:var(--card);border:1.5px solid var(--border);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--sh2);transition:all .2s;font-size:1rem}
+.carousel-btn:hover{background:var(--g);color:#052e16;border-color:var(--g)}
+.carousel-btn:disabled{opacity:.25;cursor:not-allowed}
+.carousel-btn-left{left:-16px}
+.carousel-btn-right{right:-16px}
 .oferta-badge{position:absolute;top:8px;left:8px;background:#ef4444;color:#fff;font-size:.68rem;font-weight:800;padding:3px 8px;border-radius:100px;z-index:2}
 .oferta-img{width:100%;aspect-ratio:1;background:#f8fbff;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .oferta-img img{width:100%;height:100%;object-fit:contain;padding:8px}
@@ -260,7 +261,11 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--g);cursor:pointer
         <div class="sec-eyebrow">🔥 Ofertas especiales</div>
         <div class="sec-title">Aprovechá estos precios</div>
         <div class="oferta-carousel-wrap">
-          <div class="oferta-grid" id="ofertas-pub-grid"></div>
+          <button class="carousel-btn carousel-btn-left" id="of-prev" onclick="ofCarousel(-1)" disabled>&#8249;</button>
+          <div class="oferta-carousel-track">
+            <div class="oferta-grid" id="ofertas-pub-grid"></div>
+          </div>
+          <button class="carousel-btn carousel-btn-right" id="of-next" onclick="ofCarousel(1)">&#8250;</button>
         </div>
       </div>
       <hr class="divider"/>
@@ -934,6 +939,48 @@ function imgError(el){
   el.style.display='none';
 }
 
+
+// ── CARRUSEL OFERTAS ─────────────────────────────────────────────────
+function ofCarousel(dir) {
+  const grid  = document.getElementById('ofertas-pub-grid');
+  const track = grid?.parentElement;
+  if (!grid || !track) return;
+  const cards  = grid.querySelectorAll('.oferta-card');
+  const gap    = 12;
+  const cw     = 165 + gap;
+  const visible = Math.floor(track.offsetWidth / cw) || 1;
+  const max    = Math.max(0, cards.length - visible);
+  ofIdx = Math.min(Math.max(ofIdx + dir, 0), max);
+  grid.style.transform = 'translateX(-' + (ofIdx * cw) + 'px)';
+  const btnL = document.getElementById('of-prev');
+  const btnR = document.getElementById('of-next');
+  if (btnL) btnL.disabled = ofIdx === 0;
+  if (btnR) btnR.disabled = ofIdx >= max;
+}
+function updateCarousel() {
+  ofIdx = 0;
+  const grid = document.getElementById('ofertas-pub-grid');
+  if (grid) grid.style.transform = 'translateX(0)';
+  const btnL = document.getElementById('of-prev');
+  const btnR = document.getElementById('of-next');
+  if (btnL) btnL.disabled = true;
+  if (btnR) btnR.disabled = false;
+  // Ocultar botones si caben todas las cards
+  const track = grid?.parentElement;
+  if (track && grid) {
+    const cards = grid.querySelectorAll('.oferta-card');
+    const cw = 165 + 12;
+    const visible = Math.floor(track.offsetWidth / cw);
+    if (cards.length <= visible) {
+      if (btnL) btnL.style.display = 'none';
+      if (btnR) btnR.style.display = 'none';
+    } else {
+      if (btnL) btnL.style.display = '';
+      if (btnR) btnR.style.display = '';
+    }
+  }
+}
+
 function consultarProd(msg){window.open('https://wa.me/'+WA_NUM+'?text='+msg,'_blank');}
 
 // ══════════ OFERTAS ══════════
@@ -962,8 +1009,9 @@ function renderOfsPub(){
       '</div>'+
     '</div>';
   }).join('');
-  // Duplicar las cards para que el scroll sea infinito
-  grid.innerHTML = cards + cards;
+  grid.innerHTML = cards;
+  ofIdx = 0;
+  updateCarousel();
 }
 function renderOfsAdmin(){
   const grid=document.getElementById('oac-grid'),badge=document.getElementById('of-badge');
