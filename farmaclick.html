@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#1e3a5f" />
-  <meta name="description" content="FarmaClick – Farmacias de turno en La Matanza" />
+  <meta name="description" content="Farmacia Garmendia – Farmacias de turno en La Matanza" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="FarmaClick" />
-  <title>FarmaClick – Turnos de Farmacia</title>
+  <meta name="apple-mobile-web-app-title" content="Farmacia Garmendia" />
+  <title>Turnos de Farmacia · Farmacia Garmendia</title>
 
   <!-- ══════════════════════════════════════════════
        GOOGLE ANALYTICS — descomentá cuando tengas tu ID
@@ -25,7 +25,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22FarmaClick%22%2C%22short_name%22%3A%22FarmaClick%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%2300b894%22%2C%22theme_color%22%3A%22%2200b894%22%2C%22lang%22%3A%22es-AR%22%7D" />
+  <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22Farmacia%20Garmendia%22%2C%22short_name%22%3A%22Turnos%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%2300b894%22%2C%22theme_color%22%3A%22%2200b894%22%2C%22lang%22%3A%22es-AR%22%7D" />
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -361,7 +361,7 @@
     }
     .footer a { color: var(--brand); text-decoration: none; font-weight: 700; }
 
-    /* ══ SUMATE A FARMACLICK ══ */
+    /* ══ PARA FARMACIAS ══ */
     .sumate-section {
       margin-bottom: 14px;
     }
@@ -445,23 +445,87 @@
       color: rgba(255,255,255,0.65); font-size: 10px;
       margin-top: 10px; line-height: 1.5;
     }
+
+    /* ── AVISO DE INCONVENIENTE EN CARD ── */
+    .fcard-warning {
+      display: flex; align-items: flex-start; gap: 7px;
+      background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.35);
+      color: #fca5a5; border-radius: 10px; padding: 9px 11px;
+      font-size: 11.5px; line-height: 1.4; margin: 10px 0 0;
+    }
+    .fcard-warning b { color: #fecaca; }
+
+    /* ── PANEL ADMIN ── */
+    #admin-fab {
+      position: fixed; right: 14px; bottom: 14px; z-index: 500;
+      background: var(--card); color: var(--gray-500);
+      border: 1px solid var(--gray-200); border-radius: 20px;
+      font-size: 11px; font-weight: 700; padding: 8px 13px;
+      cursor: pointer; font-family: 'Nunito', sans-serif;
+      box-shadow: var(--shadow-sm);
+    }
+    #admin-overlay {
+      display: none; position: fixed; inset: 0; z-index: 900;
+      background: rgba(4,10,20,0.72); padding: 16px;
+      overflow-y: auto;
+    }
+    #admin-modal {
+      max-width: 480px; margin: 30px auto; background: var(--card);
+      border: 1px solid var(--gray-200); border-radius: 18px;
+      padding: 18px; color: var(--gray-900);
+    }
+    #admin-modal h3 { font-size: 15px; margin-bottom: 4px; }
+    #admin-modal p.sub { font-size: 12px; color: var(--gray-500); margin-bottom: 14px; }
+    #admin-modal input[type="password"] {
+      width: 100%; padding: 11px 12px; border-radius: 10px;
+      border: 1px solid var(--gray-200); background: var(--bg);
+      color: var(--gray-900); font-size: 14px; margin-bottom: 10px;
+      font-family: 'Nunito', sans-serif;
+    }
+    #admin-msg { font-size: 12px; margin-bottom: 8px; min-height: 14px; }
+    #admin-list { max-height: 46vh; overflow-y: auto; margin: 6px 0 14px; }
+    .admin-row {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--gray-200);
+    }
+    .admin-row:last-child { border-bottom: none; }
+    .admin-row-name { font-size: 12.5px; font-weight: 700; }
+    .admin-row-addr { font-size: 10.5px; color: var(--gray-500); }
+    .admin-toggle {
+      width: 38px; height: 22px; border-radius: 20px; background: var(--gray-200);
+      position: relative; cursor: pointer; flex: none; border: none;
+    }
+    .admin-toggle.on { background: #ef4444; }
+    .admin-toggle::after {
+      content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px;
+      background: #fff; border-radius: 50%; transition: left .15s;
+    }
+    .admin-toggle.on::after { left: 18px; }
+    .admin-motivo {
+      width: 100%; margin-top: 6px; padding: 7px 9px; border-radius: 8px;
+      border: 1px solid var(--gray-200); background: var(--bg); color: var(--gray-900);
+      font-size: 11.5px; font-family: 'Nunito', sans-serif; display: none;
+    }
+    .admin-row.on .admin-motivo { display: block; }
+    #admin-modal .btn-buscar { width: 100%; margin-top: 4px; }
+    #admin-close { float: right; background: none; border: none; color: var(--gray-500); font-size: 18px; cursor: pointer; }
   </style>
 </head>
 <body>
 
   <!-- INSTALL BANNER -->
   <div id="install-banner">
-    <p>📲 Instalá FarmaClick para acceso rápido</p>
+    <p>📲 Instalá esta app para acceso rápido</p>
     <button id="install-btn">Instalar</button>
     <button id="install-close">✕</button>
   </div>
 
   <!-- TOPBAR -->
   <header class="topbar">
-    <a class="logo" href="#">
+    <a class="logo" href="index.html">
       <div class="logo-icon"><span>&#10010;</span></div>
       <div class="logo-text">
-        <div class="logo-name">Farma<span>Click</span></div>
+        <div class="logo-name">Farmacia Garmendia</div>
         <div class="logo-sub">Turnos · La Matanza</div>
       </div>
     </a>
@@ -473,7 +537,7 @@
        onmouseover="this.style.borderColor='#22c55e';this.style.color='#22c55e'"
        onmouseout="this.style.borderColor='#1e3560';this.style.color='#94afd4'">
       <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="12" height="12"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      Farmacia Garmendia
+      Inicio
     </a>
   </header>
 
@@ -483,7 +547,7 @@
       ⭐ Visitá Farmacia Garmendia
       <small>Garmendia 3402 — Laferrere</small>
     </div>
-    <a class="btn-wsp" href="https://wa.me/541130858200?text=Hola%2C%20vi%20FarmaClick%20y%20quiero%20consultar" target="_blank" rel="noopener">
+    <a class="btn-wsp" href="https://wa.me/541130858200?text=Hola%2C%20vi%20la%20p%C3%A1gina%20de%20turnos%20y%20quiero%20consultar" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       WhatsApp
     </a>
@@ -533,8 +597,8 @@
       <div class="ad-slot">
         <span class="ad-label">Espacio publicitario disponible</span>
         <div class="ad-title">¿Querés llegar a miles de vecinos de La Matanza?</div>
-        <div class="ad-sub">Mostrá tu negocio o promoción a toda la comunidad que usa FarmaClick a diario.</div>
-        <a class="btn-anunciar" href="https://wa.me/541130858200?text=Hola%2C%20quiero%20anunciar%20en%20FarmaClick" target="_blank" rel="noopener">
+        <div class="ad-sub">Mostrá tu negocio o promoción a toda la comunidad que consulta esta guía todos los días.</div>
+        <a class="btn-anunciar" href="https://wa.me/541130858200?text=Hola%2C%20quiero%20anunciar%20en%20la%20p%C3%A1gina%20de%20turnos" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           Anunciá aquí
         </a>
@@ -555,12 +619,12 @@
       </div>
     </div>
 
-    <!-- SUMATE A FARMACLICK -->
+    <!-- PARA FARMACIAS -->
     <div style="padding-top:6px;" class="sumate-section">
       <div class="section-title">Para farmacias</div>
       <div class="sumate-card">
         <span class="sumate-icon">💊</span>
-        <div class="sumate-title">Sumate a <span>FarmaClick</span></div>
+        <div class="sumate-title">Sumate a <span>la red de turnos</span></div>
         <div class="sumate-sub">
           Miles de vecinos de La Matanza consultan esta app todos los días.<br>
           Mostrá tu farmacia, tus productos y tus promociones.
@@ -597,7 +661,7 @@
 
         <!-- CTA -->
         <a class="btn-sumate"
-           href="https://wa.me/541130858200?text=Hola%2C%20quiero%20sumar%20mi%20farmacia%20a%20FarmaClick%21"
+           href="https://wa.me/541130858200?text=Hola%2C%20quiero%20sumar%20mi%20farmacia%20a%20la%20red%20de%20turnos%21"
            target="_blank" rel="noopener">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="#00896e">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
@@ -611,13 +675,35 @@
     </div>
 
     <div class="footer">
-      <a href="index.html" style="color:#22c55e;font-weight:700;text-decoration:none">← Farmacia Garmendia</a> &nbsp;·&nbsp; <strong>FarmaClick</strong> · Turnos de Farmacia · La Matanza 2026<br>
+      <a href="index.html" style="color:#22c55e;font-weight:700;text-decoration:none">← Farmacia Garmendia</a> &nbsp;·&nbsp; Turnos de Farmacia · La Matanza 2026<br>
       <span style="opacity:0.7;">Datos según calendario oficial · Siempre verificá con la farmacia</span><br>
-      <a href="https://wa.me/541130858200?text=Hola%2C%20quiero%20anunciar%20en%20FarmaClick">Anunciá tu negocio aquí</a>
+      <a href="https://wa.me/541130858200?text=Hola%2C%20quiero%20anunciar%20en%20la%20p%C3%A1gina%20de%20turnos">Anunciá tu negocio aquí</a>
     </div>
   </div>
 
   <div id="offline-toast">Sin conexión — mostrando datos guardados</div>
+
+  <!-- PANEL ADMIN (uso interno) -->
+  <button id="admin-fab" onclick="abrirPanelAdmin()">⚙ Panel farmacias</button>
+  <div id="admin-overlay">
+    <div id="admin-modal">
+      <button id="admin-close" onclick="cerrarPanelAdmin()">✕</button>
+      <h3>Panel de farmacias</h3>
+      <p class="sub">Marcá qué farmacias tienen inconvenientes hoy (sin turno confirmado, cerradas, etc.). Se ve reflejado para todos los visitantes.</p>
+
+      <div id="admin-login">
+        <input type="password" id="admin-password" placeholder="Contraseña" />
+        <button class="btn-buscar" onclick="loginPanelAdmin()">Ingresar</button>
+      </div>
+
+      <div id="admin-panel-body" style="display:none;">
+        <div id="admin-list"></div>
+        <button class="btn-buscar" onclick="guardarPanelAdmin()">Guardar cambios</button>
+      </div>
+
+      <div id="admin-msg"></div>
+    </div>
+  </div>
 
   <script>
   // ══════════════════════════════════════════════════════
@@ -683,7 +769,7 @@
         I: [
           { nombre:"Melella",        dir:"Luro 6405",           tel:"",            wsp:"",               logo:"", cover:"" },
           { nombre:"Iborra",         dir:"Cjal J.P.Gomez 4675", tel:"",            wsp:"",               logo:"", cover:"" },
-          { nombre:"Nueva Salvigny", dir:"Salvigny 4260",       tel:"",            wsp:"",               logo:"", cover:"" }
+          { nombre:"Nueva Salvigny", dir:"Salvigny 4521",       tel:"",            wsp:"",               logo:"", cover:"" }
         ],
         J: [
           { nombre:"Santa Ana",      dir:"Luro 3108",           tel:"",            wsp:"",               logo:"", cover:"" },
@@ -742,6 +828,9 @@
   // ══ ESTADO ══
   let currentLocality = 'laferrere';
   let currentCAL = {};
+  let currentGrupo = null;
+  let estadoProblemas = {};
+  const ESTADO_ENDPOINT = '/.netlify/functions/turnos-estado';
 
   const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
   const DIAS  = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
@@ -772,6 +861,7 @@
   //  RENDER CARD — estructura con logo circular + nombre
   // ══════════════════════════════════════════════════════
   function renderCards(grupo, loc) {
+    currentGrupo = grupo;
     const cont = document.getElementById('farmacias-list');
     cont.innerHTML = '';
     const data     = DB[loc];
@@ -805,6 +895,11 @@
         ? `<img src="${f.logo}" alt="Logo ${f.nombre}" />`
         : iniciales(f.nombre);
 
+      const estado = estadoProblemas[f.nombre];
+      const warningHTML = (estado && estado.inconveniente)
+        ? `<div class="fcard-warning">⚠️ <span><b>Podría tener inconvenientes hoy.</b>${estado.motivo ? ' ' + estado.motivo : ''} Te recomendamos confirmar antes de acercarte.</span></div>`
+        : '';
+
       // Configuramos la cuadrícula de botones según la disponibilidad de datos
       // Si no hay teléfono ni whatsapp, solo mostramos 1 columna para Maps
       let gridStyle = "grid-template-columns: 1fr;";
@@ -836,6 +931,8 @@
             </div>
           </div>
 
+          ${warningHTML}
+
           <div class="fcard-actions" style="${gridStyle}">
             ${f.tel ? `
             <a class="fcard-btn call" href="tel:${f.tel}">
@@ -847,7 +944,7 @@
 
             ${f.wsp ? `
             <a class="fcard-btn wsp"
-               href="https://wa.me/${f.wsp}?text=Hola%2C%20vi%20FarmaClick%20y%20quiero%20consultar"
+               href="https://wa.me/${f.wsp}?text=Hola%2C%20vi%20la%20p%C3%A1gina%20de%20turnos%20y%20quiero%20consultar"
                target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
@@ -937,6 +1034,143 @@
     }
   }
 
+  // ══════════════════════════════════════════════════════
+  //  ESTADO DE FARMACIAS (inconvenientes) — vía Netlify Function
+  // ══════════════════════════════════════════════════════
+  async function cargarEstadoProblemas() {
+    try {
+      const res = await fetch(ESTADO_ENDPOINT, { cache: 'no-store' });
+      if (!res.ok) return;
+      estadoProblemas = await res.json();
+      if (currentGrupo) renderCards(currentGrupo, currentLocality);
+    } catch (e) {
+      // Sin conexión con la función — seguimos mostrando el listado normal
+    }
+  }
+
+  // ══════════════════════════════════════════════════════
+  //  PANEL ADMIN (uso interno — marcar inconvenientes)
+  // ══════════════════════════════════════════════════════
+  let adminPassword = sessionStorage.getItem('fg_admin_pw') || '';
+
+  function abrirPanelAdmin() {
+    document.getElementById('admin-overlay').style.display = 'block';
+    document.getElementById('admin-msg').textContent = '';
+    if (adminPassword) {
+      verificarYRenderAdmin();
+    } else {
+      document.getElementById('admin-login').style.display = 'block';
+      document.getElementById('admin-panel-body').style.display = 'none';
+    }
+  }
+
+  function cerrarPanelAdmin() {
+    document.getElementById('admin-overlay').style.display = 'none';
+  }
+
+  async function loginPanelAdmin() {
+    const pw = document.getElementById('admin-password').value;
+    if (!pw) return;
+    adminPassword = pw;
+    await verificarYRenderAdmin();
+  }
+
+  async function verificarYRenderAdmin() {
+    const msg = document.getElementById('admin-msg');
+    msg.textContent = 'Verificando…';
+    msg.style.color = 'var(--gray-500)';
+    try {
+      const res = await fetch(ESTADO_ENDPOINT + '?check=1', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: adminPassword, updates: [] })
+      });
+      if (res.status === 401) {
+        msg.textContent = 'Contraseña incorrecta.';
+        msg.style.color = '#f87171';
+        adminPassword = '';
+        sessionStorage.removeItem('fg_admin_pw');
+        return;
+      }
+      if (!res.ok) { msg.textContent = 'No se pudo conectar con el panel.'; msg.style.color = '#f87171'; return; }
+      sessionStorage.setItem('fg_admin_pw', adminPassword);
+      const data = await res.json();
+      if (data.estados) estadoProblemas = data.estados;
+      msg.textContent = '';
+      document.getElementById('admin-login').style.display = 'none';
+      document.getElementById('admin-panel-body').style.display = 'block';
+      renderAdminList();
+    } catch (e) {
+      msg.textContent = 'No se pudo conectar con el panel.';
+      msg.style.color = '#f87171';
+    }
+  }
+
+  function renderAdminList() {
+    const cont = document.getElementById('admin-list');
+    cont.innerHTML = '';
+    const data = DB[currentLocality];
+    const vistas = new Set();
+    Object.values(data.grupos).forEach(lista => {
+      lista.forEach(f => {
+        if (vistas.has(f.nombre)) return;
+        vistas.add(f.nombre);
+        const estado = estadoProblemas[f.nombre];
+        const row = document.createElement('div');
+        row.className = 'admin-row' + (estado && estado.inconveniente ? ' on' : '');
+        row.dataset.nombre = f.nombre;
+        row.innerHTML = `
+          <div style="flex:1;">
+            <div class="admin-row-name">Farmacia ${f.nombre}</div>
+            <div class="admin-row-addr">${f.dir}</div>
+            <input class="admin-motivo" placeholder="Motivo (opcional, ej: sin confirmar turno)" value="${estado && estado.motivo ? estado.motivo.replace(/"/g,'&quot;') : ''}" />
+          </div>
+          <button type="button" class="admin-toggle${estado && estado.inconveniente ? ' on' : ''}" onclick="toggleAdminRow(this)"></button>
+        `;
+        cont.appendChild(row);
+      });
+    });
+  }
+
+  function toggleAdminRow(btn) {
+    btn.classList.toggle('on');
+    btn.closest('.admin-row').classList.toggle('on');
+  }
+
+  async function guardarPanelAdmin() {
+    const msg = document.getElementById('admin-msg');
+    const rows = document.querySelectorAll('#admin-list .admin-row');
+    const updates = [];
+    rows.forEach(row => {
+      const nombre = row.dataset.nombre;
+      const inconveniente = row.querySelector('.admin-toggle').classList.contains('on');
+      const motivo = row.querySelector('.admin-motivo').value.trim();
+      updates.push({ nombre, inconveniente, motivo });
+    });
+    msg.textContent = 'Guardando…';
+    msg.style.color = 'var(--gray-500)';
+    try {
+      const res = await fetch(ESTADO_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: adminPassword, updates })
+      });
+      if (res.status === 401) {
+        msg.textContent = 'Contraseña incorrecta.'; msg.style.color = '#f87171';
+        adminPassword = ''; sessionStorage.removeItem('fg_admin_pw');
+        return;
+      }
+      if (!res.ok) { msg.textContent = 'No se pudo guardar.'; msg.style.color = '#f87171'; return; }
+      const data = await res.json();
+      if (data.estados) estadoProblemas = data.estados;
+      msg.textContent = '✓ Guardado.';
+      msg.style.color = '#4ade80';
+      if (currentGrupo) renderCards(currentGrupo, currentLocality);
+    } catch (e) {
+      msg.textContent = 'No se pudo guardar.'; msg.style.color = '#f87171';
+    }
+  }
+
   // ══ OFFLINE ══
   window.addEventListener('online',  () => { document.getElementById('offline-toast').style.display = 'none'; });
   window.addEventListener('offline', () => {
@@ -965,7 +1199,7 @@
   // ══ SERVICE WORKER INLINE ══
   if ('serviceWorker' in navigator) {
     const swCode = `
-      const CACHE = 'farmaclick-v2';
+      const CACHE = 'turnos-garmendia-v1';
       self.addEventListener('install', e => {
         e.waitUntil(caches.open(CACHE).then(c => c.add('/')).then(() => self.skipWaiting()));
       });
@@ -993,6 +1227,7 @@
 
   // ══ ARRANCAR ══
   loadLocality('laferrere');
+  cargarEstadoProblemas();
   </script>
 </body>
 </html>
