@@ -23,6 +23,18 @@ export default async (req) => {
     return new Response(null, { status: 204, headers: cors });
   }
 
+  // Diagnóstico temporal: confirma si la variable de entorno llegó a la
+  // función y cuántos caracteres tiene, sin revelar el valor. Borrar
+  // este bloque (y el uso de ?diag=1) una vez resuelto el problema.
+  const url = new URL(req.url);
+  if (req.method === "GET" && url.searchParams.get("diag") === "1") {
+    return new Response(JSON.stringify({
+      configured: ADMIN_PASSWORD.length > 0,
+      length: ADMIN_PASSWORD.length,
+      hasLeadingOrTrailingSpace: ADMIN_PASSWORD !== ADMIN_PASSWORD.trim(),
+    }), { headers: cors });
+  }
+
   if (req.method !== "POST") {
     return new Response("Method Not Allowed", { status: 405, headers: cors });
   }
