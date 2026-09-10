@@ -2,9 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#1e3a5f" />
-  <meta name="description" content="Farmacia Garmendia – Farmacias de turno en La Matanza" />
+  <meta name="description" content="Farmacia Garmendia, farmacias de turno en La Matanza" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Farmacia Garmendia" />
@@ -102,10 +102,8 @@
       padding: 9px 16px;
       display: flex; align-items: center; justify-content: space-between; gap: 10px;
     }
-    .promo-strip-text { color: #052e16 !important; }
-    .promo-strip-text small { color: #0a3d1f !important; }
-    .promo-strip-text { color: #fff; font-size: 12px; font-weight: 700; line-height: 1.35; }
-    .promo-strip-text small { font-size: 10px; font-weight: 400; opacity: 0.85; display: block; }
+    .promo-strip-text { color: #052e16; font-size: 12px; font-weight: 700; line-height: 1.35; }
+    .promo-strip-text small { color: #0a3d1f; font-size: 10px; font-weight: 400; opacity: 0.85; display: block; }
     .btn-wsp {
       background: var(--wsp); color: #fff; border: none; border-radius: 20px;
       padding: 6px 12px; font-size: 11px; font-weight: 700; cursor: pointer;
@@ -162,8 +160,8 @@
 
     /* ══ CONTENT ══ */
     .content { padding: 14px 14px 0; max-width: 480px; margin: 0 auto; }
-    .section-title { color: #22c55e !important;
-      font-size: 11px; font-weight: 700; color: #94afd4;
+    .section-title {
+      color: #22c55e; font-size: 11px; font-weight: 700;
       letter-spacing: 0.9px; text-transform: uppercase; margin-bottom: 10px; padding-left: 2px;
     }
 
@@ -302,14 +300,6 @@
     }
     .btn-anunciar svg { width: 16px; height: 16px; fill: #fff; }
     .btn-anunciar:active { opacity: 0.88; transform: scale(0.97); }
-
-
-    .dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--gray-200); border: none; cursor: pointer; padding: 0;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .dot.active { background: var(--brand); transform: scale(1.35); }
 
     /* ══ DATE PICKER ══ */
     .picker-card {
@@ -517,7 +507,7 @@
   <div id="install-banner">
     <p>📲 Instalá esta app para acceso rápido</p>
     <button id="install-btn">Instalar</button>
-    <button id="install-close">✕</button>
+    <button id="install-close" aria-label="Cerrar aviso de instalación">✕</button>
   </div>
 
   <!-- TOPBAR -->
@@ -536,7 +526,7 @@
               white-space:nowrap;transition:all .2s;font-family:Nunito,sans-serif"
        onmouseover="this.style.borderColor='#22c55e';this.style.color='#22c55e'"
        onmouseout="this.style.borderColor='#1e3560';this.style.color='#94afd4'">
-      <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="12" height="12"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="12" height="12"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       Inicio
     </a>
   </header>
@@ -545,10 +535,10 @@
   <div class="promo-strip">
     <div class="promo-strip-text">
       ⭐ Visitá Farmacia Garmendia
-      <small>Garmendia 3402 — Laferrere</small>
+      <small>Garmendia 3402, Laferrere</small>
     </div>
     <a class="btn-wsp" href="https://wa.me/541130858200?text=Hola%2C%20vi%20la%20p%C3%A1gina%20de%20turnos%20y%20quiero%20consultar" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       WhatsApp
     </a>
   </div>
@@ -571,11 +561,11 @@
   <!-- HERO -->
   <div class="hero">
     <div class="hero-locality" id="hero-locality">Laferrere</div>
-    <div class="hero-date" id="hero-date">—</div>
+    <div class="hero-date" id="hero-date">Cargando...</div>
     <div class="group-badge">
       <div class="group-letter" id="group-letter">?</div>
       <div class="group-label">
-        <strong id="group-name">—</strong>
+        <strong id="group-name">...</strong>
         farmacias de turno
       </div>
     </div>
@@ -599,7 +589,7 @@
         <div class="ad-title">¿Querés llegar a miles de vecinos de La Matanza?</div>
         <div class="ad-sub">Mostrá tu negocio o promoción a toda la comunidad que consulta esta guía todos los días.</div>
         <a class="btn-anunciar" href="https://wa.me/541130858200?text=Hola%2C%20quiero%20anunciar%20en%20la%20p%C3%A1gina%20de%20turnos" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           Anunciá aquí
         </a>
       </div>
@@ -633,8 +623,8 @@
         <!-- BENEFICIOS -->
         <div class="sumate-pills">
           <div class="sumate-pill"><span>📍</span> Logo en tu card</div>
-          <div class="sumate-pill"><span>📸</span> Carrusel de productos</div>
-          <div class="sumate-pill"><span>📞</span> Botón WhatsApp directo</div>
+          <div class="sumate-pill"><span>📸</span> Foto de portada</div>
+          <div class="sumate-pill"><span>💬</span> Botón WhatsApp directo</div>
           <div class="sumate-pill"><span>📞</span> Botón Llamar</div>
           <div class="sumate-pill"><span>⭐</span> Card destacada</div>
           <div class="sumate-pill"><span>📊</span> Más visibilidad</div>
@@ -655,7 +645,7 @@
           <div class="plan-card destacado">
             <div class="plan-nombre">⭐ Pro</div>
             <div class="plan-precio">Consultá</div>
-            <div class="plan-item">✓ Maps<br>✓ Logo<br>✓ WhatsApp<br>✓ Destacado<br>✓ Carrusel<br>✓ Banner</div>
+            <div class="plan-item">✓ Maps<br>✓ Logo<br>✓ WhatsApp<br>✓ Destacado<br>✓ Foto de portada<br>✓ Banner</div>
           </div>
         </div>
 
@@ -663,7 +653,7 @@
         <a class="btn-sumate"
            href="https://wa.me/541130858200?text=Hola%2C%20quiero%20sumar%20mi%20farmacia%20a%20la%20red%20de%20turnos%21"
            target="_blank" rel="noopener">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="#00896e">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="#00896e">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
           </svg>
           Quiero sumarme por WhatsApp
@@ -677,17 +667,17 @@
     <div class="footer">
       <a href="index.html" style="color:#22c55e;font-weight:700;text-decoration:none">← Farmacia Garmendia</a> &nbsp;·&nbsp; Turnos de Farmacia · La Matanza 2026<br>
       <span style="opacity:0.7;">Datos según calendario oficial · Siempre verificá con la farmacia</span><br>
-      <a href="https://wa.me/541130858200?text=Hola%2C%20quiero%20anunciar%20en%20la%20p%C3%A1gina%20de%20turnos">Anunciá tu negocio aquí</a>
+      <a href="https://wa.me/541130858200?text=Hola%2C%20quiero%20anunciar%20en%20la%20p%C3%A1gina%20de%20turnos">Anunciá aquí</a>
     </div>
   </div>
 
-  <div id="offline-toast">Sin conexión — mostrando datos guardados</div>
+  <div id="offline-toast">Sin conexión, mostrando datos guardados</div>
 
   <!-- PANEL ADMIN (uso interno) -->
   <button id="admin-fab" onclick="abrirPanelAdmin()">⚙ Panel farmacias</button>
   <div id="admin-overlay">
     <div id="admin-modal">
-      <button id="admin-close" onclick="cerrarPanelAdmin()">✕</button>
+      <button id="admin-close" onclick="cerrarPanelAdmin()" aria-label="Cerrar panel de farmacias">✕</button>
       <h3>Panel de farmacias</h3>
       <p class="sub">Marcá qué farmacias tienen inconvenientes hoy (sin turno confirmado, cerradas, etc.). Se ve reflejado para todos los visitantes.</p>
 
@@ -921,7 +911,7 @@
             <div class="fcard-name-block">
               <div class="fcard-name">Farmacia ${f.nombre}</div>
               <div class="fcard-addr">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                      stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                   <circle cx="12" cy="10" r="3"/>
@@ -936,7 +926,7 @@
           <div class="fcard-actions" style="${gridStyle}">
             ${f.tel ? `
             <a class="fcard-btn call" href="tel:${f.tel}">
-              <svg viewBox="0 0 24 24">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/>
               </svg>
               Llamar
@@ -946,7 +936,7 @@
             <a class="fcard-btn wsp"
                href="https://wa.me/${f.wsp}?text=Hola%2C%20vi%20la%20p%C3%A1gina%20de%20turnos%20y%20quiero%20consultar"
                target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
               </svg>
               WhatsApp
@@ -955,7 +945,7 @@
             <a class="fcard-btn maps"
                href="${mapsUrl(f.nombre, f.dir, data.nombre)}"
                target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
               </svg>
               Maps
@@ -974,7 +964,7 @@
 
     if (!data.calendario || data.calendario.length === 0) {
       currentCAL = {};
-      document.getElementById('group-letter').textContent = '—';
+      document.getElementById('group-letter').textContent = '?';
       document.getElementById('group-name').textContent   = 'Próximamente';
       document.getElementById('farmacias-list').innerHTML = `
         <div class="coming-soon">
@@ -999,7 +989,7 @@
       document.getElementById('group-name').textContent   = String(data.grupos[letra].length);
       renderCards(letra, loc);
     } else {
-      document.getElementById('group-letter').textContent = '—';
+      document.getElementById('group-letter').textContent = '-';
       document.getElementById('group-name').textContent   = '0';
       document.getElementById('farmacias-list').innerHTML =
         '<div style="padding:16px;color:var(--gray-500);font-size:13px;text-align:center;">Sin datos para hoy.</div>';
@@ -1025,7 +1015,7 @@
       const lista = (data.grupos[letra] || []).map(f => 'Farmacia ' + f.nombre).join(', ') || 'Sin datos';
       rb.style.background = 'var(--brand-light)';
       rb.style.color      = 'var(--brand-dark)';
-      rb.innerHTML = `<b>Grupo ${letra}</b> — ${DIAS[dt.getDay()]} ${+d} de ${MESES[+m-1]}<br>
+      rb.innerHTML = `<b>Grupo ${letra}</b>, ${DIAS[dt.getDay()]} ${+d} de ${MESES[+m-1]}<br>
         <span style="font-size:12px;font-weight:500;">${lista}</span>`;
     } else {
       rb.style.background = '#fffbea';
@@ -1125,7 +1115,7 @@
             <div class="admin-row-addr">${f.dir}</div>
             <input class="admin-motivo" placeholder="Motivo (opcional, ej: sin confirmar turno)" value="${estado && estado.motivo ? estado.motivo.replace(/"/g,'&quot;') : ''}" />
           </div>
-          <button type="button" class="admin-toggle${estado && estado.inconveniente ? ' on' : ''}" onclick="toggleAdminRow(this)"></button>
+          <button type="button" class="admin-toggle${estado && estado.inconveniente ? ' on' : ''}" onclick="toggleAdminRow(this)" aria-pressed="${estado && estado.inconveniente ? 'true' : 'false'}" aria-label="Marcar inconveniente para Farmacia ${f.nombre}"></button>
         `;
         cont.appendChild(row);
       });
@@ -1133,7 +1123,8 @@
   }
 
   function toggleAdminRow(btn) {
-    btn.classList.toggle('on');
+    const on = btn.classList.toggle('on');
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
     btn.closest('.admin-row').classList.toggle('on');
   }
 
