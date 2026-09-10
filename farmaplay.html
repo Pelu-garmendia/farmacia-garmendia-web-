@@ -1112,8 +1112,7 @@ function renderPerfil(){
       ${m.d !== 0 ? `<span class="m-delta ${m.d>0?'m-mas':'m-menos'}">${m.d>0?'+':''}${m.d}</span>` : ''}
     </div>`).join('')
     : '<p style="font-size:12.5px;color:var(--texto-suave);text-align:center;padding:12px">Todavía no hay movimientos</p>';
-  // Control de acceso admin: solo visible si el DNI es autorizado
-  $('btnAdminAcceso').style.display = (S.dni === DNI_ADMIN) ? 'block' : 'none';
+  $('btnAdminAcceso').style.display = 'block';
 }
 function renderTodo(){
   $('hdrPuntos').textContent = S.puntos.toLocaleString('es-AR');
@@ -1202,15 +1201,10 @@ function demoReset(){
 
 /* ================== PANEL FARMACIA: ACCESO Y USUARIOS ================== */
 const AUTH_ENDPOINT_ADMIN = '/.netlify/functions/tienda-auth';
-const DNI_ADMIN = '38042020';
 let adminOk = sessionStorage.getItem('fc1_admin') === '1';
 let tabAdmin = 'cupones';
 
 function abrirAdmin(){
-  if(S.dni !== DNI_ADMIN){
-    toast('🔒 Acceso reservado para administrador','error');
-    return;
-  }
   if(!adminOk){
     $('ovPassAdmin').classList.add('abierto');
     setTimeout(()=> $('inputPassAdmin').focus(), 250);
