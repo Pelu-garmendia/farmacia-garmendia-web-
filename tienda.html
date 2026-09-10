@@ -541,7 +541,7 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--g);cursor:pointer
         </button>
       </div>
       <div class="auth-err" id="auth-err"></div>
-      <button class="btn btn-g" style="width:100%;justify-content:center;margin-bottom:8px" onclick="checkPass()">Ingresar</button>
+      <button class="btn btn-g" id="auth-submit" style="width:100%;justify-content:center;margin-bottom:8px" onclick="checkPass()">Ingresar</button>
       <button class="btn btn-out" style="width:100%;justify-content:center" onclick="cerrarAuth()">Cancelar</button>
       <p style="font-size:.7rem;color:var(--text2);margin-top:8px" id="auth-hint"></p>
     </div>
@@ -616,7 +616,7 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--g);cursor:pointer
 <script>
 'use strict';
 // ══════════ CONSTANTES ══════════
-const PASS     = 'alma3402!';
+const AUTH_ENDPOINT = '/.netlify/functions/tienda-auth';
 const WA_NUM   = '541130858200';
 const PP       = 25;
 const GH_URLS  = [
@@ -683,19 +683,34 @@ function showTab(t) {
 function pedirClave() { if(adminOK){showTab('admin');return}; document.getElementById('auth-inp').value=''; document.getElementById('auth-err').textContent=''; document.getElementById('auth-modal').classList.add('open'); setTimeout(()=>document.getElementById('auth-inp').focus(),100); }
 function cerrarAuth() { document.getElementById('auth-modal').classList.remove('open'); }
 function toggleEye() { const i=document.getElementById('auth-inp'); i.type=i.type==='password'?'text':'password'; }
-function checkPass() {
+async function checkPass() {
   if (locked) { document.getElementById('auth-err').textContent='⛔ Bloqueado 30s.'; return; }
-  if (document.getElementById('auth-inp').value===PASS) {
-    adminOK=true; authFail=0; cerrarAuth();
-    document.getElementById('tab-admin').classList.remove('hidden');
-    document.getElementById('lock-btn').style.display='none';
-    showTab('admin'); toast('✅ Acceso concedido','suc');
-  } else {
-    authFail++;
-    const r=5-authFail;
-    document.getElementById('auth-err').textContent='❌ Clave incorrecta.'+(r>0?' '+r+' intentos restantes.':'');
-    if (authFail>=5) { locked=true; document.getElementById('auth-err').textContent='⛔ Bloqueado 30 segundos.'; setTimeout(()=>{locked=false;authFail=0;document.getElementById('auth-err').textContent=''},30000); }
-    document.getElementById('auth-inp').value='';
+  const pass = document.getElementById('auth-inp').value;
+  const btn  = document.getElementById('auth-submit');
+  const err  = document.getElementById('auth-err');
+  btn.disabled = true; err.textContent = 'Verificando…';
+  try {
+    const res = await fetch(AUTH_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pass })
+    });
+    if (res.ok) {
+      adminOK=true; authFail=0; err.textContent=''; cerrarAuth();
+      document.getElementById('tab-admin').classList.remove('hidden');
+      document.getElementById('lock-btn').style.display='none';
+      showTab('admin'); toast('✅ Acceso concedido','suc');
+    } else {
+      authFail++;
+      const r=5-authFail;
+      err.textContent='❌ Clave incorrecta.'+(r>0?' '+r+' intentos restantes.':'');
+      if (authFail>=5) { locked=true; err.textContent='⛔ Bloqueado 30 segundos.'; setTimeout(()=>{locked=false;authFail=0;err.textContent=''},30000); }
+      document.getElementById('auth-inp').value='';
+    }
+  } catch (e) {
+    err.textContent='⚠ No se pudo conectar. Probá de nuevo.';
+  } finally {
+    btn.disabled = false;
   }
 }
 function cerrarAdmin() { adminOK=false; document.getElementById('tab-admin').classList.add('hidden'); document.getElementById('lock-btn').style.display=''; showTab('tienda'); }

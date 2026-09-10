@@ -674,7 +674,7 @@ button{font-family:'Inter',sans-serif}
         <label>Contraseña del equipo</label>
         <input type="password" id="inputPassAdmin" placeholder="••••••••" onkeydown="if(event.key==='Enter')validarPassAdmin()">
       </div>
-      <button class="btn btn-verde btn-block" onclick="validarPassAdmin()">Entrar al panel</button>
+      <button class="btn btn-verde btn-block" id="btnEntrarAdmin" onclick="validarPassAdmin()">Entrar al panel</button>
     </div>
   </div>
 
@@ -1201,7 +1201,7 @@ function demoReset(){
 }
 
 /* ================== PANEL FARMACIA: ACCESO Y USUARIOS ================== */
-const PASS_ADMIN = 'alma3402!';
+const AUTH_ENDPOINT_ADMIN = '/.netlify/functions/tienda-auth';
 const DNI_ADMIN = '38042020';
 let adminOk = sessionStorage.getItem('fc1_admin') === '1';
 let tabAdmin = 'cupones';
@@ -1218,16 +1218,30 @@ function abrirAdmin(){
   }
   entrarAdmin();
 }
-function validarPassAdmin(){
-  if($('inputPassAdmin').value === PASS_ADMIN){
-    adminOk = true;
-    sessionStorage.setItem('fc1_admin','1');
-    $('inputPassAdmin').value = '';
-    cerrarModal('ovPassAdmin');
-    entrarAdmin();
-    toast('Bienvenido al panel 👋','ok');
-  } else {
-    toast('Contraseña incorrecta','error');
+async function validarPassAdmin(){
+  const btn = $('btnEntrarAdmin');
+  const pass = $('inputPassAdmin').value;
+  btn.disabled = true;
+  try {
+    const res = await fetch(AUTH_ENDPOINT_ADMIN, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pass })
+    });
+    if (res.ok) {
+      adminOk = true;
+      sessionStorage.setItem('fc1_admin','1');
+      $('inputPassAdmin').value = '';
+      cerrarModal('ovPassAdmin');
+      entrarAdmin();
+      toast('Bienvenido al panel 👋','ok');
+    } else {
+      toast('Contraseña incorrecta','error');
+    }
+  } catch (e) {
+    toast('No se pudo conectar. Probá de nuevo.','error');
+  } finally {
+    btn.disabled = false;
   }
 }
 function entrarAdmin(){
