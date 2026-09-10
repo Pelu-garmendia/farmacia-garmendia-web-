@@ -7,6 +7,9 @@
 <meta http-equiv="Expires" content="0"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Farmacia Garmendia · Laferrere</title>
+<meta name="theme-color" content="#0a3d42"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -32,6 +35,8 @@ html{
 
 html{scroll-behavior:smooth}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0fdfd;color:#0a3d42;line-height:1.6;overflow-x:hidden}
+a,button{touch-action:manipulation}
+#servicios,#valoraciones,#info{scroll-margin-top:68px}
 
 /* ─── NAV ─── */
 nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d42;border-bottom:1px solid #cce9e8;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 20px 0 2px 12px rgba(10,61,66,.1)}
@@ -53,12 +58,14 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 .hero-left{display:flex;flex-direction:column;justify-content:center;padding:72px 6% 72px 8%;position:relative;z-index:1}
 .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(13,148,136,.1);border:1px solid rgba(13,148,136,.3);color:#0d9488;padding:6px 14px;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;width:fit-content;margin-bottom:28px;animation:up .7s .1s both}
 .hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#0d9488;animation:blink 2s infinite}
-.hero-h1{font-size:clamp(2.6rem,4.5vw,4.2rem);font-weight:800;color:#0a3d42;line-height:1.06;letter-spacing:-.03em;margin-bottom:20px;animation:up .7s .2s both}
+.hero-h1{font-size:clamp(2.6rem,4.5vw,4.2rem);font-weight:800;color:#0a3d42;line-height:1.06;letter-spacing:-.03em;margin-bottom:20px;animation:up .7s .2s both;text-wrap:balance}
 .hero-h1 mark{background:none;color:#0d9488}
 .hero-p{font-size:1rem;color:#5b8c8f;line-height:1.75;max-width:420px;margin-bottom:36px;animation:up .7s .3s both}
 .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px;animation:up .7s .4s both}
 .btn-g{display:inline-flex;align-items:center;gap:8px;background:#f97316;color:#fff;padding:14px 28px;border-radius:100px;font-size:.88rem;font-weight:800;text-decoration:none;border:none;cursor:pointer;font-family:inherit;transition:background .2s,transform .2s;box-shadow:0 4px 16px rgba(249,115,22,.4)}
 .btn-g:hover{background:#fb8c3c;transform:translateY(-2px)}
+.btn-arrow{display:inline-block;transition:transform .25s cubic-bezier(.22,1,.36,1)}
+.btn-g:hover .btn-arrow{transform:translateX(4px)}
 .btn-o{display:inline-flex;align-items:center;gap:8px;background:transparent;color:#f97316;border:1.5px solid rgba(249,115,22,.4);padding:14px 28px;border-radius:100px;font-size:.88rem;font-weight:600;text-decoration:none;cursor:pointer;font-family:inherit;transition:border-color .2s,color .2s,transform .2s}
 .btn-o:hover{border-color:#f97316;color:#fb8c3c;transform:translateY(-2px)}
 .hero-stats{display:flex;gap:24px;flex-wrap:wrap;animation:up .7s .5s both}
@@ -68,8 +75,12 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 
 .hero-right{background:transparent;display:flex;align-items:center;justify-content:center;padding:48px 5%;position:relative;overflow:hidden}
 .trust-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:380px}
-.trust-card{background:#e1f5ee;border-radius:16px;padding:20px;box-shadow:0 4px 18px rgba(10,61,66,.08);border:1.5px solid rgba(13,148,136,.08);transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease,border-color .35s ease;cursor:default}
+.trust-card{background:#e1f5ee;border-radius:16px;padding:20px;box-shadow:0 4px 18px rgba(10,61,66,.08);border:1.5px solid rgba(13,148,136,.08);transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease,border-color .35s ease;cursor:default;animation:up .6s cubic-bezier(.22,1,.36,1) both}
 .trust-card:hover{transform:translateY(-8px) scale(1.03);box-shadow:0 16px 38px rgba(13,148,136,.22);border-color:rgba(13,148,136,.35)}
+.trust-card:nth-child(1){animation-delay:.55s}
+.trust-card:nth-child(2){animation-delay:.62s}
+.trust-card:nth-child(3){animation-delay:.69s}
+.trust-card:nth-child(4){animation-delay:.76s}
 .trust-ico{width:40px;height:40px;border-radius:11px;background:rgba(13,148,136,.12);display:flex;align-items:center;justify-content:center;color:#0d9488;margin-bottom:12px;transition:transform .35s cubic-bezier(.34,1.56,.64,1),background .35s ease,color .35s ease}
 .trust-card:hover .trust-ico{transform:scale(1.15) rotate(-6deg);background:#0d9488;color:#fff}
 .trust-ico svg{width:20px;height:20px}
@@ -94,12 +105,21 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 .sec-teal .h2{color:#ffffff}
 .sec-teal .subp{color:#a7d9d6}
 .lbl{font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#0d9488;margin-bottom:10px}
-.h2{font-size:clamp(1.8rem,3vw,2.6rem);font-weight:800;color:#0a3d42;letter-spacing:-.03em;line-height:1.1;margin-bottom:12px}
+.h2{font-size:clamp(1.8rem,3vw,2.6rem);font-weight:800;color:#0a3d42;letter-spacing:-.03em;line-height:1.1;margin-bottom:12px;text-wrap:balance}
 .subp{color:#5b8c8f;font-size:.95rem;line-height:1.7;max-width:500px}
-.reveal{opacity:1;transform:none;transition:opacity .65s,transform .65s}
-.js-anim .reveal{opacity:0;transform:translateY(20px)}
+.reveal{opacity:1;transform:none;transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
+.js-anim .reveal{opacity:0;transform:translateY(22px)}
 .js-anim .reveal.vis{opacity:1;transform:none}
 .sec-top{margin-bottom:48px}
+
+/* Cascada de entrada para la grilla de servicios */
+.srv-card.reveal:nth-child(1){transition-delay:0ms}
+.srv-card.reveal:nth-child(2){transition-delay:70ms}
+.srv-card.reveal:nth-child(3){transition-delay:140ms}
+.srv-card.reveal:nth-child(4){transition-delay:210ms}
+.srv-card.reveal:nth-child(5){transition-delay:280ms}
+.srv-card.reveal:nth-child(6){transition-delay:350ms}
+.srv-card.reveal:nth-child(7){transition-delay:420ms}
 
 
 /* ─── SERVICIOS ─── */
@@ -147,7 +167,7 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 
 
 /* Modal producto */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;align-items:center;justify-content:center;padding:16px}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;align-items:center;justify-content:center;padding:16px;overscroll-behavior:contain}
 .modal-bg.open{display:flex}
 .modal-box{background:#f0fdfd;border:1px solid #cce9e8;border-radius:var(--r2);padding:32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:up .3s both;box-shadow:0 20px 60px rgba(0,0,0,.6)}
 .modal-box h3{font-size:1.15rem;font-weight:800;color:#0a3d42;margin-bottom:6px}
@@ -156,6 +176,9 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 .fg label{font-size:.67rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0d9488;display:block;margin-bottom:5px}
 .fg input,.fg textarea,.fg select{width:100%;background:#ffffff;border:1.5px solid #cce9e8;color:#0a3d42;padding:10px 14px;border-radius:10px;font-family:inherit;font-size:.87rem;outline:none;transition:border-color .2s}
 .fg input:focus,.fg textarea:focus,.fg select:focus{border-color:#0d9488}
+.fg input:focus-visible,.fg textarea:focus-visible,.fg select:focus-visible{outline:2px solid #0d9488;outline-offset:1px}
+.field-err{display:none;color:#dc2626;font-size:.72rem;margin-top:4px}
+.field-err.on{display:block}
 .fg textarea{min-height:80px;resize:vertical}
 .fgrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
@@ -222,7 +245,7 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 .rev-stars-s{display:flex;gap:2px;margin-bottom:10px}
 .rev-stars-s svg{width:12px;height:12px}
 .rev-stars-s svg.on{fill:#fbbf24}.rev-stars-s svg.off{fill:#a3d9d6}
-.rev-text{font-size:.8rem;color:#5b8c8f;line-height:1.65}
+.rev-text{font-size:.8rem;color:#5b8c8f;line-height:1.65;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
 .rev-vc{display:flex;align-items:center;gap:4px;margin-top:10px;font-size:.63rem;color:#5ec8c2}
 .rev-vc svg{width:10px;fill:#5ec8c2}
 .rev-footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
@@ -276,21 +299,9 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
 .f-links a{color:#5ec8c2;text-decoration:none;font-size:.75rem;font-weight:500;transition:color .2s}
 .f-links a:hover{color:#0d9488}
 
-/* ─── CONFIG ─── */
-#cfg-panel{position:fixed;bottom:24px;right:24px;z-index:300}
-.cfg-btn{width:46px;height:46px;border-radius:50%;background:#ffffff;border:1px solid #cce9e8;color:#0a3d42;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.4);transition:background .2s,transform .2s}
-.cfg-btn:hover{background:#f0fdfd;transform:scale(1.08)}
-.cfg-drawer{position:absolute;bottom:58px;right:0;width:280px;background:#f0fdfd;border:1px solid #cce9e8;border-radius:var(--r2);padding:20px;display:none;box-shadow:0 20px 60px rgba(0,0,0,.6);max-height:80vh;overflow-y:auto}
-.cfg-drawer.open{display:block;animation:up .2s both}
-.cfg-drawer h5{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#0d9488;margin-bottom:14px}
-.cfg-item{margin-bottom:13px}
-.cfg-item label{font-size:.68rem;color:#5b8c8f;display:block;margin-bottom:4px}
-.cfg-item input{width:100%;background:#ffffff;border:1.5px solid #cce9e8;color:#0a3d42;padding:8px 12px;border-radius:8px;font-size:.8rem;font-family:inherit;outline:none;transition:border-color .2s}
-.cfg-item input:focus{border-color:#0d9488}
+/* ─── UPLOAD LABEL ─── */
 .up-lbl{display:flex;align-items:center;gap:7px;background:#ffffff;border:1.5px dashed #cce9e8;border-radius:8px;padding:9px 12px;cursor:pointer;font-size:.76rem;color:#5b8c8f;transition:border-color .2s}
 .up-lbl:hover{border-color:#0d9488;color:#0a3d42}
-.cfg-save{width:100%;background:#0d9488;color:#042f2c;border:none;padding:10px;border-radius:100px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:8px;transition:background .2s}
-.cfg-save:hover{background:#14b8a6}
 
 /* ─── WA FLOAT ─── */
 .wa-float{position:fixed;bottom:80px;left:20px;z-index:200;display:flex;align-items:center;gap:8px;background:#f97316;color:#fff;padding:11px 18px;border-radius:100px;text-decoration:none;font-size:.78rem;font-weight:800;box-shadow:0 4px 20px rgba(249,115,22,.5);transition:transform .2s}
@@ -304,7 +315,7 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
 .lb-x{position:absolute;top:18px;right:22px;background:rgba(255,255,255,.1);border:none;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center}
 
 /* ─── TOAST ─── */
-.toast{position:fixed;bottom:76px;right:22px;z-index:400;background:#ffffff;color:#0a3d42;border:1px solid #cce9e8;padding:11px 18px;border-radius:100px;font-size:.8rem;font-weight:600;transform:translateY(8px);opacity:0;transition:all .3s;pointer-events:none}
+.toast{position:fixed;bottom:76px;right:22px;z-index:400;background:#ffffff;color:#0a3d42;border:1px solid #cce9e8;padding:11px 18px;border-radius:100px;font-size:.8rem;font-weight:600;transform:translateY(8px);opacity:0;transition:transform .3s,opacity .3s;pointer-events:none}
 .toast.on{transform:translateY(0);opacity:1}
 .toast.err{background:#450a0a;color:#fca5a5;border-color:#7f1d1d}
 
@@ -312,6 +323,12 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
 @keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0ms!important;scroll-behavior:auto!important}
+  .js-anim .reveal{opacity:1;transform:none}
+  .hero-badge::before{animation:none;opacity:1}
+}
 
 /* ─── RESPONSIVE ─── */
 @media(max-width:960px){
@@ -359,10 +376,10 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
     <li><a href="farmaclick.html" style="color:#5eead4;font-weight:700">💊 Turnos</a></li>
   </ul>
   <a href="tienda.html" class="nav-pill">
-    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="14"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="14"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
     Tienda
   </a>
-  <button class="hb" id="hb"><span></span><span></span><span></span></button>
+  <button class="hb" id="hb" aria-label="Abrir menú" aria-expanded="false" aria-controls="nl"><span></span><span></span><span></span></button>
 </nav>
 
 <!-- HERO -->
@@ -370,13 +387,13 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   <div class="hero-left">
     <div class="hero-badge">Farmacia de barrio · Laferrere</div>
     <h1 class="hero-h1">Salud y bienestar,<br><mark>a tu alcance</mark></h1>
-    <p class="hero-p">Más que medicamentos — atención personalizada, trato cercano y profesionales que te escuchan. Garmendia 3402, Laferrere.</p>
+    <p class="hero-p">Más que medicamentos: atención personalizada, trato cercano y profesionales que te escuchan. Garmendia 3402, Laferrere.</p>
     <div class="hero-ctas">
       <a href="tienda.html" class="btn-g">
-        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="15"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="15"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
         Ver productos
       </a>
-      <a href="#servicios" class="btn-g">Ver servicios →</a>
+      <a href="#servicios" class="btn-g">Ver servicios <span class="btn-arrow" aria-hidden="true">→</span></a>
     </div>
     <div class="hero-stats">
       <div class="hstat"><div class="hstat-n">+10</div><div class="hstat-l">Años en el barrio</div></div>
@@ -387,22 +404,22 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
     <div class="hero-right" style="background:transparent;display:flex;align-items:center;justify-content:center;padding:40px 5%;position:relative;overflow:hidden">
     <div class="trust-grid">
       <div class="trust-card">
-        <div class="trust-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="trust-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
         <div class="trust-t">+10 años</div>
         <div class="trust-s">en el barrio, junto a vos</div>
       </div>
       <div class="trust-card">
-        <div class="trust-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+        <div class="trust-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
         <div class="trust-t">Trato cercano</div>
         <div class="trust-s">atendemos personas, no clientes</div>
       </div>
       <div class="trust-card">
-        <div class="trust-ico"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg></div>
+        <div class="trust-ico"><svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg></div>
         <div class="trust-t">Consultas por WhatsApp</div>
         <div class="trust-s">te respondemos al instante</div>
       </div>
       <div class="trust-card">
-        <div class="trust-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
+        <div class="trust-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
         <div class="trust-t">Te escuchamos</div>
         <div class="trust-s">con tiempo y sin apuros</div>
       </div>
@@ -414,21 +431,21 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
 <div class="hora-strip">
   <div class="hora-items">
     <div class="hora-item">
-      <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       <span><strong>Lun–Sáb</strong> 9–13 hs · 17–20 hs (invierno)</span>
     </div>
     <div class="hora-item">
-      <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       <span><strong>Dom y Feriados</strong> 9–13 hs</span>
     </div>
     <div class="hora-item">
-      <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
       <span><strong>Garmendia 3402</strong>, Laferrere</span>
     </div>
   </div>
   <a href="https://wa.me/541130858200?text=Hola!%20Tengo%20una%20consulta" target="_blank" class="hora-btn">
-      <svg fill="currentColor" viewBox="0 0 24 24" width="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Dudas y consultas
+      <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" width="14"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Consultar por WhatsApp
     </a>
 </div>
 
@@ -438,24 +455,24 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   <div class="sec-top reveal">
     <p class="lbl">Lo que ofrecemos</p>
     <h2 class="h2">Más que una farmacia,<br>un lugar de confianza</h2>
-    <p class="subp">Cada persona recibe atención real — con tiempo, dedicación y profesionalismo.</p>
+    <p class="subp">Cada persona recibe atención real, con tiempo, dedicación y profesionalismo.</p>
   </div>
   <div class="srv-featured reveal">
-    <div class="sf-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+    <div class="sf-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
     <div>
       <div class="sf-tag">⭐ Nuestro diferencial</div>
       <h3 class="sf-h">Atención personalizada</h3>
       <p class="sf-p">No somos una farmacia más. Nos tomamos el tiempo para escucharte, orientarte y acompañarte. Farmacéuticos matriculados, trato cercano y sin apuros.</p>
     </div>
   </div>
-  <div class="srv-grid reveal">
-    <div class="srv-card"><div class="sc-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg></div><h3>Medicamentos</h3><p>Stock completo de venta libre y receta.</p></div>
-    <div class="srv-card"><div class="sc-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>Dermocosmética</h3><p>Las mejores marcas con asesoramiento personalizado.</p></div>
-    <div class="srv-card"><div class="sc-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><h3>Perfumería</h3><p>Marcas nacionales e importadas a tu alcance.</p></div>
-    <div class="srv-card"><div class="sc-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><h3>Toma de glucosa</h3><p>Medición sin cargo. Prevención real.</p></div>
-    <div class="srv-card"><div class="sc-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><h3>Toma de presión</h3><p>Control cardiovascular sin cargo.</p></div>
-    <div class="srv-card"><div class="sc-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><h3>Carga virtual</h3><p>Recargá saldo de celular en la farmacia.</p></div>
-    <div class="srv-card"><div class="sc-ico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div><h3>Masoterapia</h3><p>Servicio profesional. Consultá disponibilidad.</p></div>
+  <div class="srv-grid">
+    <div class="srv-card reveal"><div class="sc-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg></div><h3>Medicamentos</h3><p>Stock completo de venta libre y receta.</p></div>
+    <div class="srv-card reveal"><div class="sc-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>Dermocosmética</h3><p>Las mejores marcas con asesoramiento personalizado.</p></div>
+    <div class="srv-card reveal"><div class="sc-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><h3>Perfumería</h3><p>Marcas nacionales e importadas a tu alcance.</p></div>
+    <div class="srv-card reveal"><div class="sc-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><h3>Toma de glucosa</h3><p>Medición sin cargo. Prevención real.</p></div>
+    <div class="srv-card reveal"><div class="sc-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><h3>Toma de presión</h3><p>Control cardiovascular sin cargo.</p></div>
+    <div class="srv-card reveal"><div class="sc-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><h3>Carga virtual</h3><p>Recargá saldo de celular en la farmacia.</p></div>
+    <div class="srv-card reveal"><div class="sc-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div><h3>Masoterapia</h3><p>Servicio profesional. Consultá disponibilidad.</p></div>
   </div>
 </section>
 
@@ -464,7 +481,7 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   <div class="sec-head reveal">
     <div><p class="lbl">Promociones</p><h2 class="h2" style="font-size:1.6rem;margin-bottom:0">Espacio publicitario</h2></div>
     <label class="btn-up btn-up-alt" style="cursor:pointer">
-      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <svg aria-hidden="true" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       Subir aviso
       <input type="file" accept="image/*" multiple style="display:none" id="ad-up"/>
     </label>
@@ -499,7 +516,7 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   <div class="rev-scroll reveal" id="rev-sc"></div>
   <div class="rev-footer reveal">
     <button class="btn-opinion" id="op-rev">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <svg aria-hidden="true" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       Dejá tu opinión
     </button>
     <span style="font-size:.75rem;color:#a7d9d6" id="rev-sub"></span>
@@ -511,16 +528,17 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   <div class="modal-box">
     <h3>Tu opinión importa</h3>
     <p>Contanos tu experiencia en Farmacia Garmendia.</p>
-    <div class="fgrow"><div class="fg"><label>Nombre *</label><input type="text" id="rv-n" placeholder="María G."/></div><div class="fg"><label>Barrio</label><input type="text" id="rv-l" placeholder="Laferrere"/></div></div>
-    <label style="font-size:.67rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0d9488;display:block;margin-bottom:10px">Puntuación *</label>
-    <div class="star-row" id="sr">
-      <button type="button" data-v="1"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
-      <button type="button" data-v="2"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
-      <button type="button" data-v="3"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
-      <button type="button" data-v="4"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
-      <button type="button" data-v="5"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+    <div class="fgrow"><div class="fg"><label for="rv-n">Nombre *</label><input type="text" id="rv-n" name="rv-n" autocomplete="name" placeholder="María G."/><span class="field-err" id="rv-n-err" aria-live="polite"></span></div><div class="fg"><label for="rv-l">Barrio</label><input type="text" id="rv-l" name="rv-l" autocomplete="address-level2" placeholder="Laferrere"/></div></div>
+    <label id="rv-score-lbl" style="font-size:.67rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0d9488;display:block;margin-bottom:10px">Puntuación *</label>
+    <div class="star-row" id="sr" role="radiogroup" aria-labelledby="rv-score-lbl">
+      <button type="button" data-v="1" role="radio" aria-checked="false" aria-label="1 estrella"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+      <button type="button" data-v="2" role="radio" aria-checked="false" aria-label="2 estrellas"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+      <button type="button" data-v="3" role="radio" aria-checked="false" aria-label="3 estrellas"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+      <button type="button" data-v="4" role="radio" aria-checked="false" aria-label="4 estrellas"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+      <button type="button" data-v="5" role="radio" aria-checked="false" aria-label="5 estrellas"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
     </div>
-    <div class="fg"><label>Comentario *</label><textarea id="rv-t" placeholder="¿Cómo fue tu experiencia?"></textarea></div>
+    <span class="field-err" id="rv-score-err" aria-live="polite"></span>
+    <div class="fg"><label for="rv-t">Comentario *</label><textarea id="rv-t" maxlength="400" placeholder="¿Cómo fue tu experiencia?"></textarea><span class="field-err" id="rv-t-err" aria-live="polite"></span></div>
     <div class="modal-footer"><button class="btn-cancel" id="cls-rev">Cancelar</button><button class="btn-up" id="sub-rev">Publicar</button></div>
   </div>
 </div>
@@ -534,31 +552,31 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   <div class="info-layout reveal">
     <div class="info-stack">
       <div class="icard">
-        <div class="icard-hd"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Horarios</div>
-        <div class="irow"><div class="iico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="ilbl">Lun – Sáb</div><div class="ival">9:00–13:00 · 17:00–20:00 hs<small>Horario de invierno</small></div></div></div>
-        <div class="irow"><div class="iico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="ilbl">Dom y Feriados</div><div class="ival">9:00–13:00 hs</div></div></div>
+        <div class="icard-hd"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Horarios</div>
+        <div class="irow"><div class="iico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="ilbl">Lun – Sáb</div><div class="ival">9:00–13:00 · 17:00–20:00 hs<small>Horario de invierno</small></div></div></div>
+        <div class="irow"><div class="iico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="ilbl">Dom y Feriados</div><div class="ival">9:00–13:00 hs</div></div></div>
       </div>
       <div class="icard">
-        <div class="icard-hd"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Dónde estamos</div>
-        <div class="irow"><div class="iico"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="ilbl">Dirección</div><div class="ival">Garmendia 3402, Laferrere<small>La Matanza, Buenos Aires</small></div></div></div>
+        <div class="icard-hd"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Dónde estamos</div>
+        <div class="irow"><div class="iico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="ilbl">Dirección</div><div class="ival">Garmendia 3402, Laferrere<small>La Matanza, Buenos Aires</small></div></div></div>
       </div>
       <div class="cnt-btns">
         <a href="https://wa.me/541130858200?text=Hola!%20Tengo%20una%20consulta" target="_blank" class="cnt-btn wa">
-          <svg fill="currentColor" viewBox="0 0 24 24" width="20"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          <div>Escribinos por WhatsApp<span class="cnt-sub">Respondemos a la brevedad</span></div>
+          <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" width="20"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <div>Consultar por WhatsApp<span class="cnt-sub">Respondemos a la brevedad</span></div>
         </a>
         <a href="https://instagram.com/farma.garmendia" target="_blank" class="cnt-btn ig">
-          <svg fill="currentColor" viewBox="0 0 24 24" width="20"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" width="20"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
           <div>Seguinos en Instagram<span class="cnt-sub">@farma.garmendia</span></div>
         </a>
       </div>
       <div class="cnt-form">
         <h4>Envianos un mensaje</h4>
         <p>Te respondemos por WhatsApp al instante.</p>
-        <div class="fgrow"><div class="fg"><label>Nombre</label><input type="text" id="cf-n" placeholder="Tu nombre"/></div><div class="fg"><label>Teléfono</label><input type="tel" id="cf-p" placeholder="11 1234-5678"/></div></div>
-        <div class="fg" style="margin-bottom:14px"><label>Mensaje *</label><textarea id="cf-m" placeholder="¿En qué te podemos ayudar?"></textarea></div>
+        <div class="fgrow"><div class="fg"><label for="cf-n">Nombre</label><input type="text" id="cf-n" name="cf-n" autocomplete="name" placeholder="Tu nombre"/></div><div class="fg"><label for="cf-p">Teléfono</label><input type="tel" id="cf-p" name="cf-p" autocomplete="tel" inputmode="tel" placeholder="11 1234-5678"/></div></div>
+        <div class="fg" style="margin-bottom:14px"><label for="cf-m">Mensaje *</label><textarea id="cf-m" name="cf-m" placeholder="¿En qué te podemos ayudar?"></textarea><span class="field-err" id="cf-m-err" aria-live="polite"></span></div>
         <button class="btn-send" id="snd-wa">
-          <svg fill="currentColor" viewBox="0 0 24 24" width="15"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" width="15"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           Enviar por WhatsApp
         </button>
       </div>
@@ -578,26 +596,15 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   </div>
 </footer>
 
-<!-- CONFIG (solo mapa) -->
-<div id="cfg-panel">
-  <div class="cfg-drawer" id="cfg-d">
-    <h5>⚙️ Configuración</h5>
-    <div class="cfg-item"><label>Google Maps embed URL (opcional)</label><input type="text" id="c-map" placeholder="https://maps.google.com/maps?q=..."/></div>
-    <button class="cfg-save" id="cfg-sv">Guardar</button>
-  </div>
-  <button class="cfg-btn" id="cfg-btn">⚙️</button>
-</div>
-
 <!-- WA FLOAT -->
 <a href="https://wa.me/541130858200?text=Hola!%20Tengo%20una%20consulta" target="_blank" class="wa-float">
-  <svg fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-  Consultar
+  <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  Consultar por WhatsApp
 </a>
 
-<div class="lb" id="lb"><button class="lb-x" id="lb-x">✕</button><img id="lb-img" src="" alt=""/></div>
+<div class="lb" id="lb"><button class="lb-x" id="lb-x" aria-label="Cerrar imagen">✕</button><img id="lb-img" src="" alt=""/></div>
 <div class="toast" id="toast"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 (function(){
 // ── STORAGE ──
@@ -626,34 +633,16 @@ function toast(m,err){
 }
 
 // ── NAV ──
-document.getElementById('hb').addEventListener('click',()=>document.getElementById('nl').classList.toggle('mob'));
+document.getElementById('hb').addEventListener('click',function(){const open=document.getElementById('nl').classList.toggle('mob');this.setAttribute('aria-expanded',open?'true':'false');});
 
 // ── REVEAL ──
 document.documentElement.classList.add('js-anim');
 const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');}),{threshold:.08});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-// ── CONFIG ──
-const cfg=S.get('cfg')||{};
-if(cfg.mapUrl){
-  const mapInput=document.getElementById('c-map');
-  if(mapInput)mapInput.value=cfg.mapUrl;
-  const mapFrame=document.querySelector('.info-map iframe');
-  if(mapFrame)mapFrame.src=cfg.mapUrl;
-}
-document.getElementById('cfg-btn').addEventListener('click',()=>document.getElementById('cfg-d').classList.toggle('open'));
-document.getElementById('cfg-sv').addEventListener('click',()=>{
-  const old=S.get('cfg')||{};
-  const mu=document.getElementById('c-map').value.trim();
-  S.set('cfg',{...old,mapUrl:mu});
-  if(mu){const f=document.querySelector('.info-map iframe');if(f)f.src=mu;}
-  document.getElementById('cfg-d').classList.remove('open');
-  toast('✅ Guardado');
-});
-
 // ── PUBLICIDAD ──
 let ads=S.get('ads')||[null,null];while(ads.length<2)ads.push(null);
-function rAds(){[0,1].forEach(i=>{const s=document.getElementById('ad-'+i);if(!s)return;if(ads[i]){s.innerHTML=`<img src="${ads[i]}" alt="Promo"/><button class="ad-del" data-i="${i}">✕</button>`;s.querySelector('.ad-del').addEventListener('click',e=>{e.stopPropagation();ads[+e.target.dataset.i]=null;S.set('ads',ads);rAds();});s.onclick=null;}else{s.innerHTML=`<div class="ad-tag">Espacio ${i+1}</div><div class="ad-title">Tu promo aquí</div><div class="ad-sub">Hacé clic para subir</div>`;s.onclick=()=>document.getElementById('ad-up').click();}});}
+function rAds(){[0,1].forEach(i=>{const s=document.getElementById('ad-'+i);if(!s)return;if(ads[i]){s.innerHTML=`<img src="${ads[i]}" width="400" height="120" alt="Promo ${i+1}"/><button class="ad-del" data-i="${i}" aria-label="Quitar aviso ${i+1}">✕</button>`;s.querySelector('.ad-del').addEventListener('click',e=>{e.stopPropagation();const idx=+e.currentTarget.dataset.i;if(!confirm('¿Quitar este aviso?'))return;ads[idx]=null;S.set('ads',ads);rAds();});s.onclick=null;}else{s.innerHTML=`<div class="ad-tag">Espacio ${i+1}</div><div class="ad-title">Tu promo aquí</div><div class="ad-sub">Hacé clic para subir</div>`;s.onclick=()=>document.getElementById('ad-up').click();}});}
 rAds();
 let adT=0;document.getElementById('ad-up').addEventListener('change',function(){[...this.files].forEach(f=>{compress(f,1000,.85,data=>{if(!data)return;const idx=ads.indexOf(null);if(idx!==-1)ads[idx]=data;else{ads[adT%2]=data;adT++;}S.set('ads',ads);rAds();toast('✅ Aviso guardado');});});this.value='';});
 
@@ -670,14 +659,14 @@ let revs;
 try{ revs=S.get('reviews'); }catch(e){ revs=null; }
 if(!revs||!Array.isArray(revs)||!revs.length){ revs=SEED.slice(); try{S.set('reviews',revs);}catch(e){} }
 const AV=['#1d6b3e','#1e4d8c','#5b21b6','#b45309','#0f766e','#be185d'];
-function stH(n,sz=13){let h='';for(let i=1;i<=5;i++)h+=`<svg width="${sz}" height="${sz}" viewBox="0 0 24 24" class="${i<=n?'on':'off'}"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;return h;}
+function stH(n,sz=13){let h='';for(let i=1;i<=5;i++)h+=`<svg aria-hidden="true" width="${sz}" height="${sz}" viewBox="0 0 24 24" class="${i<=n?'on':'off'}"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;return h;}
 function ini(n){return n.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();}
 function fRD(d){if(!d)return '';const p=d.split('-');return new Date(p[0],p[1]-1,p[2]).toLocaleDateString('es-AR',{day:'numeric',month:'short',year:'numeric'});}
 function rRevs(){
   const sc=document.getElementById('rev-sc');sc.innerHTML='';
   revs.forEach((r,i)=>{
     const c=document.createElement('div');c.className='rev-card';
-    c.innerHTML=`<div class="rev-top"><div class="rev-av" style="background:${AV[i%AV.length]}">${ini(r.name)}</div><div><div class="rev-name">${r.name}${r.loc?` <span style="opacity:.4;font-size:.7rem;font-weight:300">· ${r.loc}</span>`:''}</div><div class="rev-loc">${fRD(r.date)}</div></div></div><div class="rev-stars-s">${stH(r.stars)}</div><div class="rev-text">${r.text}</div><div class="rev-vc"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Cliente verificado</div>`;
+    c.innerHTML=`<div class="rev-top"><div class="rev-av" style="background:${AV[i%AV.length]}">${ini(r.name)}</div><div><div class="rev-name">${r.name}${r.loc?` <span style="opacity:.4;font-size:.7rem;font-weight:300">· ${r.loc}</span>`:''}</div><div class="rev-loc">${fRD(r.date)}</div></div></div><div class="rev-stars-s">${stH(r.stars)}</div><div class="rev-text">${r.text}</div><div class="rev-vc"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Cliente verificado</div>`;
     sc.appendChild(c);
   });
   const tot=revs.length;if(!tot)return;
@@ -690,30 +679,39 @@ function rRevs(){
 }
 rRevs();
 
+function fieldErr(id,msg){const e=document.getElementById(id);if(!e)return;e.textContent=msg||'';e.classList.toggle('on',!!msg);}
+
 let sel=0;const sbs=document.querySelectorAll('#sr button');
 sbs.forEach(b=>{
   b.addEventListener('mouseenter',()=>{const v=+b.dataset.v;sbs.forEach(x=>x.classList.toggle('hv',+x.dataset.v<=v));});
   b.addEventListener('mouseleave',()=>sbs.forEach(x=>x.classList.remove('hv')));
-  b.addEventListener('click',()=>{sel=+b.dataset.v;sbs.forEach(x=>x.classList.toggle('on',+x.dataset.v<=sel));});
+  b.addEventListener('click',()=>{sel=+b.dataset.v;sbs.forEach(x=>{const on=+x.dataset.v<=sel;x.classList.toggle('on',on);x.setAttribute('aria-checked',on?'true':'false');});fieldErr('rv-score-err','');});
 });
 document.getElementById('op-rev').addEventListener('click',()=>document.getElementById('rev-modal').classList.add('open'));
 document.getElementById('cls-rev').addEventListener('click',()=>document.getElementById('rev-modal').classList.remove('open'));
 document.getElementById('rev-modal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 document.getElementById('sub-rev').addEventListener('click',()=>{
-  const name=document.getElementById('rv-n').value.trim(),loc=document.getElementById('rv-l').value.trim(),text=document.getElementById('rv-t').value.trim();
-  if(!name){toast('Ingresá tu nombre',true);return;}if(!sel){toast('Seleccioná una puntuación',true);return;}if(!text){toast('Escribí tu comentario',true);return;}
+  const nameEl=document.getElementById('rv-n'),textEl=document.getElementById('rv-t');
+  const name=nameEl.value.trim(),loc=document.getElementById('rv-l').value.trim(),text=textEl.value.trim();
+  fieldErr('rv-n-err','');fieldErr('rv-score-err','');fieldErr('rv-t-err','');
+  let firstInvalid=null;
+  if(!name){fieldErr('rv-n-err','Ingresá tu nombre');firstInvalid=firstInvalid||nameEl;}
+  if(!sel){fieldErr('rv-score-err','Seleccioná una puntuación');firstInvalid=firstInvalid||sbs[0];}
+  if(!text){fieldErr('rv-t-err','Escribí tu comentario');firstInvalid=firstInvalid||textEl;}
+  if(firstInvalid){firstInvalid.focus();return;}
   revs.unshift({name,loc,stars:sel,text,date:new Date().toISOString().split('T')[0]});
   S.set('reviews',revs);rRevs();
   document.getElementById('rev-modal').classList.remove('open');
   ['rv-n','rv-l','rv-t'].forEach(id=>document.getElementById(id).value='');
-  sel=0;sbs.forEach(b=>b.classList.remove('on','hv'));
+  sel=0;sbs.forEach(b=>{b.classList.remove('on','hv');b.setAttribute('aria-checked','false');});
   toast('⭐ ¡Gracias por tu opinión!');
 });
 
 // ── CONTACTO WA ──
 document.getElementById('snd-wa').addEventListener('click',()=>{
-  const n=document.getElementById('cf-n').value.trim(),p=document.getElementById('cf-p').value.trim(),m=document.getElementById('cf-m').value.trim();
-  if(!m){toast('Escribí tu mensaje',true);return;}
+  const n=document.getElementById('cf-n').value.trim(),p=document.getElementById('cf-p').value.trim(),mEl=document.getElementById('cf-m'),m=mEl.value.trim();
+  fieldErr('cf-m-err','');
+  if(!m){fieldErr('cf-m-err','Escribí tu mensaje');mEl.focus();return;}
   window.open(`https://wa.me/541130858200?text=${encodeURIComponent(`Hola! Soy ${n||'un cliente'}${p?' ('+p+')':''}.\n\n${m}`)}`,'_blank');
 });
 
