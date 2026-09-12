@@ -66,12 +66,12 @@ export default async (req) => {
 
   let opcionesPremio = [];
   if (data.premio_pendiente) {
-    const { data: productos } = await sb
-      .from("productos_vencimiento")
+    const { data: premios } = await sb
+      .from("fidelidad_premios")
       .select("nombre")
-      .eq("activo", true).eq("premio", true)
-      .order("vencimiento", { ascending: true }).limit(3);
-    opcionesPremio = (productos || []).map((p) => p.nombre);
+      .eq("activo", true)
+      .order("created_at", { ascending: false }).limit(3);
+    opcionesPremio = (premios || []).map((p) => p.nombre);
   }
 
   return new Response(JSON.stringify({

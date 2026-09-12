@@ -1,14 +1,14 @@
 // netlify/functions/fidelidad-admin.mjs
 //
 // Todas las acciones de empleado de la Tarjeta Fidelidad (cargar compra,
-// administrar productos próximos a vencer) pasan por acá. Verifica la
+// administrar la lista de premios) pasan por acá. Verifica la
 // contraseña del equipo del lado del servidor en cada llamada y usa la
 // service role key de Supabase (nunca expuesta al navegador) para leer y
 // escribir. El navegador nunca toca las tablas directamente.
 //
 // POST -> { password, action, ...payload }
 //   action: "login" | "cargarCompra" | "listarProductos" |
-//           "agregarProducto" | "togglePremio" | "desactivarProducto"
+//           "agregarProducto" | "desactivarProducto"
 //
 // El canje del premio lo elige el cliente desde su propio panel
 // (ver netlify/functions/fidelidad-canjear.mjs), no el empleado.
@@ -64,36 +64,27 @@ export default async (req) => {
 
     if (action === "listarProductos") {
       const { data, error } = await sb
-        .from("productos_vencimiento")
+        .from("fidelidad_premios")
         .select("*")
         .eq("activo", true)
-        .order("vencimiento", { ascending: true })
-        .limit(500);
+        .order("created_at", { ascending: false })
+        .limit(200);
       if (error) throw error;
       return new Response(JSON.stringify({ data }), { headers: cors });
     }
 
     if (action === "agregarProducto") {
       const nombre = String(body.nombre || "").trim();
-      const vencimiento = String(body.vencimiento || "").trim();
-      const codigo_barra = body.codigo_barra ? String(body.codigo_barra).trim() : null;
-      const premio = !!body.premio;
-      if (!nombre || !vencimiento) {
-        return new Response(JSON.stringify({ error: "Completá el nombre y la fecha de vencimiento" }), { status: 400, headers: cors });
+      if (!nombre) {
+        return new Response(JSON.stringify({ error: "Completá el nombre del premio" }), { status: 400, headers: cors });
       }
-      const { error } = await sb.from("productos_vencimiento").insert({ nombre, codigo_barra, vencimiento, premio });
-      if (error) throw error;
-      return new Response(JSON.stringify({ ok: true }), { headers: cors });
-    }
-
-    if (action === "togglePremio") {
-      const { error } = await sb.from("productos_vencimiento").update({ premio: !!body.premio }).eq("id", body.id);
+      const { error } = await sb.from("fidelidad_premios").insert({ nombre });
       if (error) throw error;
       return new Response(JSON.stringify({ ok: true }), { headers: cors });
     }
 
     if (action === "desactivarProducto") {
-      const { error } = await sb.from("productos_vencimiento").update({ activo: false }).eq("id", body.id);
+      const { error } = await sb.from("fidelidad_premios").update({ activo: false }).eq("id", body.id);
       if (error) throw error;
       return new Response(JSON.stringify({ ok: true }), { headers: cors });
     }

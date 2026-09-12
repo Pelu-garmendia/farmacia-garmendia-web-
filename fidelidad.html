@@ -70,6 +70,7 @@
     font-size:0.9rem;
     color:var(--gris);
     user-select:none;
+    transition:background-color .2s ease, color .2s ease;
   }
   .tab.active{
     background:var(--verde);
@@ -81,6 +82,24 @@
     border-radius:16px;
     padding:20px;
     margin-bottom:16px;
+    animation:card-in .45s cubic-bezier(.22,1,.36,1) both;
+  }
+  .saludo{
+    text-align:center;
+    color:var(--verde-oscuro);
+    font-weight:700;
+    font-size:0.95rem;
+    margin-bottom:14px;
+    animation:card-in .45s cubic-bezier(.22,1,.36,1) both;
+  }
+  @keyframes card-in{
+    from{opacity:0;transform:translateY(10px)}
+    to{opacity:1;transform:none}
+  }
+  @keyframes circulo-pop{
+    0%{transform:scale(.7)}
+    60%{transform:scale(1.15)}
+    100%{transform:scale(1)}
   }
   label{
     display:block;
@@ -112,8 +131,11 @@
     font-size:1rem;
     font-weight:700;
     cursor:pointer;
+    transition:background-color .15s ease, transform .1s ease;
   }
   button:hover{background:var(--verde-oscuro);}
+  button:active:not(:disabled){transform:scale(.97);}
+  button:disabled{cursor:default;}
   button.secundario{
     background:#25D366;
   }
@@ -142,10 +164,12 @@
     justify-content:center;
     font-size:1.2rem;
     background:#fff;
+    transition:background-color .3s ease, color .3s ease;
   }
   .circulo.lleno{
     background:var(--verde);
     color:#fff;
+    animation:circulo-pop .4s cubic-bezier(.34,1.56,.64,1);
   }
   .resumen{
     text-align:center;
@@ -202,7 +226,6 @@
     font-size:0.88rem;
   }
   .prod-row:last-child{border-bottom:none;}
-  .prod-row .venc{color:var(--gris);font-size:0.8rem;}
   .prod-row button{
     width:auto;
     background:none;
@@ -217,6 +240,13 @@
     color:var(--gris);
     font-size:0.75rem;
     margin-top:8px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{
+      animation-duration:.001ms!important;
+      animation-iteration-count:1!important;
+      transition-duration:.001ms!important;
+    }
   }
 </style>
 </head>
@@ -235,6 +265,7 @@
 
   <!-- VISTA CLIENTE -->
   <div id="vistaCliente">
+    <div class="saludo" id="saludo"></div>
     <div class="card">
       <label for="dniCliente">Tu DNI</label>
       <input id="dniCliente" inputmode="numeric" placeholder="Ej: 30123456">
@@ -289,19 +320,12 @@
       </div>
 
       <div class="card">
-        <label style="margin-bottom:2px">Productos próximos a vencer</label>
-        <div class="sub" style="margin-bottom:10px">Tildá "premio" en los que querés ofrecer cuando se complete una tarjeta.</div>
-        <input id="buscarProducto" placeholder="Buscar producto..." oninput="filtrarProductos()">
-        <div id="listaVencimientos" class="sub" style="margin-bottom:14px;max-height:320px;overflow-y:auto">Cargando...</div>
-        <input id="nombreProducto" placeholder="Nombre del producto">
-        <input id="codigoProducto" placeholder="Código de barra (opcional)">
-        <label for="fechaVencProducto" style="margin-top:-8px">Fecha de vencimiento</label>
-        <input id="fechaVencProducto" type="date">
-        <label style="display:flex;align-items:center;gap:8px;font-weight:500;margin-bottom:14px">
-          <input type="checkbox" id="premioNuevoProducto" style="width:auto;margin:0">
-          Ofrecerlo como premio
-        </label>
-        <button onclick="agregarProducto()">Agregar producto</button>
+        <label style="margin-bottom:2px">Premios disponibles</label>
+        <div class="sub" style="margin-bottom:10px">Estos son los productos que el cliente puede elegir al completar la tarjeta.</div>
+        <div id="listaPremios" class="sub" style="margin-bottom:14px;max-height:320px;overflow-y:auto">Cargando...</div>
+        <label for="nombreProducto" style="margin-top:-8px">Nombre del premio</label>
+        <input id="nombreProducto" placeholder="Ej: Shampoo Anticaída">
+        <button onclick="agregarProducto()">Agregar premio</button>
         <div class="msg" id="msgProducto"></div>
       </div>
 
@@ -465,7 +489,7 @@ async function loginEmpleado(){
 let productosCache = [];
 
 async function cargarProductosVencimiento(){
-  const cont = document.getElementById('listaVencimientos');
+  const cont = document.getElementById('listaPremios');
   let data;
   try {
     ({data} = await adminFetch('listarProductos', {}));
@@ -477,90 +501,44 @@ async function cargarProductosVencimiento(){
   renderProductos(productosCache);
 }
 
-function filtrarProductos(){
-  const q = document.getElementById('buscarProducto').value.trim().toLowerCase();
-  const filtrados = q
-    ? productosCache.filter(p => p.nombre.toLowerCase().includes(q))
-    : productosCache;
-  renderProductos(filtrados);
-}
-
 function renderProductos(data){
-  const cont = document.getElementById('listaVencimientos');
+  const cont = document.getElementById('listaPremios');
   if(!data || data.length === 0){
-    cont.textContent = 'No hay productos que coincidan.';
+    cont.textContent = 'Todavía no cargaste ningún premio.';
     return;
   }
   cont.innerHTML = '';
   data.forEach(p => {
     const row = document.createElement('div');
     row.className = 'prod-row';
-    const fecha = new Date(p.vencimiento + 'T00:00:00').toLocaleDateString('es-AR');
 
     const info = document.createElement('span');
-    info.innerHTML = `${p.nombre}<br><span class="venc">Vence ${fecha}</span>`;
-
-    const derecha = document.createElement('span');
-    derecha.style.display = 'flex';
-    derecha.style.alignItems = 'center';
-    derecha.style.gap = '10px';
-
-    const checkLabel = document.createElement('label');
-    checkLabel.style.display = 'flex';
-    checkLabel.style.alignItems = 'center';
-    checkLabel.style.gap = '4px';
-    checkLabel.style.fontWeight = '500';
-    checkLabel.style.fontSize = '0.8rem';
-    const check = document.createElement('input');
-    check.type = 'checkbox';
-    check.style.width = 'auto';
-    check.style.margin = '0';
-    check.checked = !!p.premio;
-    check.onchange = () => togglePremio(p.id, check.checked);
-    checkLabel.appendChild(check);
-    checkLabel.appendChild(document.createTextNode('premio'));
+    info.textContent = p.nombre;
 
     const btn = document.createElement('button');
     btn.textContent = 'Quitar';
     btn.onclick = () => desactivarProducto(p.id);
 
-    derecha.appendChild(checkLabel);
-    derecha.appendChild(btn);
-
     row.appendChild(info);
-    row.appendChild(derecha);
+    row.appendChild(btn);
     cont.appendChild(row);
   });
 }
 
-async function togglePremio(id, valor){
-  try {
-    await adminFetch('togglePremio', {id, premio: valor});
-  } catch(e){ return; }
-  const p = productosCache.find(x => x.id === id);
-  if(p) p.premio = valor;
-}
-
 async function agregarProducto(){
   const nombre = document.getElementById('nombreProducto').value.trim();
-  const codigo = document.getElementById('codigoProducto').value.trim();
-  const vencimiento = document.getElementById('fechaVencProducto').value;
-  const premio = document.getElementById('premioNuevoProducto').checked;
   limpiarMsg('msgProducto');
-  if(!nombre || !vencimiento){
-    mostrarMsg('msgProducto','Completá el nombre y la fecha de vencimiento.','err');
+  if(!nombre){
+    mostrarMsg('msgProducto','Completá el nombre del premio.','err');
     return;
   }
   try {
-    await adminFetch('agregarProducto', {nombre, codigo_barra: codigo || null, vencimiento, premio});
+    await adminFetch('agregarProducto', {nombre});
   } catch(e){
-    if(e.message !== 'unauthorized') mostrarMsg('msgProducto','Error al guardar el producto.','err');
+    if(e.message !== 'unauthorized') mostrarMsg('msgProducto','Error al guardar el premio.','err');
     return;
   }
   document.getElementById('nombreProducto').value = '';
-  document.getElementById('codigoProducto').value = '';
-  document.getElementById('fechaVencProducto').value = '';
-  document.getElementById('premioNuevoProducto').checked = false;
   cargarProductosVencimiento();
 }
 
@@ -569,7 +547,7 @@ async function desactivarProducto(id){
     await adminFetch('desactivarProducto', {id});
   } catch(e){ return; }
   productosCache = productosCache.filter(x => x.id !== id);
-  filtrarProductos();
+  renderProductos(productosCache);
 }
 
 function salirEmpleado(){
@@ -647,6 +625,13 @@ function enviarWhatsapp(){
   window.open(url, '_blank');
 }
 
+function saludoHorario(){
+  const h = new Date().getHours();
+  const saludo = h < 12 ? '¡Buen día!' : h < 20 ? '¡Buenas tardes!' : '¡Buenas noches!';
+  const el = document.getElementById('saludo');
+  if(el) el.textContent = `${saludo} Consultá tu Tarjeta Fidelidad cuando quieras.`;
+}
+saludoHorario();
 </script>
 </body>
 </html>
