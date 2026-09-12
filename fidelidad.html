@@ -251,6 +251,7 @@
       <div class="circulos" id="circulosGrid"></div>
       <div class="sub" style="text-align:center" id="faltanTexto"></div>
       <div class="sub" style="text-align:center;margin-top:6px" id="tarjetasCompletadasTexto"></div>
+      <div class="premio oculto" id="premioClienteBox"></div>
     </div>
   </div>
 
@@ -313,6 +314,7 @@
 
 <script>
 const CONSULTAR_ENDPOINT = '/.netlify/functions/fidelidad-consultar';
+const CANJEAR_ENDPOINT = '/.netlify/functions/fidelidad-canjear';
 const ADMIN_ENDPOINT = '/.netlify/functions/fidelidad-admin';
 
 const MONTO_POR_CIRCULO = 15000;
@@ -321,6 +323,7 @@ const FARMACIA_WA = '541130858200';
 
 let adminPass = null;
 let ultimoResultado = null;
+let dniConsultado = null;
 
 async function adminFetch(action, payload){
   const res = await fetch(ADMIN_ENDPOINT, {
@@ -397,13 +400,50 @@ async function consultarCliente(){
   document.getElementById('circulosTexto').textContent = data.circulos + '/10';
   pintarCirculos('circulosGrid', data.circulos);
   const falta = MONTO_POR_CIRCULO - Number(data.monto_acumulado);
-  document.getElementById('faltanTexto').textContent = data.circulos < CIRCULOS_TOTAL
+  document.getElementById('faltanTexto').textContent = !data.premio_pendiente
     ? `Te faltan $${falta.toLocaleString('es-AR')} para el próximo círculo`
-    : '¡Tarjeta completa! Consultá tu premio en el mostrador.';
+    : '';
   document.getElementById('tarjetasCompletadasTexto').textContent = data.tarjetas_completadas > 0
     ? `Tarjetas completadas hasta ahora: ${data.tarjetas_completadas}`
     : '';
+
+  dniConsultado = dni;
+  const premioBox = document.getElementById('premioClienteBox');
+  if(data.premio_pendiente){
+    const nombres = data.opcionesPremio && data.opcionesPremio.length > 0 ? data.opcionesPremio : ['Premio sorpresa'];
+    premioBox.innerHTML = '🎉 ¡Tarjeta completa! Elegí tu premio:' +
+      '<div class="premio-botones">' +
+      nombres.map(n => `<button type="button" class="secundario premio-btn" onclick="elegirPremioCliente('${n.replace(/'/g,"\\'")}')">${n}</button>`).join('') +
+      '</div>';
+    premioBox.classList.remove('oculto');
+  } else {
+    premioBox.classList.add('oculto');
+    premioBox.innerHTML = '';
+  }
+
   document.getElementById('resultadoCliente').classList.remove('oculto');
+}
+
+async function elegirPremioCliente(producto){
+  if(!dniConsultado) return;
+  let data;
+  try {
+    const res = await fetch(CANJEAR_ENDPOINT, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({dni: dniConsultado, producto})
+    });
+    data = await res.json().catch(() => ({}));
+    if(!res.ok) throw new Error(data.error || 'Error');
+  } catch(e){
+    mostrarMsg('msgCliente', e.message === 'No hay ningún premio pendiente para canjear' ? e.message : 'No se pudo registrar el canje. Probá de nuevo.', 'err');
+    return;
+  }
+  document.querySelectorAll('#premioClienteBox .premio-btn').forEach(b => b.disabled = true);
+  const texto = `Hola! Quiero canjear mi premio de la Tarjeta Fidelidad.\nDNI: ${dniConsultado}\nPremio elegido: ${producto}`;
+  const url = `https://wa.me/${FARMACIA_WA}?text=${encodeURIComponent(texto)}`;
+  window.open(url, '_blank');
+  document.getElementById('faltanTexto').textContent = `¡Premio "${producto}" registrado! Te abrimos WhatsApp para avisarle a la farmacia.`;
 }
 
 async function loginEmpleado(){
@@ -567,9 +607,9 @@ async function cargarCompra(){
     return;
   }
 
-  let circulos, tarjetaCompletadaAhora, opcionesPremio, telefono;
+  let circulos, tarjetaCompletadaAhora, telefono;
   try {
-    ({circulos, tarjetaCompletadaAhora, opcionesPremio, telefono} = await adminFetch('cargarCompra', {dni, telefono: telRaw, monto}));
+    ({circulos, tarjetaCompletadaAhora, telefono} = await adminFetch('cargarCompra', {dni, telefono: telRaw, monto}));
   } catch(e){
     if(e.message !== 'unauthorized') mostrarMsg('msgEmpleado', e.message === 'Completá el DNI y un monto válido' ? e.message : 'Error al guardar la compra.', 'err');
     return;
@@ -581,15 +621,11 @@ async function cargarCompra(){
 
   if(tarjetaCompletadaAhora){
     const premioBox = document.getElementById('premioBox');
-    const nombres = opcionesPremio.length > 0 ? opcionesPremio.map(p => p.nombre) : ['Premio sorpresa'];
-    premioBox.innerHTML = '🎉 ¡Tarjeta completa! Tocá el premio que eligió el cliente para avisarle a la farmacia:' +
-      '<div class="premio-botones">' +
-      nombres.map(n => `<button type="button" class="secundario premio-btn" onclick="confirmarPremio('${n.replace(/'/g,"\\'")}')">${n}</button>`).join('') +
-      '</div>';
+    premioBox.textContent = '🎉 ¡Tarjeta completa! El cliente ya puede elegir su premio desde "Consultar mi tarjeta".';
     premioBox.classList.remove('oculto');
   }
 
-  ultimoResultado = {dni, telefono, circulos, tarjetaCompletadaAhora, opcionesPremio};
+  ultimoResultado = {dni, telefono, circulos, tarjetaCompletadaAhora};
 
   if(telefono && !tarjetaCompletadaAhora){
     document.getElementById('btnWhatsapp').classList.remove('oculto');
@@ -611,22 +647,6 @@ function enviarWhatsapp(){
   window.open(url, '_blank');
 }
 
-async function confirmarPremio(producto){
-  if(!ultimoResultado) return;
-  try {
-    await adminFetch('confirmarPremio', {dni: ultimoResultado.dni, producto});
-  } catch(e){
-    if(e.message !== 'unauthorized') mostrarMsg('msgEmpleado','No se pudo registrar el canje.','err');
-    return;
-  }
-  document.querySelectorAll('.premio-btn').forEach(b => b.disabled = true);
-
-  const fecha = new Date().toLocaleDateString('es-AR');
-  const texto = `✅ Comprobante de canje - Tarjeta Fidelidad\n\nCliente DNI: ${ultimoResultado.dni}\nPremio canjeado: ${producto}\nFecha: ${fecha}`;
-  const url = `https://wa.me/${FARMACIA_WA}?text=${encodeURIComponent(texto)}`;
-  window.open(url, '_blank');
-  mostrarMsg('msgEmpleado', `Comprobante de "${producto}" enviado.`, 'ok');
-}
 </script>
 </body>
 </html>

@@ -8,8 +8,10 @@
 //
 // POST -> { password, action, ...payload }
 //   action: "login" | "cargarCompra" | "listarProductos" |
-//           "agregarProducto" | "togglePremio" | "desactivarProducto" |
-//           "confirmarPremio"
+//           "agregarProducto" | "togglePremio" | "desactivarProducto"
+//
+// El canje del premio lo elige el cliente desde su propio panel
+// (ver netlify/functions/fidelidad-canjear.mjs), no el empleado.
 //
 // Configuración necesaria en Netlify (Site configuration → Environment variables):
 //   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, ADMIN_PASSWORD_TIENDA
@@ -96,17 +98,6 @@ export default async (req) => {
       return new Response(JSON.stringify({ ok: true }), { headers: cors });
     }
 
-    if (action === "confirmarPremio") {
-      const dni = String(body.dni || "").trim();
-      const producto = String(body.producto || "").trim();
-      if (!dni || !producto) {
-        return new Response(JSON.stringify({ error: "Faltan datos del canje" }), { status: 400, headers: cors });
-      }
-      const { error } = await sb.from("fidelidad_clientes").update({ ultimo_premio: producto }).eq("dni", dni);
-      if (error) throw error;
-      return new Response(JSON.stringify({ ok: true }), { headers: cors });
-    }
-
     if (action === "cargarCompra") {
       const dni = String(body.dni || "").trim();
       const telRaw = String(body.telefono || "").trim();
@@ -142,6 +133,9 @@ export default async (req) => {
         tarjetas_completadas: tarjetasCompletadas,
         updated_at: new Date().toISOString(),
       };
+      // Si se completa una tarjeta, queda un premio pendiente de elegir:
+      // el cliente lo elige después desde su propio panel.
+      if (tarjetaCompletadaAhora) payload.premio_pendiente = true;
 
       const { error: errGuardar } = existente
         ? await sb.from("fidelidad_clientes").update(payload).eq("dni", dni)
@@ -152,17 +146,8 @@ export default async (req) => {
         dni, monto, circulos_sumados: nuevosCirculos, tarjeta_completada: tarjetaCompletadaAhora,
       });
 
-      let opcionesPremio = [];
-      if (tarjetaCompletadaAhora) {
-        const { data } = await sb
-          .from("productos_vencimiento")
-          .select("*").eq("activo", true).eq("premio", true)
-          .order("vencimiento", { ascending: true }).limit(3);
-        opcionesPremio = data || [];
-      }
-
       return new Response(JSON.stringify({
-        circulos, tarjetaCompletadaAhora, opcionesPremio, telefono,
+        circulos, tarjetaCompletadaAhora, telefono,
       }), { headers: cors });
     }
 

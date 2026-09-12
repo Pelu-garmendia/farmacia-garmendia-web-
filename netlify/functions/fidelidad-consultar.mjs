@@ -6,7 +6,11 @@
 // tarjeta: nunca el teléfono ni datos de otros clientes.
 //
 // POST -> { dni } devuelve { found:false } o
-//         { found:true, circulos, monto_acumulado, tarjetas_completadas }
+//         { found:true, circulos, monto_acumulado, tarjetas_completadas,
+//           premio_pendiente, opcionesPremio }
+// Si premio_pendiente es true, opcionesPremio trae hasta 3 nombres de
+// producto marcados como premio (o queda vacío si todavía no hay ninguno
+// cargado, y el cliente elige "premio sorpresa").
 //
 // Configuración necesaria en Netlify (Site configuration → Environment variables):
 //   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
@@ -49,7 +53,7 @@ export default async (req) => {
   const sb = createClient(SUPABASE_URL, SERVICE_KEY);
   const { data, error } = await sb
     .from("fidelidad_clientes")
-    .select("circulos, monto_acumulado, tarjetas_completadas")
+    .select("circulos, monto_acumulado, tarjetas_completadas, premio_pendiente")
     .eq("dni", dni)
     .maybeSingle();
 
@@ -60,10 +64,22 @@ export default async (req) => {
     return new Response(JSON.stringify({ found: false }), { headers: cors });
   }
 
+  let opcionesPremio = [];
+  if (data.premio_pendiente) {
+    const { data: productos } = await sb
+      .from("productos_vencimiento")
+      .select("nombre")
+      .eq("activo", true).eq("premio", true)
+      .order("vencimiento", { ascending: true }).limit(3);
+    opcionesPremio = (productos || []).map((p) => p.nombre);
+  }
+
   return new Response(JSON.stringify({
     found: true,
     circulos: data.circulos,
     monto_acumulado: data.monto_acumulado,
     tarjetas_completadas: data.tarjetas_completadas,
+    premio_pendiente: data.premio_pendiente,
+    opcionesPremio,
   }), { headers: cors });
 };
