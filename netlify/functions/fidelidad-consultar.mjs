@@ -8,8 +8,8 @@
 // POST -> { dni } devuelve { found:false } o
 //         { found:true, circulos, monto_acumulado, tarjetas_completadas,
 //           premio_pendiente, opcionesPremio }
-// Si premio_pendiente es true, opcionesPremio trae hasta 3 nombres de
-// producto marcados como premio (o queda vacío si todavía no hay ninguno
+// Si premio_pendiente es true, opcionesPremio trae hasta 3 objetos
+// { nombre, vencimiento } (o queda vacío si todavía no hay ninguno
 // cargado, y el cliente elige "premio sorpresa").
 //
 // Configuración necesaria en Netlify (Site configuration → Environment variables):
@@ -68,10 +68,10 @@ export default async (req) => {
   if (data.premio_pendiente) {
     const { data: premios } = await sb
       .from("fidelidad_premios")
-      .select("nombre")
+      .select("nombre, vencimiento")
       .eq("activo", true)
-      .order("created_at", { ascending: false }).limit(3);
-    opcionesPremio = (premios || []).map((p) => p.nombre);
+      .order("vencimiento", { ascending: true, nullsFirst: false }).limit(3);
+    opcionesPremio = premios || [];
   }
 
   return new Response(JSON.stringify({

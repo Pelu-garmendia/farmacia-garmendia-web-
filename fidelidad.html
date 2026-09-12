@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tarjeta Fidelidad · Farmacia Garmendia</title>
+<title>Farma VIP · Farmacia Garmendia</title>
 <style>
   :root{
     --verde:#0f9d6b;
@@ -14,6 +14,7 @@
     --gris:#6b7a76;
     --borde:#dbe6e2;
     --rojo:#d64545;
+    --dorado:#d4a017;
   }
   *{box-sizing:border-box;}
   body{
@@ -96,10 +97,15 @@
     from{opacity:0;transform:translateY(10px)}
     to{opacity:1;transform:none}
   }
-  @keyframes circulo-pop{
-    0%{transform:scale(.7)}
-    60%{transform:scale(1.15)}
-    100%{transform:scale(1)}
+  @keyframes circulo-premium{
+    0%{transform:scale(.5) rotate(-10deg); box-shadow:0 0 0 0 rgba(212,160,23,.6);}
+    45%{transform:scale(1.22) rotate(5deg); box-shadow:0 0 0 9px rgba(212,160,23,.28);}
+    75%{transform:scale(.94) rotate(-2deg); box-shadow:0 0 0 15px rgba(212,160,23,0);}
+    100%{transform:scale(1) rotate(0deg); box-shadow:0 0 0 0 rgba(212,160,23,0);}
+  }
+  @keyframes brillo-sweep{
+    from{transform:translateX(-120%) rotate(20deg);}
+    to{transform:translateX(120%) rotate(20deg);}
   }
   label{
     display:block;
@@ -156,6 +162,7 @@
     margin:18px 0;
   }
   .circulo{
+    position:relative;
     aspect-ratio:1;
     border-radius:50%;
     border:2px solid var(--verde);
@@ -164,12 +171,24 @@
     justify-content:center;
     font-size:1.2rem;
     background:#fff;
-    transition:background-color .3s ease, color .3s ease;
+    overflow:hidden;
+    transition:background-color .3s ease, color .3s ease, border-color .3s ease;
   }
   .circulo.lleno{
-    background:var(--verde);
+    background:linear-gradient(135deg, var(--verde), var(--verde-oscuro));
+    border-color:var(--dorado);
     color:#fff;
-    animation:circulo-pop .4s cubic-bezier(.34,1.56,.64,1);
+    animation:circulo-premium .65s cubic-bezier(.22,1,.36,1);
+  }
+  .circulo.lleno::after{
+    content:'';
+    position:absolute;
+    top:-50%;
+    left:0;
+    width:40%;
+    height:200%;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.75), transparent);
+    animation:brillo-sweep .65s ease-out;
   }
   .resumen{
     text-align:center;
@@ -210,8 +229,13 @@
     margin-top:12px;
   }
   .premio-btn{
-    font-weight:700;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:2px;
   }
+  .pb-nombre{font-weight:700;}
+  .pb-venc{font-weight:500;font-size:0.76rem;opacity:.85;}
   .premio-btn:disabled{
     opacity:0.55;
     cursor:default;
@@ -226,6 +250,7 @@
     font-size:0.88rem;
   }
   .prod-row:last-child{border-bottom:none;}
+  .prod-row .venc{color:var(--gris);font-size:0.8rem;}
   .prod-row button{
     width:auto;
     background:none;
@@ -254,8 +279,8 @@
 <div class="wrap">
   <header>
     <a href="index.html" class="volver">← Sitio principal</a>
-    <h1>🎯 Tarjeta Fidelidad</h1>
-    <p>Farmacia Garmendia · cada $15.000 en compras suma un círculo</p>
+    <h1>👑 Farma VIP</h1>
+    <p>Farmacia Garmendia · cada $17.000 en compras suma un círculo</p>
   </header>
 
   <div class="tabs">
@@ -325,6 +350,8 @@
         <div id="listaPremios" class="sub" style="margin-bottom:14px;max-height:320px;overflow-y:auto">Cargando...</div>
         <label for="nombreProducto" style="margin-top:-8px">Nombre del premio</label>
         <input id="nombreProducto" placeholder="Ej: Shampoo Anticaída">
+        <label for="fechaVencProducto" style="margin-top:-8px">Fecha de vencimiento</label>
+        <input id="fechaVencProducto" type="date">
         <button onclick="agregarProducto()">Agregar premio</button>
         <div class="msg" id="msgProducto"></div>
       </div>
@@ -341,7 +368,7 @@ const CONSULTAR_ENDPOINT = '/.netlify/functions/fidelidad-consultar';
 const CANJEAR_ENDPOINT = '/.netlify/functions/fidelidad-canjear';
 const ADMIN_ENDPOINT = '/.netlify/functions/fidelidad-admin';
 
-const MONTO_POR_CIRCULO = 15000;
+const MONTO_POR_CIRCULO = 17000;
 const CIRCULOS_TOTAL = 10;
 const FARMACIA_WA = '541130858200';
 
@@ -434,10 +461,13 @@ async function consultarCliente(){
   dniConsultado = dni;
   const premioBox = document.getElementById('premioClienteBox');
   if(data.premio_pendiente){
-    const nombres = data.opcionesPremio && data.opcionesPremio.length > 0 ? data.opcionesPremio : ['Premio sorpresa'];
+    const opciones = data.opcionesPremio && data.opcionesPremio.length > 0 ? data.opcionesPremio : [{nombre:'Premio sorpresa', vencimiento:null}];
     premioBox.innerHTML = '🎉 ¡Tarjeta completa! Elegí tu premio:' +
       '<div class="premio-botones">' +
-      nombres.map(n => `<button type="button" class="secundario premio-btn" onclick="elegirPremioCliente('${n.replace(/'/g,"\\'")}')">${n}</button>`).join('') +
+      opciones.map(p => `<button type="button" class="secundario premio-btn" onclick="elegirPremioCliente('${p.nombre.replace(/'/g,"\\'")}')">` +
+        `<span class="pb-nombre">${p.nombre}</span>` +
+        (p.vencimiento ? `<span class="pb-venc">Vence ${formatFecha(p.vencimiento)}</span>` : '') +
+      `</button>`).join('') +
       '</div>';
     premioBox.classList.remove('oculto');
   } else {
@@ -464,7 +494,7 @@ async function elegirPremioCliente(producto){
     return;
   }
   document.querySelectorAll('#premioClienteBox .premio-btn').forEach(b => b.disabled = true);
-  const texto = `Hola! Quiero canjear mi premio de la Tarjeta Fidelidad.\nDNI: ${dniConsultado}\nPremio elegido: ${producto}`;
+  const texto = `Hola! Quiero canjear mi premio de Farma VIP.\nDNI: ${dniConsultado}\nPremio elegido: ${producto}`;
   const url = `https://wa.me/${FARMACIA_WA}?text=${encodeURIComponent(texto)}`;
   window.open(url, '_blank');
   document.getElementById('faltanTexto').textContent = `¡Premio "${producto}" registrado! Te abrimos WhatsApp para avisarle a la farmacia.`;
@@ -501,6 +531,11 @@ async function cargarProductosVencimiento(){
   renderProductos(productosCache);
 }
 
+function formatFecha(v){
+  if(!v) return 'Sin fecha';
+  return new Date(v + 'T00:00:00').toLocaleDateString('es-AR');
+}
+
 function renderProductos(data){
   const cont = document.getElementById('listaPremios');
   if(!data || data.length === 0){
@@ -513,7 +548,7 @@ function renderProductos(data){
     row.className = 'prod-row';
 
     const info = document.createElement('span');
-    info.textContent = p.nombre;
+    info.innerHTML = `${p.nombre}<br><span class="venc">Vence ${formatFecha(p.vencimiento)}</span>`;
 
     const btn = document.createElement('button');
     btn.textContent = 'Quitar';
@@ -527,18 +562,20 @@ function renderProductos(data){
 
 async function agregarProducto(){
   const nombre = document.getElementById('nombreProducto').value.trim();
+  const vencimiento = document.getElementById('fechaVencProducto').value;
   limpiarMsg('msgProducto');
-  if(!nombre){
-    mostrarMsg('msgProducto','Completá el nombre del premio.','err');
+  if(!nombre || !vencimiento){
+    mostrarMsg('msgProducto','Completá el nombre y la fecha de vencimiento.','err');
     return;
   }
   try {
-    await adminFetch('agregarProducto', {nombre});
+    await adminFetch('agregarProducto', {nombre, vencimiento});
   } catch(e){
     if(e.message !== 'unauthorized') mostrarMsg('msgProducto','Error al guardar el premio.','err');
     return;
   }
   document.getElementById('nombreProducto').value = '';
+  document.getElementById('fechaVencProducto').value = '';
   cargarProductosVencimiento();
 }
 
@@ -620,7 +657,7 @@ function enviarWhatsapp(){
   if(!ultimoResultado || !ultimoResultado.telefono) return;
   const numero = normalizarTelefono(ultimoResultado.telefono);
   if(!numero) return;
-  const texto = `¡Gracias por tu compra en Farmacia Garmendia! Sumaste un círculo en tu Tarjeta Fidelidad: llevás ${ultimoResultado.circulos}/10. ¡Seguí sumando para tu premio sorpresa!`;
+  const texto = `¡Gracias por tu compra en Farmacia Garmendia! Sumaste un círculo en tu Farma VIP: llevás ${ultimoResultado.circulos}/10. ¡Seguí sumando para tu premio sorpresa!`;
   const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
   window.open(url, '_blank');
 }
@@ -629,7 +666,7 @@ function saludoHorario(){
   const h = new Date().getHours();
   const saludo = h < 12 ? '¡Buen día!' : h < 20 ? '¡Buenas tardes!' : '¡Buenas noches!';
   const el = document.getElementById('saludo');
-  if(el) el.textContent = `${saludo} Consultá tu Tarjeta Fidelidad cuando quieras.`;
+  if(el) el.textContent = `${saludo} Consultá tu Farma VIP cuando quieras.`;
 }
 saludoHorario();
 </script>

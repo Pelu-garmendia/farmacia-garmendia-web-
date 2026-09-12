@@ -22,7 +22,7 @@ const SUPABASE_URL = process.env.SUPABASE_URL || "";
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD_TIENDA || "";
 
-const MONTO_POR_CIRCULO = 15000;
+const MONTO_POR_CIRCULO = 17000;
 const CIRCULOS_TOTAL = 10;
 
 export default async (req) => {
@@ -67,7 +67,7 @@ export default async (req) => {
         .from("fidelidad_premios")
         .select("*")
         .eq("activo", true)
-        .order("created_at", { ascending: false })
+        .order("vencimiento", { ascending: true, nullsFirst: false })
         .limit(200);
       if (error) throw error;
       return new Response(JSON.stringify({ data }), { headers: cors });
@@ -75,10 +75,11 @@ export default async (req) => {
 
     if (action === "agregarProducto") {
       const nombre = String(body.nombre || "").trim();
-      if (!nombre) {
-        return new Response(JSON.stringify({ error: "Completá el nombre del premio" }), { status: 400, headers: cors });
+      const vencimiento = String(body.vencimiento || "").trim();
+      if (!nombre || !vencimiento) {
+        return new Response(JSON.stringify({ error: "Completá el nombre y la fecha de vencimiento" }), { status: 400, headers: cors });
       }
-      const { error } = await sb.from("fidelidad_premios").insert({ nombre });
+      const { error } = await sb.from("fidelidad_premios").insert({ nombre, vencimiento });
       if (error) throw error;
       return new Response(JSON.stringify({ ok: true }), { headers: cors });
     }
