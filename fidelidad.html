@@ -29,38 +29,60 @@
     background:linear-gradient(135deg,#f0fdfd 0%,#d9f5ef 50%,#bdeee2 100%);
     background-attachment:fixed;
     color:var(--texto);
-    padding-block:24px;
   }
+  .topbar{
+    background:var(--verde-oscuro);
+    height:64px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 20px;
+    position:sticky;
+    top:0;
+    z-index:100;
+    box-shadow:0 2px 20px rgba(10,61,66,.35);
+  }
+  .topbar-brand{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    text-decoration:none;
+  }
+  .topbar-crown{font-size:1.3rem;}
+  .topbar-title{
+    margin:0;
+    font-size:1.05rem;
+    font-weight:800;
+    letter-spacing:.02em;
+    color:#fff;
+  }
+  .back-btn{
+    font-size:.75rem;
+    color:#a7f3e8;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    gap:5px;
+    padding:6px 12px;
+    border-radius:8px;
+    border:1px solid rgba(167,243,232,.25);
+    transition:all .2s;
+  }
+  .back-btn:hover{color:#5eead4;border-color:rgba(94,234,212,.4);}
   .wrap{
     max-width:480px;
     margin:0 auto;
-    padding:0 16px;
+    padding:24px 16px;
   }
   header{
     text-align:center;
     margin-bottom:20px;
-  }
-  header h1{
-    font-size:1.5rem;
-    font-weight:800;
-    letter-spacing:-.01em;
-    margin:0 0 4px;
-    color:var(--verde-oscuro);
   }
   header p{
     margin:0;
     color:var(--gris);
     font-size:0.9rem;
   }
-  .volver{
-    display:inline-block;
-    margin-bottom:10px;
-    color:var(--gris);
-    font-size:0.82rem;
-    text-decoration:none;
-    font-weight:600;
-  }
-  .volver:hover{color:var(--verde-oscuro);}
   .tabs{
     display:flex;
     gap:8px;
@@ -426,6 +448,21 @@
     font-size:0.75rem;
     margin-top:8px;
   }
+  .lock-btn{
+    display:block;
+    width:auto;
+    margin:14px auto 0;
+    background:none;
+    border:none;
+    box-shadow:none;
+    opacity:.35;
+    font-size:1rem;
+    padding:8px;
+    cursor:pointer;
+    transition:opacity .2s;
+  }
+  .lock-btn:hover{opacity:.7;background:none;}
+  .lock-btn:active:not(:disabled){transform:scale(.92);}
   @media (prefers-reduced-motion: reduce){
     *,*::before,*::after{
       animation-duration:.001ms!important;
@@ -436,14 +473,22 @@
 </style>
 </head>
 <body>
+<header class="topbar">
+  <a href="index.html" class="topbar-brand">
+    <span class="topbar-crown" aria-hidden="true">👑</span>
+    <h1 class="topbar-title">Farma VIP</h1>
+  </a>
+  <a href="index.html" class="back-btn">
+    <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="12"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Sitio principal
+  </a>
+</header>
 <div class="wrap">
   <header>
-    <a href="index.html" class="volver">← Sitio principal</a>
-    <h1>👑 Farma VIP</h1>
     <p>Farmacia Garmendia · cada $17.000 en compras suma un círculo</p>
   </header>
 
-  <div class="tabs">
+  <div class="tabs oculto" id="tabsSelector">
     <div class="tab active" id="tabCliente" onclick="mostrarTab('cliente')">Consultar mi tarjeta</div>
     <div class="tab" id="tabEmpleado" onclick="mostrarTab('empleado')">Empleado</div>
   </div>
@@ -482,6 +527,7 @@
       <label for="passAdmin">Clave</label>
       <input id="passAdmin" type="password" placeholder="Clave">
       <button onclick="loginEmpleado()">Ingresar</button>
+      <button class="link" onclick="mostrarTab('cliente')">← Volver</button>
       <div class="msg" id="msgLogin"></div>
     </div>
 
@@ -535,6 +581,7 @@
   </div>
 
   <div class="footer-note">Farmacia Garmendia · Garmendia 3402, Laferrere</div>
+  <button class="lock-btn" onclick="mostrarTab('empleado')" title="Acceso empleado" aria-label="Acceso empleado">🔒</button>
 </div>
 
 <script>
