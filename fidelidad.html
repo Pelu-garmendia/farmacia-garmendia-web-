@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Farma VIP · Farmacia Garmendia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
   :root{
     --verde:#0f9d6b;
@@ -19,8 +22,9 @@
   *{box-sizing:border-box;}
   body{
     margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:var(--fondo);
+    font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:linear-gradient(160deg, #eafff6 0%, #ddf5ec 45%, #c9ecdf 100%);
+    background-attachment:fixed;
     color:var(--texto);
     padding-block:24px;
   }
@@ -34,7 +38,9 @@
     margin-bottom:20px;
   }
   header h1{
-    font-size:1.4rem;
+    font-size:1.5rem;
+    font-weight:800;
+    letter-spacing:-.01em;
     margin:0 0 4px;
     color:var(--verde-oscuro);
   }
@@ -288,27 +294,83 @@
   .msg.ok{background:var(--verde-claro);color:var(--verde-oscuro);display:block;}
   .msg.err{background:#fbeaea;color:var(--rojo);display:block;}
   .premio{
+    position:relative;
+    overflow:hidden;
     text-align:center;
-    background:linear-gradient(135deg,#fff7e0,#ffe9b3);
-    border:1px dashed #e0a800;
-    border-radius:12px;
-    padding:16px;
+    background:linear-gradient(135deg, #0b3d2e 0%, #0f9d6b 55%, #0a2e22 100%);
+    border:1px solid var(--dorado);
+    border-radius:18px;
+    padding:24px 18px 20px;
     margin-bottom:14px;
-    font-weight:700;
-    color:#8a6200;
+    color:#fff;
+    box-shadow:0 12px 30px rgba(11,61,46,.35);
+    animation:card-in .5s cubic-bezier(.22,1,.36,1) both;
+  }
+  .premio::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(120deg, transparent 42%, rgba(212,160,23,.25) 50%, transparent 58%);
+    pointer-events:none;
+  }
+  .premio-titulo{
+    font-size:1.15rem;
+    font-weight:800;
+    letter-spacing:-.01em;
+  }
+  .premio-sub{
+    font-size:.85rem;
+    font-weight:600;
+    color:rgba(255,255,255,.8);
+    margin-top:2px;
   }
   .premio-botones{
     display:flex;
     flex-direction:column;
-    gap:8px;
-    margin-top:12px;
+    gap:10px;
+    margin-top:16px;
+    position:relative;
+    z-index:1;
   }
   .premio-btn{
-    font-weight:700;
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(135deg, #f3cf6a, var(--dorado) 55%, #a97c12);
+    color:#3b2a00;
+    font-weight:800;
+    border:1px solid #fff3cf;
+    box-shadow:0 6px 16px rgba(212,160,23,.45);
+    animation:card-in .45s cubic-bezier(.22,1,.36,1) both;
+    animation-delay:calc(var(--i, 0) * 90ms);
+  }
+  .premio-btn:hover{background:linear-gradient(135deg, #ffe08a, #e0b020 55%, var(--dorado));}
+  .premio-btn::after{
+    content:'';
+    position:absolute;
+    top:-50%;
+    left:0;
+    width:35%;
+    height:200%;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+    animation:brillo-sweep 1.1s ease-out both;
+    animation-delay:calc(var(--i, 0) * 90ms + 350ms);
   }
   .premio-btn:disabled{
     opacity:0.55;
     cursor:default;
+  }
+  .confeti-pieza{
+    position:absolute;
+    top:-10px;
+    width:7px;
+    height:13px;
+    border-radius:2px;
+    pointer-events:none;
+    animation:confeti-caer 1.7s ease-in forwards;
+  }
+  @keyframes confeti-caer{
+    0%{transform:translateY(0) translateX(0) rotate(0deg); opacity:1;}
+    100%{transform:translateY(150px) translateX(var(--drift, 0px)) rotate(var(--rot, 180deg)); opacity:0;}
   }
   .oculto{display:none;}
   .catalogo-row{display:flex;justify-content:flex-start;}
@@ -521,6 +583,26 @@ function pintarCirculos(gridId, llenos){
   }
 }
 
+function lanzarConfeti(container){
+  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const colores = ['#f3cf6a', '#d4a017', '#ffffff', '#e6f7f0', '#0f9d6b'];
+  const frag = document.createDocumentFragment();
+  for(let i=0;i<26;i++){
+    const c = document.createElement('span');
+    c.className = 'confeti-pieza';
+    c.style.left = (Math.random()*94 + 3) + '%';
+    c.style.background = colores[i % colores.length];
+    c.style.animationDelay = (Math.random()*0.35) + 's';
+    c.style.setProperty('--drift', (Math.random()*70 - 35) + 'px');
+    c.style.setProperty('--rot', (Math.random()*280 + 80) + 'deg');
+    frag.appendChild(c);
+  }
+  container.appendChild(frag);
+  setTimeout(() => {
+    container.querySelectorAll('.confeti-pieza').forEach(el => el.remove());
+  }, 2100);
+}
+
 function mostrarMsg(elId, texto, tipo){
   const el = document.getElementById(elId);
   el.textContent = texto;
@@ -573,11 +655,13 @@ async function consultarCliente(){
   const premioBox = document.getElementById('premioClienteBox');
   if(data.premio_pendiente){
     const nombres = data.opcionesPremio && data.opcionesPremio.length > 0 ? data.opcionesPremio : ['Premio sorpresa'];
-    premioBox.innerHTML = '🎉 ¡Tarjeta completa! Elegí tu premio:' +
+    premioBox.innerHTML = '<div class="premio-titulo">🎉 ¡Tarjeta completa!</div>' +
+      '<div class="premio-sub">Elegí tu premio</div>' +
       '<div class="premio-botones">' +
-      nombres.map(n => `<button type="button" class="secundario premio-btn" onclick="elegirPremioCliente('${n.replace(/'/g,"\\'")}')">${n}</button>`).join('') +
+      nombres.map((n,i) => `<button type="button" class="premio-btn" style="--i:${i}" onclick="elegirPremioCliente('${n.replace(/'/g,"\\'")}')">${n}</button>`).join('') +
       '</div>';
     premioBox.classList.remove('oculto');
+    lanzarConfeti(premioBox);
   } else {
     premioBox.classList.add('oculto');
     premioBox.innerHTML = '';
