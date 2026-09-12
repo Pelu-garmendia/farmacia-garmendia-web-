@@ -179,6 +179,19 @@
     font-weight:700;
     color:#8a6200;
   }
+  .premio-botones{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-top:12px;
+  }
+  .premio-btn{
+    font-weight:700;
+  }
+  .premio-btn:disabled{
+    opacity:0.55;
+    cursor:default;
+  }
   .oculto{display:none;}
   .prod-row{
     display:flex;
@@ -567,20 +580,19 @@ async function cargarCompra(){
 
   if(tarjetaCompletadaAhora){
     const premioBox = document.getElementById('premioBox');
-    if(opcionesPremio.length > 0){
-      premioBox.innerHTML = '🎉 ¡Tarjeta completa! Elegí tu premio entre estos productos:' +
-        '<ul>' + opcionesPremio.map(p => `<li>${p.nombre}</li>`).join('') + '</ul>';
-    } else {
-      premioBox.innerHTML = '🎉 ¡Tarjeta completa! Le corresponde un premio sorpresa a elección (todavía no hay productos cargados en la lista de vencimientos).';
-    }
+    const nombres = opcionesPremio.length > 0 ? opcionesPremio.map(p => p.nombre) : ['Premio sorpresa'];
+    premioBox.innerHTML = '🎉 ¡Tarjeta completa! Tocá el premio que eligió el cliente para mandarle el comprobante:' +
+      '<div class="premio-botones">' +
+      nombres.map(n => `<button type="button" class="secundario premio-btn" onclick="confirmarPremio('${n.replace(/'/g,"\\'")}')">${n}</button>`).join('') +
+      '</div>';
     premioBox.classList.remove('oculto');
   }
 
   ultimoResultado = {dni, telefono, circulos, tarjetaCompletadaAhora, opcionesPremio};
 
-  if(telefono){
+  if(telefono && !tarjetaCompletadaAhora){
     document.getElementById('btnWhatsapp').classList.remove('oculto');
-  } else {
+  } else if(!telefono){
     mostrarMsg('msgEmpleado','Compra cargada. No hay teléfono guardado para avisar por WhatsApp.','ok');
   }
 
@@ -593,20 +605,31 @@ function enviarWhatsapp(){
   if(!ultimoResultado || !ultimoResultado.telefono) return;
   const numero = normalizarTelefono(ultimoResultado.telefono);
   if(!numero) return;
-  let texto;
-  if(ultimoResultado.tarjetaCompletadaAhora){
-    const opciones = ultimoResultado.opcionesPremio || [];
-    if(opciones.length > 0){
-      const lista = opciones.map((p,i) => `${i+1}) ${p.nombre}`).join('\n');
-      texto = `¡Felicitaciones! 🎉 Completaste tu Tarjeta Fidelidad de Farmacia Garmendia. Elegí tu premio y contestanos con el número:\n${lista}`;
-    } else {
-      texto = `¡Felicitaciones! 🎉 Completaste tu Tarjeta Fidelidad de Farmacia Garmendia. Pasá por el mostrador a elegir tu premio sorpresa.`;
-    }
-  } else {
-    texto = `¡Gracias por tu compra en Farmacia Garmendia! Sumaste un círculo en tu Tarjeta Fidelidad: llevás ${ultimoResultado.circulos}/10. ¡Seguí sumando para tu premio sorpresa!`;
-  }
+  const texto = `¡Gracias por tu compra en Farmacia Garmendia! Sumaste un círculo en tu Tarjeta Fidelidad: llevás ${ultimoResultado.circulos}/10. ¡Seguí sumando para tu premio sorpresa!`;
   const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
   window.open(url, '_blank');
+}
+
+async function confirmarPremio(producto){
+  if(!ultimoResultado) return;
+  try {
+    await adminFetch('confirmarPremio', {dni: ultimoResultado.dni, producto});
+  } catch(e){
+    if(e.message !== 'unauthorized') mostrarMsg('msgEmpleado','No se pudo registrar el canje.','err');
+    return;
+  }
+  document.querySelectorAll('.premio-btn').forEach(b => b.disabled = true);
+
+  if(!ultimoResultado.telefono){
+    mostrarMsg('msgEmpleado', `Premio "${producto}" registrado. No hay teléfono guardado para enviar el comprobante.`, 'ok');
+    return;
+  }
+  const numero = normalizarTelefono(ultimoResultado.telefono);
+  const fecha = new Date().toLocaleDateString('es-AR');
+  const texto = `✅ Comprobante de canje - Farmacia Garmendia\n\nTarjeta Fidelidad completa.\nPremio canjeado: ${producto}\nFecha: ${fecha}\n\n¡Gracias por elegirnos! Tu tarjeta se reinició, seguí sumando 🎉`;
+  const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
+  window.open(url, '_blank');
+  mostrarMsg('msgEmpleado', `Comprobante de "${producto}" enviado.`, 'ok');
 }
 </script>
 </body>

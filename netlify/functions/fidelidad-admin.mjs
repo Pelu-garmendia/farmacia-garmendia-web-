@@ -8,7 +8,8 @@
 //
 // POST -> { password, action, ...payload }
 //   action: "login" | "cargarCompra" | "listarProductos" |
-//           "agregarProducto" | "togglePremio" | "desactivarProducto"
+//           "agregarProducto" | "togglePremio" | "desactivarProducto" |
+//           "confirmarPremio"
 //
 // Configuración necesaria en Netlify (Site configuration → Environment variables):
 //   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, ADMIN_PASSWORD_TIENDA
@@ -91,6 +92,17 @@ export default async (req) => {
 
     if (action === "desactivarProducto") {
       const { error } = await sb.from("productos_vencimiento").update({ activo: false }).eq("id", body.id);
+      if (error) throw error;
+      return new Response(JSON.stringify({ ok: true }), { headers: cors });
+    }
+
+    if (action === "confirmarPremio") {
+      const dni = String(body.dni || "").trim();
+      const producto = String(body.producto || "").trim();
+      if (!dni || !producto) {
+        return new Response(JSON.stringify({ error: "Faltan datos del canje" }), { status: 400, headers: cors });
+      }
+      const { error } = await sb.from("fidelidad_clientes").update({ ultimo_premio: producto }).eq("dni", dni);
       if (error) throw error;
       return new Response(JSON.stringify({ ok: true }), { headers: cors });
     }
