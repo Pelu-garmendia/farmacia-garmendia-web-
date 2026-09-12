@@ -317,6 +317,7 @@ const ADMIN_ENDPOINT = '/.netlify/functions/fidelidad-admin';
 
 const MONTO_POR_CIRCULO = 15000;
 const CIRCULOS_TOTAL = 10;
+const FARMACIA_WA = '541130858200';
 
 let adminPass = null;
 let ultimoResultado = null;
@@ -581,7 +582,7 @@ async function cargarCompra(){
   if(tarjetaCompletadaAhora){
     const premioBox = document.getElementById('premioBox');
     const nombres = opcionesPremio.length > 0 ? opcionesPremio.map(p => p.nombre) : ['Premio sorpresa'];
-    premioBox.innerHTML = '🎉 ¡Tarjeta completa! Tocá el premio que eligió el cliente para mandarle el comprobante:' +
+    premioBox.innerHTML = '🎉 ¡Tarjeta completa! Tocá el premio que eligió el cliente para avisarle a la farmacia:' +
       '<div class="premio-botones">' +
       nombres.map(n => `<button type="button" class="secundario premio-btn" onclick="confirmarPremio('${n.replace(/'/g,"\\'")}')">${n}</button>`).join('') +
       '</div>';
@@ -620,14 +621,9 @@ async function confirmarPremio(producto){
   }
   document.querySelectorAll('.premio-btn').forEach(b => b.disabled = true);
 
-  if(!ultimoResultado.telefono){
-    mostrarMsg('msgEmpleado', `Premio "${producto}" registrado. No hay teléfono guardado para enviar el comprobante.`, 'ok');
-    return;
-  }
-  const numero = normalizarTelefono(ultimoResultado.telefono);
   const fecha = new Date().toLocaleDateString('es-AR');
-  const texto = `✅ Comprobante de canje - Farmacia Garmendia\n\nTarjeta Fidelidad completa.\nPremio canjeado: ${producto}\nFecha: ${fecha}\n\n¡Gracias por elegirnos! Tu tarjeta se reinició, seguí sumando 🎉`;
-  const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
+  const texto = `✅ Comprobante de canje - Tarjeta Fidelidad\n\nCliente DNI: ${ultimoResultado.dni}\nPremio canjeado: ${producto}\nFecha: ${fecha}`;
+  const url = `https://wa.me/${FARMACIA_WA}?text=${encodeURIComponent(texto)}`;
   window.open(url, '_blank');
   mostrarMsg('msgEmpleado', `Comprobante de "${producto}" enviado.`, 'ok');
 }
