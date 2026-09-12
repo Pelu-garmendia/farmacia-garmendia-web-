@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarjeta Fidelidad · Farmacia Garmendia</title>
+<style>
+  :root{
+    --verde:#0f9d6b;
+    --verde-oscuro:#0b7a53;
+    --verde-claro:#e6f7f0;
+    --fondo:#f4f7f6;
+    --texto:#1c2a26;
+    --gris:#6b7a76;
+    --borde:#dbe6e2;
+    --rojo:#d64545;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--fondo);
+    color:var(--texto);
+    padding-block:24px;
+  }
+  .wrap{
+    max-width:480px;
+    margin:0 auto;
+    padding:0 16px;
+  }
+  header{
+    text-align:center;
+    margin-bottom:20px;
+  }
+  header h1{
+    font-size:1.4rem;
+    margin:0 0 4px;
+    color:var(--verde-oscuro);
+  }
+  header p{
+    margin:0;
+    color:var(--gris);
+    font-size:0.9rem;
+  }
+  .tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:16px;
+    background:#fff;
+    padding:4px;
+    border-radius:12px;
+    border:1px solid var(--borde);
+  }
+  .tab{
+    flex:1;
+    text-align:center;
+    padding:10px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:600;
+    font-size:0.9rem;
+    color:var(--gris);
+    user-select:none;
+  }
+  .tab.active{
+    background:var(--verde);
+    color:#fff;
+  }
+  .card{
+    background:#fff;
+    border:1px solid var(--borde);
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:16px;
+  }
+  label{
+    display:block;
+    font-size:0.85rem;
+    font-weight:600;
+    margin-bottom:6px;
+    color:var(--texto);
+  }
+  input{
+    width:100%;
+    padding:11px 12px;
+    border-radius:10px;
+    border:1px solid var(--borde);
+    font-size:1rem;
+    margin-bottom:14px;
+    background:#fbfdfc;
+  }
+  input:focus{
+    outline:2px solid var(--verde);
+    outline-offset:1px;
+  }
+  button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:var(--verde);
+    color:#fff;
+    font-size:1rem;
+    font-weight:700;
+    cursor:pointer;
+  }
+  button:hover{background:var(--verde-oscuro);}
+  button.secundario{
+    background:#25D366;
+  }
+  button.secundario:hover{background:#1ebe57;}
+  button.link{
+    background:none;
+    color:var(--gris);
+    font-weight:500;
+    font-size:0.85rem;
+    width:auto;
+    padding:6px;
+    text-decoration:underline;
+  }
+  .circulos{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:10px;
+    margin:18px 0;
+  }
+  .circulo{
+    aspect-ratio:1;
+    border-radius:50%;
+    border:2px solid var(--verde);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.2rem;
+    background:#fff;
+  }
+  .circulo.lleno{
+    background:var(--verde);
+    color:#fff;
+  }
+  .resumen{
+    text-align:center;
+    margin-bottom:6px;
+  }
+  .resumen .num{
+    font-size:2rem;
+    font-weight:800;
+    color:var(--verde-oscuro);
+  }
+  .resumen .sub{
+    color:var(--gris);
+    font-size:0.85rem;
+  }
+  .msg{
+    padding:12px;
+    border-radius:10px;
+    font-size:0.9rem;
+    margin-bottom:14px;
+    display:none;
+  }
+  .msg.ok{background:var(--verde-claro);color:var(--verde-oscuro);display:block;}
+  .msg.err{background:#fbeaea;color:var(--rojo);display:block;}
+  .premio{
+    text-align:center;
+    background:linear-gradient(135deg,#fff7e0,#ffe9b3);
+    border:1px dashed #e0a800;
+    border-radius:12px;
+    padding:16px;
+    margin-bottom:14px;
+    font-weight:700;
+    color:#8a6200;
+  }
+  .oculto{display:none;}
+  .prod-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px 0;
+    border-bottom:1px solid var(--borde);
+    font-size:0.88rem;
+  }
+  .prod-row:last-child{border-bottom:none;}
+  .prod-row .venc{color:var(--gris);font-size:0.8rem;}
+  .prod-row button{
+    width:auto;
+    background:none;
+    color:var(--rojo);
+    padding:4px 8px;
+    font-size:0.8rem;
+    font-weight:600;
+  }
+  .premio ul{margin:8px 0 0;padding-left:18px;text-align:left;}
+  .footer-note{
+    text-align:center;
+    color:var(--gris);
+    font-size:0.75rem;
+    margin-top:8px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🎯 Tarjeta Fidelidad</h1>
+    <p>Farmacia Garmendia · cada $15.000 en compras suma un círculo</p>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" id="tabCliente" onclick="mostrarTab('cliente')">Consultar mi tarjeta</div>
+    <div class="tab" id="tabEmpleado" onclick="mostrarTab('empleado')">Empleado</div>
+  </div>
+
+  <!-- VISTA CLIENTE -->
+  <div id="vistaCliente">
+    <div class="card">
+      <label for="dniCliente">Tu DNI</label>
+      <input id="dniCliente" inputmode="numeric" placeholder="Ej: 30123456">
+      <button onclick="consultarCliente()">Ver mi progreso</button>
+    </div>
+
+    <div class="msg" id="msgCliente"></div>
+
+    <div class="card oculto" id="resultadoCliente">
+      <div class="resumen">
+        <div class="num" id="circulosTexto">0/10</div>
+        <div class="sub">círculos completados</div>
+      </div>
+      <div class="circulos" id="circulosGrid"></div>
+      <div class="sub" style="text-align:center" id="faltanTexto"></div>
+      <div class="sub" style="text-align:center;margin-top:6px" id="tarjetasCompletadasTexto"></div>
+    </div>
+  </div>
+
+  <!-- VISTA EMPLEADO -->
+  <div id="vistaEmpleado" class="oculto">
+
+    <div class="card" id="loginEmpleado">
+      <label for="passAdmin">Clave</label>
+      <input id="passAdmin" type="password" placeholder="Clave">
+      <button onclick="loginEmpleado()">Ingresar</button>
+      <div class="msg" id="msgLogin"></div>
+    </div>
+
+    <div id="panelEmpleado" class="oculto">
+      <div class="card">
+        <label for="dniCompra">DNI del cliente</label>
+        <input id="dniCompra" inputmode="numeric" placeholder="DNI del cliente">
+        <label for="telCompra">Teléfono (WhatsApp, con código de área)</label>
+        <input id="telCompra" inputmode="tel" placeholder="Ej: 11 2345-6789">
+        <label for="montoCompra">Monto de la compra ($)</label>
+        <input id="montoCompra" inputmode="numeric" placeholder="Ej: 18000">
+        <button onclick="cargarCompra()">Cargar compra</button>
+      </div>
+
+      <div class="msg" id="msgEmpleado"></div>
+
+      <div class="card oculto" id="resultadoEmpleado">
+        <div class="premio oculto" id="premioBox"></div>
+        <div class="resumen">
+          <div class="num" id="circulosTextoEmp">0/10</div>
+          <div class="sub">círculos del cliente</div>
+        </div>
+        <div class="circulos" id="circulosGridEmp"></div>
+        <button class="secundario oculto" id="btnWhatsapp" onclick="enviarWhatsapp()">Enviar aviso por WhatsApp</button>
+      </div>
+
+      <div class="card">
+        <label style="margin-bottom:2px">Productos próximos a vencer</label>
+        <div class="sub" style="margin-bottom:10px">Tildá "premio" en los que querés ofrecer cuando se complete una tarjeta.</div>
+        <input id="buscarProducto" placeholder="Buscar producto..." oninput="filtrarProductos()">
+        <div id="listaVencimientos" class="sub" style="margin-bottom:14px;max-height:320px;overflow-y:auto">Cargando...</div>
+        <input id="nombreProducto" placeholder="Nombre del producto">
+        <input id="codigoProducto" placeholder="Código de barra (opcional)">
+        <label for="fechaVencProducto" style="margin-top:-8px">Fecha de vencimiento</label>
+        <input id="fechaVencProducto" type="date">
+        <label style="display:flex;align-items:center;gap:8px;font-weight:500;margin-bottom:14px">
+          <input type="checkbox" id="premioNuevoProducto" style="width:auto;margin:0">
+          Ofrecerlo como premio
+        </label>
+        <button onclick="agregarProducto()">Agregar producto</button>
+        <div class="msg" id="msgProducto"></div>
+      </div>
+
+      <button class="link" onclick="salirEmpleado()">Salir</button>
+    </div>
+  </div>
+
+  <div class="footer-note">Farmacia Garmendia · Garmendia 3402, Laferrere</div>
+</div>
+
+<script>
+const CONSULTAR_ENDPOINT = '/.netlify/functions/fidelidad-consultar';
+const ADMIN_ENDPOINT = '/.netlify/functions/fidelidad-admin';
+
+const MONTO_POR_CIRCULO = 15000;
+const CIRCULOS_TOTAL = 10;
+
+let adminPass = null;
+let ultimoResultado = null;
+
+async function adminFetch(action, payload){
+  const res = await fetch(ADMIN_ENDPOINT, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({password: adminPass, action, ...payload})
+  });
+  if(res.status === 401){
+    adminPass = null;
+    salirEmpleado();
+    mostrarMsg('msgLogin','Sesión vencida. Ingresá la clave de nuevo.','err');
+    throw new Error('unauthorized');
+  }
+  const data = await res.json().catch(() => ({}));
+  if(!res.ok){ throw new Error(data.error || 'Error del servidor'); }
+  return data;
+}
+
+function mostrarTab(tab){
+  document.getElementById('tabCliente').classList.toggle('active', tab==='cliente');
+  document.getElementById('tabEmpleado').classList.toggle('active', tab==='empleado');
+  document.getElementById('vistaCliente').classList.toggle('oculto', tab!=='cliente');
+  document.getElementById('vistaEmpleado').classList.toggle('oculto', tab!=='empleado');
+}
+
+function pintarCirculos(gridId, llenos){
+  const grid = document.getElementById(gridId);
+  grid.innerHTML = '';
+  for(let i=0;i<CIRCULOS_TOTAL;i++){
+    const div = document.createElement('div');
+    div.className = 'circulo' + (i < llenos ? ' lleno' : '');
+    div.textContent = i < llenos ? '✓' : '';
+    grid.appendChild(div);
+  }
+}
+
+function mostrarMsg(elId, texto, tipo){
+  const el = document.getElementById(elId);
+  el.textContent = texto;
+  el.className = 'msg ' + tipo;
+}
+
+function limpiarMsg(elId){
+  const el = document.getElementById(elId);
+  el.className = 'msg';
+  el.textContent = '';
+}
+
+async function consultarCliente(){
+  const dni = document.getElementById('dniCliente').value.trim();
+  limpiarMsg('msgCliente');
+  document.getElementById('resultadoCliente').classList.add('oculto');
+  if(!dni){
+    mostrarMsg('msgCliente','Ingresá tu DNI.','err');
+    return;
+  }
+  let data;
+  try {
+    const res = await fetch(CONSULTAR_ENDPOINT, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({dni})
+    });
+    data = await res.json();
+    if(!res.ok) throw new Error(data.error || 'Error');
+  } catch(e){
+    mostrarMsg('msgCliente','Ocurrió un error al consultar. Probá de nuevo.','err');
+    return;
+  }
+  if(!data.found){
+    mostrarMsg('msgCliente','No encontramos una tarjeta con ese DNI todavía. Se crea con tu primera compra.','err');
+    return;
+  }
+  document.getElementById('circulosTexto').textContent = data.circulos + '/10';
+  pintarCirculos('circulosGrid', data.circulos);
+  const falta = MONTO_POR_CIRCULO - Number(data.monto_acumulado);
+  document.getElementById('faltanTexto').textContent = data.circulos < CIRCULOS_TOTAL
+    ? `Te faltan $${falta.toLocaleString('es-AR')} para el próximo círculo`
+    : '¡Tarjeta completa! Consultá tu premio en el mostrador.';
+  document.getElementById('tarjetasCompletadasTexto').textContent = data.tarjetas_completadas > 0
+    ? `Tarjetas completadas hasta ahora: ${data.tarjetas_completadas}`
+    : '';
+  document.getElementById('resultadoCliente').classList.remove('oculto');
+}
+
+async function loginEmpleado(){
+  const pass = document.getElementById('passAdmin').value;
+  adminPass = pass;
+  try {
+    await adminFetch('login', {});
+  } catch(e){
+    adminPass = null;
+    mostrarMsg('msgLogin', e.message === 'unauthorized' ? 'Clave incorrecta.' : 'No se pudo conectar. Probá de nuevo.', 'err');
+    return;
+  }
+  document.getElementById('loginEmpleado').classList.add('oculto');
+  document.getElementById('panelEmpleado').classList.remove('oculto');
+  limpiarMsg('msgLogin');
+  cargarProductosVencimiento();
+}
+
+let productosCache = [];
+
+async function cargarProductosVencimiento(){
+  const cont = document.getElementById('listaVencimientos');
+  let data;
+  try {
+    ({data} = await adminFetch('listarProductos', {}));
+  } catch(e){
+    if(e.message !== 'unauthorized') cont.textContent = 'No se pudo cargar la lista.';
+    return;
+  }
+  productosCache = data || [];
+  renderProductos(productosCache);
+}
+
+function filtrarProductos(){
+  const q = document.getElementById('buscarProducto').value.trim().toLowerCase();
+  const filtrados = q
+    ? productosCache.filter(p => p.nombre.toLowerCase().includes(q))
+    : productosCache;
+  renderProductos(filtrados);
+}
+
+function renderProductos(data){
+  const cont = document.getElementById('listaVencimientos');
+  if(!data || data.length === 0){
+    cont.textContent = 'No hay productos que coincidan.';
+    return;
+  }
+  cont.innerHTML = '';
+  data.forEach(p => {
+    const row = document.createElement('div');
+    row.className = 'prod-row';
+    const fecha = new Date(p.vencimiento + 'T00:00:00').toLocaleDateString('es-AR');
+
+    const info = document.createElement('span');
+    info.innerHTML = `${p.nombre}<br><span class="venc">Vence ${fecha}</span>`;
+
+    const derecha = document.createElement('span');
+    derecha.style.display = 'flex';
+    derecha.style.alignItems = 'center';
+    derecha.style.gap = '10px';
+
+    const checkLabel = document.createElement('label');
+    checkLabel.style.display = 'flex';
+    checkLabel.style.alignItems = 'center';
+    checkLabel.style.gap = '4px';
+    checkLabel.style.fontWeight = '500';
+    checkLabel.style.fontSize = '0.8rem';
+    const check = document.createElement('input');
+    check.type = 'checkbox';
+    check.style.width = 'auto';
+    check.style.margin = '0';
+    check.checked = !!p.premio;
+    check.onchange = () => togglePremio(p.id, check.checked);
+    checkLabel.appendChild(check);
+    checkLabel.appendChild(document.createTextNode('premio'));
+
+    const btn = document.createElement('button');
+    btn.textContent = 'Quitar';
+    btn.onclick = () => desactivarProducto(p.id);
+
+    derecha.appendChild(checkLabel);
+    derecha.appendChild(btn);
+
+    row.appendChild(info);
+    row.appendChild(derecha);
+    cont.appendChild(row);
+  });
+}
+
+async function togglePremio(id, valor){
+  try {
+    await adminFetch('togglePremio', {id, premio: valor});
+  } catch(e){ return; }
+  const p = productosCache.find(x => x.id === id);
+  if(p) p.premio = valor;
+}
+
+async function agregarProducto(){
+  const nombre = document.getElementById('nombreProducto').value.trim();
+  const codigo = document.getElementById('codigoProducto').value.trim();
+  const vencimiento = document.getElementById('fechaVencProducto').value;
+  const premio = document.getElementById('premioNuevoProducto').checked;
+  limpiarMsg('msgProducto');
+  if(!nombre || !vencimiento){
+    mostrarMsg('msgProducto','Completá el nombre y la fecha de vencimiento.','err');
+    return;
+  }
+  try {
+    await adminFetch('agregarProducto', {nombre, codigo_barra: codigo || null, vencimiento, premio});
+  } catch(e){
+    if(e.message !== 'unauthorized') mostrarMsg('msgProducto','Error al guardar el producto.','err');
+    return;
+  }
+  document.getElementById('nombreProducto').value = '';
+  document.getElementById('codigoProducto').value = '';
+  document.getElementById('fechaVencProducto').value = '';
+  document.getElementById('premioNuevoProducto').checked = false;
+  cargarProductosVencimiento();
+}
+
+async function desactivarProducto(id){
+  try {
+    await adminFetch('desactivarProducto', {id});
+  } catch(e){ return; }
+  productosCache = productosCache.filter(x => x.id !== id);
+  filtrarProductos();
+}
+
+function salirEmpleado(){
+  adminPass = null;
+  document.getElementById('loginEmpleado').classList.remove('oculto');
+  document.getElementById('panelEmpleado').classList.add('oculto');
+  document.getElementById('passAdmin').value = '';
+  document.getElementById('resultadoEmpleado').classList.add('oculto');
+}
+
+function normalizarTelefono(tel){
+  let d = tel.replace(/\D/g,'');
+  if(!d) return null;
+  d = d.replace(/^0/, '');
+  d = d.replace(/^15/, '');
+  if(!d.startsWith('54')){
+    d = '549' + d;
+  } else if(!d.startsWith('549')){
+    d = '549' + d.slice(2);
+  }
+  return d;
+}
+
+async function cargarCompra(){
+  const dni = document.getElementById('dniCompra').value.trim();
+  const telRaw = document.getElementById('telCompra').value.trim();
+  const monto = Number(document.getElementById('montoCompra').value);
+  limpiarMsg('msgEmpleado');
+  document.getElementById('resultadoEmpleado').classList.add('oculto');
+  document.getElementById('btnWhatsapp').classList.add('oculto');
+  document.getElementById('premioBox').classList.add('oculto');
+
+  if(!dni || !monto || monto <= 0){
+    mostrarMsg('msgEmpleado','Completá el DNI y un monto válido.','err');
+    return;
+  }
+
+  let circulos, tarjetaCompletadaAhora, opcionesPremio, telefono;
+  try {
+    ({circulos, tarjetaCompletadaAhora, opcionesPremio, telefono} = await adminFetch('cargarCompra', {dni, telefono: telRaw, monto}));
+  } catch(e){
+    if(e.message !== 'unauthorized') mostrarMsg('msgEmpleado', e.message === 'Completá el DNI y un monto válido' ? e.message : 'Error al guardar la compra.', 'err');
+    return;
+  }
+
+  pintarCirculos('circulosGridEmp', circulos);
+  document.getElementById('circulosTextoEmp').textContent = circulos + '/10';
+  document.getElementById('resultadoEmpleado').classList.remove('oculto');
+
+  if(tarjetaCompletadaAhora){
+    const premioBox = document.getElementById('premioBox');
+    if(opcionesPremio.length > 0){
+      premioBox.innerHTML = '🎉 ¡Tarjeta completa! Elegí tu premio entre estos productos:' +
+        '<ul>' + opcionesPremio.map(p => `<li>${p.nombre}</li>`).join('') + '</ul>';
+    } else {
+      premioBox.innerHTML = '🎉 ¡Tarjeta completa! Le corresponde un premio sorpresa a elección (todavía no hay productos cargados en la lista de vencimientos).';
+    }
+    premioBox.classList.remove('oculto');
+  }
+
+  ultimoResultado = {dni, telefono, circulos, tarjetaCompletadaAhora, opcionesPremio};
+
+  if(telefono){
+    document.getElementById('btnWhatsapp').classList.remove('oculto');
+  } else {
+    mostrarMsg('msgEmpleado','Compra cargada. No hay teléfono guardado para avisar por WhatsApp.','ok');
+  }
+
+  document.getElementById('dniCompra').value = '';
+  document.getElementById('telCompra').value = '';
+  document.getElementById('montoCompra').value = '';
+}
+
+function enviarWhatsapp(){
+  if(!ultimoResultado || !ultimoResultado.telefono) return;
+  const numero = normalizarTelefono(ultimoResultado.telefono);
+  if(!numero) return;
+  let texto;
+  if(ultimoResultado.tarjetaCompletadaAhora){
+    const opciones = ultimoResultado.opcionesPremio || [];
+    if(opciones.length > 0){
+      const lista = opciones.map((p,i) => `${i+1}) ${p.nombre}`).join('\n');
+      texto = `¡Felicitaciones! 🎉 Completaste tu Tarjeta Fidelidad de Farmacia Garmendia. Elegí tu premio y contestanos con el número:\n${lista}`;
+    } else {
+      texto = `¡Felicitaciones! 🎉 Completaste tu Tarjeta Fidelidad de Farmacia Garmendia. Pasá por el mostrador a elegir tu premio sorpresa.`;
+    }
+  } else {
+    texto = `¡Gracias por tu compra en Farmacia Garmendia! Sumaste un círculo en tu Tarjeta Fidelidad: llevás ${ultimoResultado.circulos}/10. ¡Seguí sumando para tu premio sorpresa!`;
+  }
+  const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
+  window.open(url, '_blank');
+}
+</script>
+</body>
+</html>
