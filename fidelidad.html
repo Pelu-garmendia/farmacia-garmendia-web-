@@ -98,14 +98,24 @@
     to{opacity:1;transform:none}
   }
   @keyframes circulo-premium{
-    0%{transform:scale(.5) rotate(-10deg); box-shadow:0 0 0 0 rgba(212,160,23,.6);}
-    45%{transform:scale(1.22) rotate(5deg); box-shadow:0 0 0 9px rgba(212,160,23,.28);}
-    75%{transform:scale(.94) rotate(-2deg); box-shadow:0 0 0 15px rgba(212,160,23,0);}
-    100%{transform:scale(1) rotate(0deg); box-shadow:0 0 0 0 rgba(212,160,23,0);}
+    0%{transform:scale(.4) rotateY(90deg); opacity:0;}
+    55%{transform:scale(1.2) rotateY(-10deg); opacity:1;}
+    100%{transform:scale(1) rotateY(0deg); opacity:1;}
+  }
+  @keyframes anillo-pulso{
+    0%{box-shadow:0 0 0 0 rgba(212,160,23,.6), 0 0 0 0 rgba(212,160,23,.35);}
+    55%{box-shadow:0 0 0 7px rgba(212,160,23,.22), 0 0 0 15px rgba(212,160,23,.1);}
+    100%{box-shadow:0 0 0 13px rgba(212,160,23,0), 0 0 0 28px rgba(212,160,23,0);}
   }
   @keyframes brillo-sweep{
-    from{transform:translateX(-120%) rotate(20deg);}
-    to{transform:translateX(120%) rotate(20deg);}
+    from{transform:translateX(-120%) rotate(20deg); opacity:0;}
+    15%{opacity:1;}
+    to{transform:translateX(120%) rotate(20deg); opacity:1;}
+  }
+  @keyframes chispa{
+    0%{transform:scale(0) rotate(0deg); opacity:0;}
+    35%{transform:scale(1) rotate(110deg); opacity:1;}
+    100%{transform:scale(0) rotate(200deg); opacity:0;}
   }
   label{
     display:block;
@@ -171,14 +181,19 @@
     justify-content:center;
     font-size:1.2rem;
     background:#fff;
-    overflow:hidden;
+    overflow:visible;
+    perspective:200px;
     transition:background-color .3s ease, color .3s ease, border-color .3s ease;
   }
   .circulo.lleno{
     background:linear-gradient(135deg, var(--verde), var(--verde-oscuro));
     border-color:var(--dorado);
     color:#fff;
-    animation:circulo-premium .65s cubic-bezier(.22,1,.36,1);
+    overflow:hidden;
+    animation:
+      circulo-premium .6s cubic-bezier(.22,1,.36,1) both,
+      anillo-pulso 1s ease-out both;
+    animation-delay:calc(var(--i, 0) * 90ms);
   }
   .circulo.lleno::after{
     content:'';
@@ -187,8 +202,20 @@
     left:0;
     width:40%;
     height:200%;
-    background:linear-gradient(90deg, transparent, rgba(255,255,255,.75), transparent);
-    animation:brillo-sweep .65s ease-out;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.8), transparent);
+    animation:brillo-sweep .7s ease-out both;
+    animation-delay:calc(var(--i, 0) * 90ms + 150ms);
+  }
+  .circulo.lleno::before{
+    content:'✦';
+    position:absolute;
+    top:-8px;
+    right:-6px;
+    font-size:.7rem;
+    color:var(--dorado);
+    z-index:1;
+    animation:chispa .7s ease-out both;
+    animation-delay:calc(var(--i, 0) * 90ms + 280ms);
   }
   .resumen{
     text-align:center;
@@ -202,6 +229,54 @@
   .resumen .sub{
     color:var(--gris);
     font-size:0.85rem;
+  }
+  .member-card{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(135deg, #0b3d2e 0%, #0f9d6b 60%, #0a2e22 100%);
+    border-radius:18px;
+    padding:22px 20px 20px;
+    margin-bottom:16px;
+    color:#fff;
+    box-shadow:0 10px 28px rgba(11,61,46,.35);
+    animation:card-in .45s cubic-bezier(.22,1,.36,1) both;
+  }
+  .member-card::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(120deg, transparent 42%, rgba(212,160,23,.22) 50%, transparent 58%);
+    pointer-events:none;
+  }
+  .member-card-brand{
+    font-weight:800;
+    letter-spacing:.05em;
+    font-size:1.1rem;
+    color:var(--dorado);
+  }
+  .member-card-dni{
+    margin-top:10px;
+    margin-bottom:16px;
+    font-family:'Courier New',monospace;
+    letter-spacing:.1em;
+    font-size:1rem;
+    color:rgba(255,255,255,.88);
+  }
+  .member-card .resumen .num{color:#fff;}
+  .member-card .resumen .sub{color:rgba(255,255,255,.72);}
+  .member-card .circulos{margin:14px 0 0;}
+  .member-card .circulo{
+    background:rgba(255,255,255,.08);
+    border-color:rgba(255,255,255,.4);
+    color:rgba(255,255,255,.9);
+  }
+  .member-card .circulo.lleno{
+    background:linear-gradient(135deg, var(--dorado), #8a6a10);
+    border-color:#fff8dc;
+    color:#3b2a00;
+  }
+  .member-card .circulo.lleno::before{
+    color:#fff;
   }
   .msg{
     padding:12px;
@@ -229,18 +304,37 @@
     margin-top:12px;
   }
   .premio-btn{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:2px;
+    font-weight:700;
   }
-  .pb-nombre{font-weight:700;}
-  .pb-venc{font-weight:500;font-size:0.76rem;opacity:.85;}
   .premio-btn:disabled{
     opacity:0.55;
     cursor:default;
   }
   .oculto{display:none;}
+  .catalogo-row{display:flex;justify-content:flex-start;}
+  .sugerencias{
+    position:absolute;
+    top:100%;
+    left:0;
+    right:0;
+    background:#fff;
+    border:1px solid var(--borde);
+    border-radius:10px;
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+    max-height:220px;
+    overflow-y:auto;
+    z-index:20;
+    margin-top:-10px;
+  }
+  .sugerencia-item{
+    padding:9px 12px;
+    font-size:0.85rem;
+    cursor:pointer;
+    border-bottom:1px solid var(--borde);
+  }
+  .sugerencia-item:last-child{border-bottom:none;}
+  .sugerencia-item:hover, .sugerencia-item.activa{background:var(--verde-claro);}
+  .sugerencia-item .sg-venc{display:block;color:var(--gris);font-size:0.72rem;margin-top:2px;}
   .prod-row{
     display:flex;
     justify-content:space-between;
@@ -300,11 +394,15 @@
     <div class="msg" id="msgCliente"></div>
 
     <div class="card oculto" id="resultadoCliente">
-      <div class="resumen">
-        <div class="num" id="circulosTexto">0/10</div>
-        <div class="sub">círculos completados</div>
+      <div class="member-card">
+        <div class="member-card-brand">👑 FARMA VIP</div>
+        <div class="member-card-dni">DNI <span id="memberDni"></span></div>
+        <div class="resumen">
+          <div class="num" id="circulosTexto">0/10</div>
+          <div class="sub">círculos completados</div>
+        </div>
+        <div class="circulos" id="circulosGrid"></div>
       </div>
-      <div class="circulos" id="circulosGrid"></div>
       <div class="sub" style="text-align:center" id="faltanTexto"></div>
       <div class="sub" style="text-align:center;margin-top:6px" id="tarjetasCompletadasTexto"></div>
       <div class="premio oculto" id="premioClienteBox"></div>
@@ -348,8 +446,18 @@
         <label style="margin-bottom:2px">Premios disponibles</label>
         <div class="sub" style="margin-bottom:10px">Estos son los productos que el cliente puede elegir al completar la tarjeta.</div>
         <div id="listaPremios" class="sub" style="margin-bottom:14px;max-height:320px;overflow-y:auto">Cargando...</div>
+
+        <div class="catalogo-row">
+          <button type="button" class="link" style="width:auto;padding:6px 0" onclick="document.getElementById('catalogoInp').click()">📂 Importar catálogo (Excel)</button>
+          <input type="file" id="catalogoInp" accept=".xlsx,.xls,.csv" style="display:none" onchange="importarCatalogo(this)">
+        </div>
+        <div class="sub" id="catalogoInfo" style="margin-bottom:10px">Sin catálogo cargado todavía.</div>
+
         <label for="nombreProducto" style="margin-top:-8px">Nombre del premio</label>
-        <input id="nombreProducto" placeholder="Ej: Shampoo Anticaída">
+        <div style="position:relative">
+          <input id="nombreProducto" placeholder="Ej: Shampoo Anticaída" autocomplete="off" oninput="buscarEnCatalogo()">
+          <div id="sugerenciasPremio" class="sugerencias oculto"></div>
+        </div>
         <label for="fechaVencProducto" style="margin-top:-8px">Fecha de vencimiento</label>
         <input id="fechaVencProducto" type="date">
         <button onclick="agregarProducto()">Agregar premio</button>
@@ -405,8 +513,10 @@ function pintarCirculos(gridId, llenos){
   grid.innerHTML = '';
   for(let i=0;i<CIRCULOS_TOTAL;i++){
     const div = document.createElement('div');
-    div.className = 'circulo' + (i < llenos ? ' lleno' : '');
-    div.textContent = i < llenos ? '✓' : '';
+    const esLleno = i < llenos;
+    div.className = 'circulo' + (esLleno ? ' lleno' : '');
+    div.textContent = esLleno ? '✓' : '';
+    if(esLleno) div.style.setProperty('--i', i);
     grid.appendChild(div);
   }
 }
@@ -448,6 +558,7 @@ async function consultarCliente(){
     mostrarMsg('msgCliente','No encontramos una tarjeta con ese DNI todavía. Se crea con tu primera compra.','err');
     return;
   }
+  document.getElementById('memberDni').textContent = dni;
   document.getElementById('circulosTexto').textContent = data.circulos + '/10';
   pintarCirculos('circulosGrid', data.circulos);
   const falta = MONTO_POR_CIRCULO - Number(data.monto_acumulado);
@@ -461,13 +572,10 @@ async function consultarCliente(){
   dniConsultado = dni;
   const premioBox = document.getElementById('premioClienteBox');
   if(data.premio_pendiente){
-    const opciones = data.opcionesPremio && data.opcionesPremio.length > 0 ? data.opcionesPremio : [{nombre:'Premio sorpresa', vencimiento:null}];
+    const nombres = data.opcionesPremio && data.opcionesPremio.length > 0 ? data.opcionesPremio : ['Premio sorpresa'];
     premioBox.innerHTML = '🎉 ¡Tarjeta completa! Elegí tu premio:' +
       '<div class="premio-botones">' +
-      opciones.map(p => `<button type="button" class="secundario premio-btn" onclick="elegirPremioCliente('${p.nombre.replace(/'/g,"\\'")}')">` +
-        `<span class="pb-nombre">${p.nombre}</span>` +
-        (p.vencimiento ? `<span class="pb-venc">Vence ${formatFecha(p.vencimiento)}</span>` : '') +
-      `</button>`).join('') +
+      nombres.map(n => `<button type="button" class="secundario premio-btn" onclick="elegirPremioCliente('${n.replace(/'/g,"\\'")}')">${n}</button>`).join('') +
       '</div>';
     premioBox.classList.remove('oculto');
   } else {
@@ -515,6 +623,116 @@ async function loginEmpleado(){
   limpiarMsg('msgLogin');
   cargarProductosVencimiento();
 }
+
+// ── CATÁLOGO DE PRODUCTOS (Excel local, solo para buscar nombre y vencimiento) ──
+// Se guarda únicamente en este navegador (localStorage), nunca en la base
+// de datos: es solo un ayuda-memoria para completar el formulario de premios.
+const CATALOGO_KEY = 'farmavip_catalogo';
+let catalogoProductos = [];
+let sugerenciasActuales = [];
+let xlsxCargado = false;
+
+function cargarCatalogoGuardado(){
+  try {
+    const raw = localStorage.getItem(CATALOGO_KEY);
+    if(!raw) return;
+    const guardado = JSON.parse(raw);
+    catalogoProductos = guardado.productos || [];
+    actualizarInfoCatalogo(guardado.fecha, catalogoProductos.length);
+  } catch(e){}
+}
+
+function actualizarInfoCatalogo(fechaISO, cantidad){
+  const el = document.getElementById('catalogoInfo');
+  if(!el) return;
+  if(!cantidad){ el.textContent = 'Sin catálogo cargado todavía.'; return; }
+  const fecha = fechaISO ? new Date(fechaISO).toLocaleDateString('es-AR') : '';
+  el.textContent = `Catálogo: ${cantidad} productos${fecha ? ' · actualizado ' + fecha : ''}.`;
+}
+
+function cargarLibreriaXLSX(cb){
+  if(xlsxCargado || window.XLSX){ xlsxCargado = true; cb(); return; }
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+  s.onload = () => { xlsxCargado = true; cb(); };
+  s.onerror = () => mostrarMsg('msgProducto','No se pudo cargar el lector de Excel. Probá de nuevo.','err');
+  document.head.appendChild(s);
+}
+
+function vencMesAnoAIso(v){
+  const m = String(v||'').trim().match(/^(\d{1,2})[/-](\d{4})$/);
+  if(!m) return '';
+  return `${m[2]}-${m[1].padStart(2,'0')}-01`;
+}
+
+function importarCatalogo(input){
+  const f = input.files[0];
+  input.value = '';
+  if(!f) return;
+  mostrarMsg('msgProducto','Procesando el archivo…','ok');
+  cargarLibreriaXLSX(() => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const wb = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(ws, {header:1, defval:'', blankrows:false});
+        if(rows.length < 2){ mostrarMsg('msgProducto','El archivo está vacío.','err'); return; }
+        const hdr = rows[0].map(h => String(h).toLowerCase().trim());
+        const iN = hdr.findIndex(h => h.includes('medicamento') || h.includes('nombre') || h.includes('product'));
+        const iV = hdr.findIndex(h => h.includes('vencimiento'));
+        if(iN < 0){ mostrarMsg('msgProducto','No encontré una columna de nombre de producto en el Excel.','err'); return; }
+        const productos = [];
+        for(let i=1;i<rows.length;i++){
+          const nombre = String(rows[i][iN]||'').trim();
+          if(!nombre) continue;
+          const vencimiento = iV >= 0 ? vencMesAnoAIso(rows[i][iV]) : '';
+          productos.push({nombre, vencimiento});
+        }
+        catalogoProductos = productos;
+        const fecha = new Date().toISOString();
+        try { localStorage.setItem(CATALOGO_KEY, JSON.stringify({productos, fecha})); } catch(e){}
+        actualizarInfoCatalogo(fecha, productos.length);
+        mostrarMsg('msgProducto', `✅ Catálogo actualizado: ${productos.length} productos.`, 'ok');
+      } catch(err){
+        mostrarMsg('msgProducto','No se pudo leer el archivo. Verificá que sea un Excel válido.','err');
+      }
+    };
+    reader.readAsArrayBuffer(f);
+  });
+}
+
+function buscarEnCatalogo(){
+  const q = document.getElementById('nombreProducto').value.trim().toLowerCase();
+  const cont = document.getElementById('sugerenciasPremio');
+  sugerenciasActuales = q.length >= 2 && catalogoProductos.length > 0
+    ? catalogoProductos.filter(p => p.nombre.toLowerCase().includes(q)).slice(0, 8)
+    : [];
+  if(sugerenciasActuales.length === 0){
+    cont.classList.add('oculto');
+    cont.innerHTML = '';
+    return;
+  }
+  cont.innerHTML = sugerenciasActuales.map((p,i) =>
+    `<div class="sugerencia-item" onclick="elegirDeCatalogo(${i})">${p.nombre}${p.vencimiento ? `<span class="sg-venc">Vence ${formatFecha(p.vencimiento)}</span>` : ''}</div>`
+  ).join('');
+  cont.classList.remove('oculto');
+}
+
+function elegirDeCatalogo(i){
+  const p = sugerenciasActuales[i];
+  if(!p) return;
+  document.getElementById('nombreProducto').value = p.nombre;
+  if(p.vencimiento) document.getElementById('fechaVencProducto').value = p.vencimiento;
+  document.getElementById('sugerenciasPremio').classList.add('oculto');
+}
+
+document.addEventListener('click', function(e){
+  if(!e.target.closest('#nombreProducto') && !e.target.closest('#sugerenciasPremio')){
+    const cont = document.getElementById('sugerenciasPremio');
+    if(cont) cont.classList.add('oculto');
+  }
+});
 
 let productosCache = [];
 
@@ -669,6 +887,7 @@ function saludoHorario(){
   if(el) el.textContent = `${saludo} Consultá tu Farma VIP cuando quieras.`;
 }
 saludoHorario();
+cargarCatalogoGuardado();
 </script>
 </body>
 </html>

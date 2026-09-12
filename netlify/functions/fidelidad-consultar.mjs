@@ -8,9 +8,9 @@
 // POST -> { dni } devuelve { found:false } o
 //         { found:true, circulos, monto_acumulado, tarjetas_completadas,
 //           premio_pendiente, opcionesPremio }
-// Si premio_pendiente es true, opcionesPremio trae hasta 3 objetos
-// { nombre, vencimiento } (o queda vacío si todavía no hay ninguno
-// cargado, y el cliente elige "premio sorpresa").
+// Si premio_pendiente es true, opcionesPremio trae hasta 3 nombres de
+// premio (sin la fecha de vencimiento: esa la ve solo el empleado desde
+// el panel admin, no el cliente).
 //
 // Configuración necesaria en Netlify (Site configuration → Environment variables):
 //   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
@@ -68,10 +68,10 @@ export default async (req) => {
   if (data.premio_pendiente) {
     const { data: premios } = await sb
       .from("fidelidad_premios")
-      .select("nombre, vencimiento")
+      .select("nombre")
       .eq("activo", true)
       .order("vencimiento", { ascending: true, nullsFirst: false }).limit(3);
-    opcionesPremio = premios || [];
+    opcionesPremio = (premios || []).map((p) => p.nombre);
   }
 
   return new Response(JSON.stringify({
