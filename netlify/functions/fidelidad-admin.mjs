@@ -84,9 +84,9 @@ export default async (req) => {
 
     if (action === "agregarProducto") {
       const nombre = String(body.nombre || "").trim();
-      const vencimiento = String(body.vencimiento || "").trim();
-      if (!nombre || !vencimiento) {
-        return new Response(JSON.stringify({ error: "Completá el nombre y la fecha de vencimiento" }), { status: 400, headers: cors });
+      const vencimiento = String(body.vencimiento || "").trim() || null;
+      if (!nombre) {
+        return new Response(JSON.stringify({ error: "Completá el nombre del premio" }), { status: 400, headers: cors });
       }
 
       let imagen_url = null;

@@ -627,7 +627,7 @@
           <input id="nombreProducto" placeholder="Ej: Shampoo Anticaída" autocomplete="off" oninput="buscarEnCatalogo()">
           <div id="sugerenciasPremio" class="sugerencias oculto"></div>
         </div>
-        <label for="fechaVencProducto" style="margin-top:-8px">Fecha de vencimiento</label>
+        <label for="fechaVencProducto" style="margin-top:-8px">Fecha de vencimiento (opcional)</label>
         <input id="fechaVencProducto" type="date">
 
         <label style="margin-top:-8px">Foto del premio (opcional)</label>
@@ -1020,8 +1020,8 @@ async function agregarProducto(){
   const nombre = document.getElementById('nombreProducto').value.trim();
   const vencimiento = document.getElementById('fechaVencProducto').value;
   limpiarMsg('msgProducto');
-  if(!nombre || !vencimiento){
-    mostrarMsg('msgProducto','Completá el nombre y la fecha de vencimiento.','err');
+  if(!nombre){
+    mostrarMsg('msgProducto','Completá el nombre del premio.','err');
     return;
   }
   try {
