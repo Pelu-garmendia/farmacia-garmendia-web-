@@ -301,7 +301,7 @@
     font-size:1.1rem;
     color:#fff;
   }
-  .member-card-dni{
+  .member-card-tel{
     margin-top:10px;
     margin-bottom:16px;
     font-family:'Courier New',monospace;
@@ -376,6 +376,10 @@
   .premio-btn{
     position:relative;
     overflow:hidden;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    text-align:left;
     background:linear-gradient(135deg, var(--naranja-oscuro), var(--naranja) 55%, #c2570a);
     color:#fff;
     font-weight:800;
@@ -383,6 +387,15 @@
     box-shadow:0 6px 16px rgba(249,115,22,.45);
     animation:card-in .45s cubic-bezier(.22,1,.36,1) both;
     animation-delay:calc(var(--i, 0) * 90ms);
+  }
+  .premio-btn img{
+    width:44px;
+    height:44px;
+    border-radius:9px;
+    object-fit:cover;
+    flex-shrink:0;
+    background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.5);
   }
   .premio-btn:hover{background:linear-gradient(135deg, var(--naranja), var(--naranja-oscuro) 55%, #c2570a);}
   .premio-btn::after{
@@ -447,6 +460,15 @@
     font-size:0.88rem;
   }
   .prod-row:last-child{border-bottom:none;}
+  .prod-row-info{display:flex;align-items:center;gap:9px;}
+  .prod-row-info img{
+    width:36px;
+    height:36px;
+    border-radius:7px;
+    object-fit:cover;
+    flex-shrink:0;
+    border:1px solid var(--borde);
+  }
   .prod-row .venc{color:var(--gris);font-size:0.8rem;}
   .prod-row button{
     width:auto;
@@ -455,6 +477,27 @@
     padding:4px 8px;
     font-size:0.8rem;
     font-weight:600;
+  }
+  .foto-picker{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+  }
+  .foto-picker-btn{
+    width:auto;
+    background:var(--verde-claro);
+    color:var(--verde-oscuro);
+    padding:8px 12px;
+    font-size:0.82rem;
+    font-weight:700;
+  }
+  .foto-preview{
+    width:40px;
+    height:40px;
+    border-radius:8px;
+    object-fit:cover;
+    border:1px solid var(--borde);
   }
   .premio ul{margin:8px 0 0;padding-left:18px;text-align:left;}
   .footer-note{
@@ -513,8 +556,8 @@
   <div id="vistaCliente">
     <div class="saludo" id="saludo"></div>
     <div class="card">
-      <label for="dniCliente">Tu DNI</label>
-      <input id="dniCliente" inputmode="numeric" placeholder="Ej: 30123456">
+      <label for="telCliente">Tu celular</label>
+      <input id="telCliente" inputmode="tel" placeholder="Ej: 11 2345-6789">
       <button onclick="consultarCliente()">Ver mi progreso</button>
     </div>
 
@@ -523,7 +566,7 @@
     <div class="card oculto" id="resultadoCliente">
       <div class="member-card">
         <div class="member-card-brand">💳 CLUB FARMENDIA</div>
-        <div class="member-card-dni">DNI <span id="memberDni"></span></div>
+        <div class="member-card-tel">Cel. <span id="memberTel"></span></div>
         <div class="resumen">
           <div class="num" id="circulosTexto">0/10</div>
           <div class="sub">círculos completados</div>
@@ -549,9 +592,7 @@
 
     <div id="panelEmpleado" class="oculto">
       <div class="card">
-        <label for="dniCompra">DNI del cliente</label>
-        <input id="dniCompra" inputmode="numeric" placeholder="DNI del cliente">
-        <label for="telCompra">Teléfono (WhatsApp, con código de área)</label>
+        <label for="telCompra">Celular del cliente</label>
         <input id="telCompra" inputmode="tel" placeholder="Ej: 11 2345-6789">
         <label for="montoCompra">Monto de la compra ($)</label>
         <input id="montoCompra" inputmode="numeric" placeholder="Ej: 18000">
@@ -588,6 +629,15 @@
         </div>
         <label for="fechaVencProducto" style="margin-top:-8px">Fecha de vencimiento</label>
         <input id="fechaVencProducto" type="date">
+
+        <label style="margin-top:-8px">Foto del premio (opcional)</label>
+        <div class="foto-picker">
+          <button type="button" class="foto-picker-btn" onclick="document.getElementById('fotoProductoInp').click()">📷 Elegir foto</button>
+          <img id="fotoProductoPreview" class="foto-preview oculto" alt="">
+          <span class="sub" id="fotoProductoNombre"></span>
+        </div>
+        <input type="file" id="fotoProductoInp" accept="image/*" style="display:none" onchange="elegirFotoProducto(this)">
+
         <button onclick="agregarProducto()">Agregar premio</button>
         <div class="msg" id="msgProducto"></div>
       </div>
@@ -611,7 +661,7 @@ const FARMACIA_WA = '541130858200';
 
 let adminPass = null;
 let ultimoResultado = null;
-let dniConsultado = null;
+let telConsultado = null;
 
 async function adminFetch(action, payload){
   const res = await fetch(ADMIN_ENDPOINT, {
@@ -683,11 +733,11 @@ function limpiarMsg(elId){
 }
 
 async function consultarCliente(){
-  const dni = document.getElementById('dniCliente').value.trim();
+  const telefono = document.getElementById('telCliente').value.trim();
   limpiarMsg('msgCliente');
   document.getElementById('resultadoCliente').classList.add('oculto');
-  if(!dni){
-    mostrarMsg('msgCliente','Ingresá tu DNI.','err');
+  if(!telefono){
+    mostrarMsg('msgCliente','Ingresá tu celular.','err');
     return;
   }
   let data;
@@ -695,7 +745,7 @@ async function consultarCliente(){
     const res = await fetch(CONSULTAR_ENDPOINT, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({dni})
+      body: JSON.stringify({telefono})
     });
     data = await res.json();
     if(!res.ok) throw new Error(data.error || 'Error');
@@ -704,10 +754,10 @@ async function consultarCliente(){
     return;
   }
   if(!data.found){
-    mostrarMsg('msgCliente','No encontramos una tarjeta con ese DNI todavía. Se crea con tu primera compra.','err');
+    mostrarMsg('msgCliente','No encontramos una tarjeta con ese celular todavía. Se crea con tu primera compra.','err');
     return;
   }
-  document.getElementById('memberDni').textContent = dni;
+  document.getElementById('memberTel').textContent = telefono;
   document.getElementById('circulosTexto').textContent = data.circulos + '/10';
   pintarCirculos('circulosGrid', data.circulos);
   const falta = MONTO_POR_CIRCULO - Number(data.monto_acumulado);
@@ -718,14 +768,16 @@ async function consultarCliente(){
     ? `Tarjetas completadas hasta ahora: ${data.tarjetas_completadas}`
     : '';
 
-  dniConsultado = dni;
+  telConsultado = telefono;
   const premioBox = document.getElementById('premioClienteBox');
   if(data.premio_pendiente){
-    const nombres = data.opcionesPremio && data.opcionesPremio.length > 0 ? data.opcionesPremio : ['Premio sorpresa'];
+    const opciones = data.opcionesPremio && data.opcionesPremio.length > 0 ? data.opcionesPremio : [{nombre:'Premio sorpresa'}];
     premioBox.innerHTML = '<div class="premio-titulo">🎉 ¡Tarjeta completa!</div>' +
       '<div class="premio-sub">Elegí tu premio</div>' +
       '<div class="premio-botones">' +
-      nombres.map((n,i) => `<button type="button" class="premio-btn" style="--i:${i}" onclick="elegirPremioCliente('${n.replace(/'/g,"\\'")}')">${n}</button>`).join('') +
+      opciones.map((p,i) => `<button type="button" class="premio-btn" style="--i:${i}" onclick="elegirPremioCliente('${p.nombre.replace(/'/g,"\\'")}')">` +
+        (p.imagen_url ? `<img src="${p.imagen_url}" alt="">` : '') +
+        `<span>${p.nombre}</span></button>`).join('') +
       '</div>';
     premioBox.classList.remove('oculto');
     lanzarConfeti(premioBox);
@@ -738,13 +790,13 @@ async function consultarCliente(){
 }
 
 async function elegirPremioCliente(producto){
-  if(!dniConsultado) return;
+  if(!telConsultado) return;
   let data;
   try {
     const res = await fetch(CANJEAR_ENDPOINT, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({dni: dniConsultado, producto})
+      body: JSON.stringify({telefono: telConsultado, producto})
     });
     data = await res.json().catch(() => ({}));
     if(!res.ok) throw new Error(data.error || 'Error');
@@ -753,7 +805,7 @@ async function elegirPremioCliente(producto){
     return;
   }
   document.querySelectorAll('#premioClienteBox .premio-btn').forEach(b => b.disabled = true);
-  const texto = `Hola! Quiero canjear mi premio de Club Farmendia.\nDNI: ${dniConsultado}\nPremio elegido: ${producto}`;
+  const texto = `Hola! Quiero canjear mi premio de Club Farmendia.\nCelular: ${telConsultado}\nPremio elegido: ${producto}`;
   const url = `https://wa.me/${FARMACIA_WA}?text=${encodeURIComponent(texto)}`;
   window.open(url, '_blank');
   document.getElementById('faltanTexto').textContent = `¡Premio "${producto}" registrado! Te abrimos WhatsApp para avisarle a la farmacia.`;
@@ -917,7 +969,9 @@ function renderProductos(data){
     row.className = 'prod-row';
 
     const info = document.createElement('span');
-    info.innerHTML = `${p.nombre}<br><span class="venc">Vence ${formatFecha(p.vencimiento)}</span>`;
+    info.className = 'prod-row-info';
+    info.innerHTML = (p.imagen_url ? `<img src="${p.imagen_url}" alt="">` : '') +
+      `<span>${p.nombre}<br><span class="venc">Vence ${formatFecha(p.vencimiento)}</span></span>`;
 
     const btn = document.createElement('button');
     btn.textContent = 'Quitar';
@@ -929,6 +983,39 @@ function renderProductos(data){
   });
 }
 
+let fotoProductoBase64 = null;
+
+function elegirFotoProducto(input){
+  const f = input.files[0];
+  input.value = '';
+  if(!f) return;
+  if(!f.type.startsWith('image/')){
+    mostrarMsg('msgProducto','Elegí un archivo de imagen.','err');
+    return;
+  }
+  const lector = new FileReader();
+  lector.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const maxLado = 640;
+      const escala = Math.min(1, maxLado / Math.max(img.width, img.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * escala);
+      canvas.height = Math.round(img.height * escala);
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      fotoProductoBase64 = canvas.toDataURL('image/jpeg', 0.82);
+      const preview = document.getElementById('fotoProductoPreview');
+      preview.src = fotoProductoBase64;
+      preview.classList.remove('oculto');
+      document.getElementById('fotoProductoNombre').textContent = f.name;
+    };
+    img.onerror = () => mostrarMsg('msgProducto','No se pudo leer la imagen. Probá con otra.','err');
+    img.src = e.target.result;
+  };
+  lector.readAsDataURL(f);
+}
+
 async function agregarProducto(){
   const nombre = document.getElementById('nombreProducto').value.trim();
   const vencimiento = document.getElementById('fechaVencProducto').value;
@@ -938,13 +1025,16 @@ async function agregarProducto(){
     return;
   }
   try {
-    await adminFetch('agregarProducto', {nombre, vencimiento});
+    await adminFetch('agregarProducto', {nombre, vencimiento, imagenBase64: fotoProductoBase64});
   } catch(e){
     if(e.message !== 'unauthorized') mostrarMsg('msgProducto','Error al guardar el premio.','err');
     return;
   }
   document.getElementById('nombreProducto').value = '';
   document.getElementById('fechaVencProducto').value = '';
+  document.getElementById('fotoProductoPreview').classList.add('oculto');
+  document.getElementById('fotoProductoNombre').textContent = '';
+  fotoProductoBase64 = null;
   cargarProductosVencimiento();
 }
 
@@ -978,7 +1068,6 @@ function normalizarTelefono(tel){
 }
 
 async function cargarCompra(){
-  const dni = document.getElementById('dniCompra').value.trim();
   const telRaw = document.getElementById('telCompra').value.trim();
   const monto = Number(document.getElementById('montoCompra').value);
   limpiarMsg('msgEmpleado');
@@ -986,16 +1075,16 @@ async function cargarCompra(){
   document.getElementById('btnWhatsapp').classList.add('oculto');
   document.getElementById('premioBox').classList.add('oculto');
 
-  if(!dni || !monto || monto <= 0){
-    mostrarMsg('msgEmpleado','Completá el DNI y un monto válido.','err');
+  if(!telRaw || !monto || monto <= 0){
+    mostrarMsg('msgEmpleado','Completá el celular y un monto válido.','err');
     return;
   }
 
   let circulos, tarjetaCompletadaAhora, telefono;
   try {
-    ({circulos, tarjetaCompletadaAhora, telefono} = await adminFetch('cargarCompra', {dni, telefono: telRaw, monto}));
+    ({circulos, tarjetaCompletadaAhora, telefono} = await adminFetch('cargarCompra', {telefono: telRaw, monto}));
   } catch(e){
-    if(e.message !== 'unauthorized') mostrarMsg('msgEmpleado', e.message === 'Completá el DNI y un monto válido' ? e.message : 'Error al guardar la compra.', 'err');
+    if(e.message !== 'unauthorized') mostrarMsg('msgEmpleado', e.message === 'Completá el celular y un monto válido' ? e.message : 'Error al guardar la compra.', 'err');
     return;
   }
 
@@ -1009,15 +1098,12 @@ async function cargarCompra(){
     premioBox.classList.remove('oculto');
   }
 
-  ultimoResultado = {dni, telefono, circulos, tarjetaCompletadaAhora};
+  ultimoResultado = {telefono, circulos, tarjetaCompletadaAhora};
 
-  if(telefono && !tarjetaCompletadaAhora){
+  if(!tarjetaCompletadaAhora){
     document.getElementById('btnWhatsapp').classList.remove('oculto');
-  } else if(!telefono){
-    mostrarMsg('msgEmpleado','Compra cargada. No hay teléfono guardado para avisar por WhatsApp.','ok');
   }
 
-  document.getElementById('dniCompra').value = '';
   document.getElementById('telCompra').value = '';
   document.getElementById('montoCompra').value = '';
 }

@@ -1,16 +1,16 @@
 // netlify/functions/fidelidad-consultar.mjs
 //
-// Consulta pública y de solo lectura de la Tarjeta Fidelidad por DNI.
-// Usa la service role key del lado del servidor (nunca llega al navegador)
-// y devuelve únicamente los campos que el cliente necesita ver de su propia
-// tarjeta: nunca el teléfono ni datos de otros clientes.
+// Consulta pública y de solo lectura de la tarjeta Club Farmendia por
+// número de celular. Usa la service role key del lado del servidor (nunca
+// llega al navegador) y devuelve únicamente los campos que el cliente
+// necesita ver de su propia tarjeta: nunca datos de otros clientes.
 //
-// POST -> { dni } devuelve { found:false } o
+// POST -> { telefono } devuelve { found:false } o
 //         { found:true, circulos, monto_acumulado, tarjetas_completadas,
 //           premio_pendiente, opcionesPremio }
-// Si premio_pendiente es true, opcionesPremio trae hasta 3 nombres de
-// premio (sin la fecha de vencimiento: esa la ve solo el empleado desde
-// el panel admin, no el cliente).
+// Si premio_pendiente es true, opcionesPremio trae hasta 3 premios
+// ({ nombre, imagen_url }), sin la fecha de vencimiento: esa la ve solo
+// el empleado desde el panel admin, no el cliente.
 //
 // Configuración necesaria en Netlify (Site configuration → Environment variables):
 //   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
@@ -19,6 +19,12 @@ import { createClient } from "@supabase/supabase-js";
 
 const SUPABASE_URL = process.env.SUPABASE_URL || "";
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+
+function normalizarTelefono(tel) {
+  let d = String(tel || "").replace(/\D/g, "");
+  d = d.replace(/^0/, "").replace(/^15/, "");
+  return d;
+}
 
 export default async (req) => {
   const cors = {
@@ -45,16 +51,16 @@ export default async (req) => {
     return new Response(JSON.stringify({ error: "JSON inválido" }), { status: 400, headers: cors });
   }
 
-  const dni = String(body.dni || "").trim();
-  if (!/^\d{6,9}$/.test(dni)) {
-    return new Response(JSON.stringify({ error: "DNI inválido" }), { status: 400, headers: cors });
+  const telefono = normalizarTelefono(body.telefono);
+  if (!telefono || telefono.length < 8 || telefono.length > 11) {
+    return new Response(JSON.stringify({ error: "Celular inválido" }), { status: 400, headers: cors });
   }
 
   const sb = createClient(SUPABASE_URL, SERVICE_KEY);
   const { data, error } = await sb
     .from("fidelidad_clientes")
     .select("circulos, monto_acumulado, tarjetas_completadas, premio_pendiente")
-    .eq("dni", dni)
+    .eq("telefono", telefono)
     .maybeSingle();
 
   if (error) {
@@ -68,10 +74,10 @@ export default async (req) => {
   if (data.premio_pendiente) {
     const { data: premios } = await sb
       .from("fidelidad_premios")
-      .select("nombre")
+      .select("nombre, imagen_url")
       .eq("activo", true)
       .order("vencimiento", { ascending: true, nullsFirst: false }).limit(3);
-    opcionesPremio = (premios || []).map((p) => p.nombre);
+    opcionesPremio = premios || [];
   }
 
   return new Response(JSON.stringify({

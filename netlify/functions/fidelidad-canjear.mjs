@@ -6,7 +6,7 @@
 // su propia tarjeta, pero solo funciona si esa tarjeta tiene un premio
 // realmente pendiente.
 //
-// POST -> { dni, producto } devuelve { ok:true } o un error.
+// POST -> { telefono, producto } devuelve { ok:true } o un error.
 //
 // Configuración necesaria en Netlify (Site configuration → Environment variables):
 //   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
@@ -15,6 +15,12 @@ import { createClient } from "@supabase/supabase-js";
 
 const SUPABASE_URL = process.env.SUPABASE_URL || "";
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+
+function normalizarTelefono(tel) {
+  let d = String(tel || "").replace(/\D/g, "");
+  d = d.replace(/^0/, "").replace(/^15/, "");
+  return d;
+}
 
 export default async (req) => {
   const cors = {
@@ -41,9 +47,9 @@ export default async (req) => {
     return new Response(JSON.stringify({ error: "JSON inválido" }), { status: 400, headers: cors });
   }
 
-  const dni = String(body.dni || "").trim();
+  const telefono = normalizarTelefono(body.telefono);
   const producto = String(body.producto || "").trim().slice(0, 200);
-  if (!/^\d{6,9}$/.test(dni) || !producto) {
+  if (!telefono || telefono.length < 8 || telefono.length > 11 || !producto) {
     return new Response(JSON.stringify({ error: "Datos inválidos" }), { status: 400, headers: cors });
   }
 
@@ -52,7 +58,7 @@ export default async (req) => {
   const { data: cliente, error: errBuscar } = await sb
     .from("fidelidad_clientes")
     .select("premio_pendiente")
-    .eq("dni", dni)
+    .eq("telefono", telefono)
     .maybeSingle();
   if (errBuscar) {
     return new Response(JSON.stringify({ error: "Error al buscar la tarjeta" }), { status: 500, headers: cors });
@@ -64,7 +70,7 @@ export default async (req) => {
   const { error: errGuardar } = await sb
     .from("fidelidad_clientes")
     .update({ ultimo_premio: producto, premio_pendiente: false })
-    .eq("dni", dni);
+    .eq("telefono", telefono);
   if (errGuardar) {
     return new Response(JSON.stringify({ error: "Error al registrar el canje" }), { status: 500, headers: cors });
   }

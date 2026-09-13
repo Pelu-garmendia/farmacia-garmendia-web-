@@ -1,10 +1,11 @@
 // netlify/functions/fidelidad-admin.mjs
 //
-// Todas las acciones de empleado de la Tarjeta Fidelidad (cargar compra,
+// Todas las acciones de empleado del Club Farmendia (cargar compra,
 // administrar la lista de premios) pasan por acá. Verifica la
 // contraseña del equipo del lado del servidor en cada llamada y usa la
-// service role key de Supabase (nunca expuesta al navegador) para leer y
-// escribir. El navegador nunca toca las tablas directamente.
+// service role key de Supabase (nunca expuesta al navegador) para leer,
+// escribir y subir fotos de premios. El navegador nunca toca las tablas
+// ni el storage directamente.
 //
 // POST -> { password, action, ...payload }
 //   action: "login" | "cargarCompra" | "listarProductos" |
@@ -16,6 +17,7 @@
 // Configuración necesaria en Netlify (Site configuration → Environment variables):
 //   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, ADMIN_PASSWORD_TIENDA
 
+import { randomUUID } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 
 const SUPABASE_URL = process.env.SUPABASE_URL || "";
@@ -24,6 +26,13 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD_TIENDA || "";
 
 const MONTO_POR_CIRCULO = 17000;
 const CIRCULOS_TOTAL = 10;
+const IMAGEN_MAX_BYTES = 3 * 1024 * 1024;
+
+function normalizarTelefono(tel) {
+  let d = String(tel || "").replace(/\D/g, "");
+  d = d.replace(/^0/, "").replace(/^15/, "");
+  return d;
+}
 
 export default async (req) => {
   const cors = {
@@ -79,7 +88,26 @@ export default async (req) => {
       if (!nombre || !vencimiento) {
         return new Response(JSON.stringify({ error: "Completá el nombre y la fecha de vencimiento" }), { status: 400, headers: cors });
       }
-      const { error } = await sb.from("fidelidad_premios").insert({ nombre, vencimiento });
+
+      let imagen_url = null;
+      if (body.imagenBase64) {
+        const match = /^data:(image\/(?:jpeg|png|webp));base64,(.+)$/.exec(body.imagenBase64);
+        if (!match) {
+          return new Response(JSON.stringify({ error: "Formato de imagen no soportado" }), { status: 400, headers: cors });
+        }
+        const [, mime, b64] = match;
+        const buffer = Buffer.from(b64, "base64");
+        if (buffer.length > IMAGEN_MAX_BYTES) {
+          return new Response(JSON.stringify({ error: "La imagen es demasiado pesada" }), { status: 400, headers: cors });
+        }
+        const ext = mime === "image/png" ? "png" : mime === "image/webp" ? "webp" : "jpg";
+        const path = `${randomUUID()}.${ext}`;
+        const { error: errSubir } = await sb.storage.from("premios").upload(path, buffer, { contentType: mime });
+        if (errSubir) throw errSubir;
+        imagen_url = sb.storage.from("premios").getPublicUrl(path).data.publicUrl;
+      }
+
+      const { error } = await sb.from("fidelidad_premios").insert({ nombre, vencimiento, imagen_url });
       if (error) throw error;
       return new Response(JSON.stringify({ ok: true }), { headers: cors });
     }
@@ -91,21 +119,19 @@ export default async (req) => {
     }
 
     if (action === "cargarCompra") {
-      const dni = String(body.dni || "").trim();
-      const telRaw = String(body.telefono || "").trim();
+      const telefono = normalizarTelefono(body.telefono);
       const monto = Number(body.monto);
-      if (!dni || !monto || monto <= 0) {
-        return new Response(JSON.stringify({ error: "Completá el DNI y un monto válido" }), { status: 400, headers: cors });
+      if (!telefono || telefono.length < 8 || telefono.length > 11 || !monto || monto <= 0) {
+        return new Response(JSON.stringify({ error: "Completá el celular y un monto válido" }), { status: 400, headers: cors });
       }
 
       const { data: existente, error: errBuscar } = await sb
-        .from("fidelidad_clientes").select("*").eq("dni", dni).maybeSingle();
+        .from("fidelidad_clientes").select("*").eq("telefono", telefono).maybeSingle();
       if (errBuscar) throw errBuscar;
 
       let circulos = existente ? existente.circulos : 0;
       let montoAcumulado = existente ? Number(existente.monto_acumulado) : 0;
       let tarjetasCompletadas = existente ? existente.tarjetas_completadas : 0;
-      const telefono = telRaw || (existente ? existente.telefono : null);
 
       montoAcumulado += monto;
       const nuevosCirculos = Math.floor(montoAcumulado / MONTO_POR_CIRCULO);
@@ -120,7 +146,7 @@ export default async (req) => {
       }
 
       const payload = {
-        dni, telefono, circulos,
+        telefono, circulos,
         monto_acumulado: montoAcumulado,
         tarjetas_completadas: tarjetasCompletadas,
         updated_at: new Date().toISOString(),
@@ -130,12 +156,12 @@ export default async (req) => {
       if (tarjetaCompletadaAhora) payload.premio_pendiente = true;
 
       const { error: errGuardar } = existente
-        ? await sb.from("fidelidad_clientes").update(payload).eq("dni", dni)
+        ? await sb.from("fidelidad_clientes").update(payload).eq("telefono", telefono)
         : await sb.from("fidelidad_clientes").insert(payload);
       if (errGuardar) throw errGuardar;
 
       await sb.from("fidelidad_movimientos").insert({
-        dni, monto, circulos_sumados: nuevosCirculos, tarjeta_completada: tarjetaCompletadaAhora,
+        telefono, monto, circulos_sumados: nuevosCirculos, tarjeta_completada: tarjetaCompletadaAhora,
       });
 
       return new Response(JSON.stringify({
