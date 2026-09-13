@@ -203,6 +203,10 @@
     background:#25D366;
   }
   button.secundario:hover{background:#1ebe57;}
+  button.btn-importar-todo{
+    background:var(--verde-oscuro);
+  }
+  button.btn-importar-todo:hover{background:var(--navy2);}
   button.link{
     background:none;
     color:var(--gris);
@@ -621,6 +625,7 @@
           <input type="file" id="catalogoInp" accept=".xlsx,.xls,.csv" style="display:none" onchange="importarCatalogo(this)">
         </div>
         <div class="sub" id="catalogoInfo" style="margin-bottom:10px">Sin catálogo cargado todavía.</div>
+        <button type="button" class="btn-importar-todo oculto" id="btnImportarTodo" style="margin-bottom:14px" onclick="importarPremiosDesdeCatalogo()">⬆️ Cargar todo el catálogo como premios</button>
 
         <label for="nombreProducto" style="margin-top:-8px">Nombre del premio</label>
         <div style="position:relative">
@@ -847,10 +852,37 @@ function cargarCatalogoGuardado(){
 
 function actualizarInfoCatalogo(fechaISO, cantidad){
   const el = document.getElementById('catalogoInfo');
+  const btn = document.getElementById('btnImportarTodo');
   if(!el) return;
-  if(!cantidad){ el.textContent = 'Sin catálogo cargado todavía.'; return; }
+  if(!cantidad){
+    el.textContent = 'Sin catálogo cargado todavía.';
+    if(btn) btn.classList.add('oculto');
+    return;
+  }
   const fecha = fechaISO ? new Date(fechaISO).toLocaleDateString('es-AR') : '';
   el.textContent = `Catálogo: ${cantidad} productos${fecha ? ' · actualizado ' + fecha : ''}.`;
+  if(btn){
+    btn.textContent = `⬆️ Cargar todo el catálogo como premios (${cantidad})`;
+    btn.classList.remove('oculto');
+  }
+}
+
+async function importarPremiosDesdeCatalogo(){
+  if(catalogoProductos.length === 0) return;
+  const ok = confirm(`Esto va a cargar los ${catalogoProductos.length} productos del catálogo como premios disponibles. ¿Confirmás?`);
+  if(!ok) return;
+  const btn = document.getElementById('btnImportarTodo');
+  btn.disabled = true;
+  limpiarMsg('msgProducto');
+  mostrarMsg('msgProducto','Cargando productos, puede tardar unos segundos…','ok');
+  try {
+    const {cantidad} = await adminFetch('importarPremiosMasivo', {productos: catalogoProductos});
+    mostrarMsg('msgProducto', `✅ Se cargaron ${cantidad} premios desde el catálogo.`, 'ok');
+    cargarProductosVencimiento();
+  } catch(e){
+    if(e.message !== 'unauthorized') mostrarMsg('msgProducto','No se pudo cargar el catálogo completo. Probá de nuevo.','err');
+  }
+  btn.disabled = false;
 }
 
 function cargarLibreriaXLSX(cb){

@@ -9,7 +9,7 @@
 //
 // POST -> { password, action, ...payload }
 //   action: "login" | "cargarCompra" | "listarProductos" |
-//           "agregarProducto" | "desactivarProducto"
+//           "agregarProducto" | "desactivarProducto" | "importarPremiosMasivo"
 //
 // El canje del premio lo elige el cliente desde su propio panel
 // (ver netlify/functions/fidelidad-canjear.mjs), no el empleado.
@@ -116,6 +116,29 @@ export default async (req) => {
       const { error } = await sb.from("fidelidad_premios").update({ activo: false }).eq("id", body.id);
       if (error) throw error;
       return new Response(JSON.stringify({ ok: true }), { headers: cors });
+    }
+
+    if (action === "importarPremiosMasivo") {
+      const productos = Array.isArray(body.productos) ? body.productos : [];
+      const filas = productos
+        .map((p) => ({
+          nombre: String(p.nombre || "").trim(),
+          vencimiento: String(p.vencimiento || "").trim() || null,
+        }))
+        .filter((p) => p.nombre)
+        .slice(0, 5000);
+      if (filas.length === 0) {
+        return new Response(JSON.stringify({ error: "No hay productos para importar" }), { status: 400, headers: cors });
+      }
+
+      const TAMANO_LOTE = 500;
+      for (let i = 0; i < filas.length; i += TAMANO_LOTE) {
+        const lote = filas.slice(i, i + TAMANO_LOTE);
+        const { error } = await sb.from("fidelidad_premios").insert(lote);
+        if (error) throw error;
+      }
+
+      return new Response(JSON.stringify({ ok: true, cantidad: filas.length }), { headers: cors });
     }
 
     if (action === "cargarCompra") {
