@@ -9,7 +9,13 @@
 //
 // POST -> { password, action, ...payload }
 //   action: "login" | "cargarCompra" | "listarProductos" |
-//           "agregarProducto" | "desactivarProducto" | "importarPremiosMasivo"
+//           "agregarProducto" | "desactivarProducto" | "importarPremiosMasivo" |
+//           "buscarPremios" | "actualizarPremio"
+//
+// Los productos que entran por "importarPremiosMasivo" quedan inactivos:
+// son solo un catálogo buscable. El empleado elige cuáles activar como
+// premio real (acción "actualizarPremio" con activo:true) y puede
+// sumarles una foto en el mismo paso o más tarde.
 //
 // El canje del premio lo elige el cliente desde su propio panel
 // (ver netlify/functions/fidelidad-canjear.mjs), no el empleado.
@@ -32,6 +38,23 @@ function normalizarTelefono(tel) {
   let d = String(tel || "").replace(/\D/g, "");
   d = d.replace(/^0/, "").replace(/^15/, "");
   return d;
+}
+
+async function subirImagenPremio(sb, imagenBase64) {
+  const match = /^data:(image\/(?:jpeg|png|webp));base64,(.+)$/.exec(imagenBase64);
+  if (!match) {
+    throw new Error("Formato de imagen no soportado");
+  }
+  const [, mime, b64] = match;
+  const buffer = Buffer.from(b64, "base64");
+  if (buffer.length > IMAGEN_MAX_BYTES) {
+    throw new Error("La imagen es demasiado pesada");
+  }
+  const ext = mime === "image/png" ? "png" : mime === "image/webp" ? "webp" : "jpg";
+  const path = `${randomUUID()}.${ext}`;
+  const { error: errSubir } = await sb.storage.from("premios").upload(path, buffer, { contentType: mime });
+  if (errSubir) throw errSubir;
+  return sb.storage.from("premios").getPublicUrl(path).data.publicUrl;
 }
 
 export default async (req) => {
@@ -91,23 +114,14 @@ export default async (req) => {
 
       let imagen_url = null;
       if (body.imagenBase64) {
-        const match = /^data:(image\/(?:jpeg|png|webp));base64,(.+)$/.exec(body.imagenBase64);
-        if (!match) {
-          return new Response(JSON.stringify({ error: "Formato de imagen no soportado" }), { status: 400, headers: cors });
+        try {
+          imagen_url = await subirImagenPremio(sb, body.imagenBase64);
+        } catch (e) {
+          return new Response(JSON.stringify({ error: e.message }), { status: 400, headers: cors });
         }
-        const [, mime, b64] = match;
-        const buffer = Buffer.from(b64, "base64");
-        if (buffer.length > IMAGEN_MAX_BYTES) {
-          return new Response(JSON.stringify({ error: "La imagen es demasiado pesada" }), { status: 400, headers: cors });
-        }
-        const ext = mime === "image/png" ? "png" : mime === "image/webp" ? "webp" : "jpg";
-        const path = `${randomUUID()}.${ext}`;
-        const { error: errSubir } = await sb.storage.from("premios").upload(path, buffer, { contentType: mime });
-        if (errSubir) throw errSubir;
-        imagen_url = sb.storage.from("premios").getPublicUrl(path).data.publicUrl;
       }
 
-      const { error } = await sb.from("fidelidad_premios").insert({ nombre, vencimiento, imagen_url });
+      const { error } = await sb.from("fidelidad_premios").insert({ nombre, vencimiento, imagen_url, activo: true });
       if (error) throw error;
       return new Response(JSON.stringify({ ok: true }), { headers: cors });
     }
@@ -118,12 +132,50 @@ export default async (req) => {
       return new Response(JSON.stringify({ ok: true }), { headers: cors });
     }
 
+    if (action === "buscarPremios") {
+      const q = String(body.q || "").trim();
+      if (q.length < 2) {
+        return new Response(JSON.stringify({ data: [] }), { headers: cors });
+      }
+      const { data, error } = await sb
+        .from("fidelidad_premios")
+        .select("id, nombre, vencimiento, activo, imagen_url")
+        .ilike("nombre", `%${q}%`)
+        .order("nombre", { ascending: true })
+        .limit(25);
+      if (error) throw error;
+      return new Response(JSON.stringify({ data }), { headers: cors });
+    }
+
+    if (action === "actualizarPremio") {
+      const id = body.id;
+      if (!id) {
+        return new Response(JSON.stringify({ error: "Falta el producto" }), { status: 400, headers: cors });
+      }
+      const update = {};
+      if (typeof body.activo === "boolean") update.activo = body.activo;
+      if (body.imagenBase64) {
+        try {
+          update.imagen_url = await subirImagenPremio(sb, body.imagenBase64);
+        } catch (e) {
+          return new Response(JSON.stringify({ error: e.message }), { status: 400, headers: cors });
+        }
+      }
+      if (Object.keys(update).length === 0) {
+        return new Response(JSON.stringify({ error: "Nada para actualizar" }), { status: 400, headers: cors });
+      }
+      const { error } = await sb.from("fidelidad_premios").update(update).eq("id", id);
+      if (error) throw error;
+      return new Response(JSON.stringify({ ok: true }), { headers: cors });
+    }
+
     if (action === "importarPremiosMasivo") {
       const productos = Array.isArray(body.productos) ? body.productos : [];
       const filas = productos
         .map((p) => ({
           nombre: String(p.nombre || "").trim(),
           vencimiento: String(p.vencimiento || "").trim() || null,
+          activo: false,
         }))
         .filter((p) => p.nombre)
         .slice(0, 5000);

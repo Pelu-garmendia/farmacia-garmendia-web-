@@ -619,13 +619,22 @@
         <label style="margin-bottom:2px">Premios disponibles</label>
         <div class="sub" style="margin-bottom:10px">Estos son los productos que el cliente puede elegir al completar la tarjeta.</div>
         <div id="listaPremios" class="sub" style="margin-bottom:14px;max-height:320px;overflow-y:auto">Cargando...</div>
+      </div>
 
+      <div class="card">
+        <label style="margin-bottom:2px">Elegir premios del catálogo</label>
+        <div class="sub" style="margin-bottom:10px">Buscá un producto ya importado y activalo como premio. Podés sumarle una foto.</div>
+        <input id="buscarPremioInput" placeholder="Ej: Shampoo, Ibuprofeno..." autocomplete="off" oninput="buscarPremiosDebounced()">
+        <div id="resultadosBusquedaPremio" class="sub" style="margin-top:8px"></div>
+      </div>
+
+      <div class="card">
         <div class="catalogo-row">
           <button type="button" class="link" style="width:auto;padding:6px 0" onclick="document.getElementById('catalogoInp').click()">📂 Importar catálogo (Excel)</button>
           <input type="file" id="catalogoInp" accept=".xlsx,.xls,.csv" style="display:none" onchange="importarCatalogo(this)">
         </div>
         <div class="sub" id="catalogoInfo" style="margin-bottom:10px">Sin catálogo cargado todavía.</div>
-        <button type="button" class="btn-importar-todo oculto" id="btnImportarTodo" style="margin-bottom:14px" onclick="importarPremiosDesdeCatalogo()">⬆️ Cargar todo el catálogo como premios</button>
+        <button type="button" class="btn-importar-todo oculto" id="btnImportarTodo" style="margin-bottom:14px" onclick="importarPremiosDesdeCatalogo()">⬆️ Sumar catálogo completo para buscar</button>
 
         <label for="nombreProducto" style="margin-top:-8px">Nombre del premio</label>
         <div style="position:relative">
@@ -862,14 +871,14 @@ function actualizarInfoCatalogo(fechaISO, cantidad){
   const fecha = fechaISO ? new Date(fechaISO).toLocaleDateString('es-AR') : '';
   el.textContent = `Catálogo: ${cantidad} productos${fecha ? ' · actualizado ' + fecha : ''}.`;
   if(btn){
-    btn.textContent = `⬆️ Cargar todo el catálogo como premios (${cantidad})`;
+    btn.textContent = `⬆️ Sumar catálogo completo para buscar (${cantidad})`;
     btn.classList.remove('oculto');
   }
 }
 
 async function importarPremiosDesdeCatalogo(){
   if(catalogoProductos.length === 0) return;
-  const ok = confirm(`Esto va a cargar los ${catalogoProductos.length} productos del catálogo como premios disponibles. ¿Confirmás?`);
+  const ok = confirm(`Esto va a sumar ${catalogoProductos.length} productos al catálogo buscable. Ninguno se muestra al cliente todavía: los activás vos desde "Elegir premios del catálogo". ¿Confirmás?`);
   if(!ok) return;
   const btn = document.getElementById('btnImportarTodo');
   btn.disabled = true;
@@ -877,8 +886,7 @@ async function importarPremiosDesdeCatalogo(){
   mostrarMsg('msgProducto','Cargando productos, puede tardar unos segundos…','ok');
   try {
     const {cantidad} = await adminFetch('importarPremiosMasivo', {productos: catalogoProductos});
-    mostrarMsg('msgProducto', `✅ Se cargaron ${cantidad} premios desde el catálogo.`, 'ok');
-    cargarProductosVencimiento();
+    mostrarMsg('msgProducto', `✅ Se sumaron ${cantidad} productos al catálogo buscable.`, 'ok');
   } catch(e){
     if(e.message !== 'unauthorized') mostrarMsg('msgProducto','No se pudo cargar el catálogo completo. Probá de nuevo.','err');
   }
@@ -1017,6 +1025,27 @@ function renderProductos(data){
 
 let fotoProductoBase64 = null;
 
+function redimensionarImagenABase64(file, maxLado = 640, calidad = 0.82){
+  return new Promise((resolve, reject) => {
+    const lector = new FileReader();
+    lector.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const escala = Math.min(1, maxLado / Math.max(img.width, img.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(img.width * escala);
+        canvas.height = Math.round(img.height * escala);
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL('image/jpeg', calidad));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    lector.onerror = reject;
+    lector.readAsDataURL(file);
+  });
+}
+
 function elegirFotoProducto(input){
   const f = input.files[0];
   input.value = '';
@@ -1025,27 +1054,13 @@ function elegirFotoProducto(input){
     mostrarMsg('msgProducto','Elegí un archivo de imagen.','err');
     return;
   }
-  const lector = new FileReader();
-  lector.onload = e => {
-    const img = new Image();
-    img.onload = () => {
-      const maxLado = 640;
-      const escala = Math.min(1, maxLado / Math.max(img.width, img.height));
-      const canvas = document.createElement('canvas');
-      canvas.width = Math.round(img.width * escala);
-      canvas.height = Math.round(img.height * escala);
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      fotoProductoBase64 = canvas.toDataURL('image/jpeg', 0.82);
-      const preview = document.getElementById('fotoProductoPreview');
-      preview.src = fotoProductoBase64;
-      preview.classList.remove('oculto');
-      document.getElementById('fotoProductoNombre').textContent = f.name;
-    };
-    img.onerror = () => mostrarMsg('msgProducto','No se pudo leer la imagen. Probá con otra.','err');
-    img.src = e.target.result;
-  };
-  lector.readAsDataURL(f);
+  redimensionarImagenABase64(f).then(base64 => {
+    fotoProductoBase64 = base64;
+    const preview = document.getElementById('fotoProductoPreview');
+    preview.src = base64;
+    preview.classList.remove('oculto');
+    document.getElementById('fotoProductoNombre').textContent = f.name;
+  }).catch(() => mostrarMsg('msgProducto','No se pudo leer la imagen. Probá con otra.','err'));
 }
 
 async function agregarProducto(){
@@ -1076,6 +1091,79 @@ async function desactivarProducto(id){
   } catch(e){ return; }
   productosCache = productosCache.filter(x => x.id !== id);
   renderProductos(productosCache);
+}
+
+let buscarPremioTimeout = null;
+
+function buscarPremiosDebounced(){
+  clearTimeout(buscarPremioTimeout);
+  buscarPremioTimeout = setTimeout(buscarPremios, 300);
+}
+
+async function buscarPremios(){
+  const q = document.getElementById('buscarPremioInput').value.trim();
+  const cont = document.getElementById('resultadosBusquedaPremio');
+  if(q.length < 2){ cont.innerHTML = ''; return; }
+  let data;
+  try {
+    ({data} = await adminFetch('buscarPremios', {q}));
+  } catch(e){
+    if(e.message !== 'unauthorized') cont.textContent = 'Error al buscar.';
+    return;
+  }
+  if(!data || data.length === 0){ cont.innerHTML = 'Sin resultados.'; return; }
+  cont.innerHTML = '';
+  data.forEach(p => {
+    const row = document.createElement('div');
+    row.className = 'prod-row';
+
+    const info = document.createElement('span');
+    info.className = 'prod-row-info';
+    info.innerHTML = (p.imagen_url ? `<img src="${p.imagen_url}" alt="">` : '') +
+      `<span>${p.nombre}<br><span class="venc">${p.activo ? '✓ Activo · ' : ''}Vence ${formatFecha(p.vencimiento)}</span></span>`;
+
+    const btnFoto = document.createElement('button');
+    btnFoto.textContent = '📷';
+    btnFoto.style.width = 'auto';
+    btnFoto.onclick = () => elegirFotoParaPremio(p.id);
+
+    const btnToggle = document.createElement('button');
+    btnToggle.textContent = p.activo ? 'Quitar' : 'Activar';
+    btnToggle.onclick = () => toggleActivoPremio(p.id, !p.activo);
+
+    row.appendChild(info);
+    row.appendChild(btnFoto);
+    row.appendChild(btnToggle);
+    cont.appendChild(row);
+  });
+}
+
+async function toggleActivoPremio(id, activo){
+  try {
+    await adminFetch('actualizarPremio', {id, activo});
+  } catch(e){ return; }
+  buscarPremios();
+  cargarProductosVencimiento();
+}
+
+function elegirFotoParaPremio(id){
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = async () => {
+    const f = input.files[0];
+    if(!f) return;
+    let base64;
+    try {
+      base64 = await redimensionarImagenABase64(f);
+    } catch(e){ return; }
+    try {
+      await adminFetch('actualizarPremio', {id, imagenBase64: base64});
+    } catch(e){ return; }
+    buscarPremios();
+    cargarProductosVencimiento();
+  };
+  input.click();
 }
 
 function salirEmpleado(){
