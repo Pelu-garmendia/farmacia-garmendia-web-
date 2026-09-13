@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Farma VIP · Farmacia Garmendia</title>
+<title>Club Farmendia · Farmacia Garmendia</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
@@ -491,7 +491,7 @@
 <header class="topbar">
   <a href="index.html" class="topbar-brand">
     <span class="topbar-crown" aria-hidden="true">👑</span>
-    <h1 class="topbar-title">Farma VIP</h1>
+    <h1 class="topbar-title">Club Farmendia</h1>
   </a>
   <a href="index.html" class="back-btn">
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="12"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
@@ -522,7 +522,7 @@
 
     <div class="card oculto" id="resultadoCliente">
       <div class="member-card">
-        <div class="member-card-brand">👑 FARMA VIP</div>
+        <div class="member-card-brand">👑 CLUB FARMENDIA</div>
         <div class="member-card-dni">DNI <span id="memberDni"></span></div>
         <div class="resumen">
           <div class="num" id="circulosTexto">0/10</div>
@@ -753,7 +753,7 @@ async function elegirPremioCliente(producto){
     return;
   }
   document.querySelectorAll('#premioClienteBox .premio-btn').forEach(b => b.disabled = true);
-  const texto = `Hola! Quiero canjear mi premio de Farma VIP.\nDNI: ${dniConsultado}\nPremio elegido: ${producto}`;
+  const texto = `Hola! Quiero canjear mi premio de Club Farmendia.\nDNI: ${dniConsultado}\nPremio elegido: ${producto}`;
   const url = `https://wa.me/${FARMACIA_WA}?text=${encodeURIComponent(texto)}`;
   window.open(url, '_blank');
   document.getElementById('faltanTexto').textContent = `¡Premio "${producto}" registrado! Te abrimos WhatsApp para avisarle a la farmacia.`;
@@ -1026,7 +1026,7 @@ function enviarWhatsapp(){
   if(!ultimoResultado || !ultimoResultado.telefono) return;
   const numero = normalizarTelefono(ultimoResultado.telefono);
   if(!numero) return;
-  const texto = `¡Gracias por tu compra en Farmacia Garmendia! Sumaste un círculo en tu Farma VIP: llevás ${ultimoResultado.circulos}/10. ¡Seguí sumando para tu premio sorpresa!`;
+  const texto = `¡Gracias por tu compra en Farmacia Garmendia! Sumaste un círculo en tu Club Farmendia: llevás ${ultimoResultado.circulos}/10. ¡Seguí sumando para tu premio sorpresa!`;
   const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
   window.open(url, '_blank');
 }
@@ -1035,7 +1035,7 @@ function saludoHorario(){
   const h = new Date().getHours();
   const saludo = h < 12 ? '¡Buen día!' : h < 20 ? '¡Buenas tardes!' : '¡Buenas noches!';
   const el = document.getElementById('saludo');
-  if(el) el.textContent = `${saludo} Consultá tu Farma VIP cuando quieras.`;
+  if(el) el.textContent = `${saludo} Consultá tu Club Farmendia cuando quieras.`;
 }
 saludoHorario();
 cargarCatalogoGuardado();
