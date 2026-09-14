@@ -48,7 +48,7 @@
     gap:8px;
     text-decoration:none;
   }
-  .topbar-crown{font-size:1.3rem;}
+  .topbar-crown{height:34px;width:34px;object-fit:contain;flex-shrink:0;}
   .topbar-title{
     margin:0;
     font-size:1.05rem;
@@ -300,10 +300,19 @@
     pointer-events:none;
   }
   .member-card-brand{
+    display:flex;
+    align-items:center;
+    gap:8px;
     font-weight:800;
     letter-spacing:.05em;
     font-size:1.1rem;
     color:#fff;
+  }
+  .member-card-brand img{
+    height:26px;
+    width:26px;
+    object-fit:contain;
+    flex-shrink:0;
   }
   .member-card-tel{
     margin-top:10px;
@@ -537,7 +546,7 @@
 <body>
 <header class="topbar">
   <a href="index.html" class="topbar-brand">
-    <span class="topbar-crown" aria-hidden="true">💳</span>
+    <img class="topbar-crown" src="img/club-farmendia-logo.webp" alt="" aria-hidden="true">
     <h1 class="topbar-title">Club Farmendia</h1>
   </a>
   <a href="index.html" class="back-btn">
@@ -569,7 +578,7 @@
 
     <div class="card oculto" id="resultadoCliente">
       <div class="member-card">
-        <div class="member-card-brand">💳 CLUB FARMENDIA</div>
+        <div class="member-card-brand"><img src="img/club-farmendia-logo.webp" alt="">CLUB FARMENDIA</div>
         <div class="member-card-tel">Cel. <span id="memberTel"></span></div>
         <div class="resumen">
           <div class="num" id="circulosTexto">0/10</div>
