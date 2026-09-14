@@ -30,7 +30,7 @@ const SUPABASE_URL = process.env.SUPABASE_URL || "";
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD_TIENDA || "";
 
-const MONTO_POR_CIRCULO = 17000;
+const MONTO_POR_CIRCULO = 15000;
 const CIRCULOS_TOTAL = 10;
 const IMAGEN_MAX_BYTES = 3 * 1024 * 1024;
 
