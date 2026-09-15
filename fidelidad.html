@@ -556,8 +556,8 @@
 </header>
 <div class="wrap">
   <header>
-    <span class="promo-pill">Comprá, sumá círculos, ganá</span>
-    <p>$15.000 = 1 círculo. Completá los 10 y elegí tu premio.</p>
+    <span class="promo-pill">Comprá, sumá sellos, ganá</span>
+    <p>$15.000 = 1 sello. Completá los 10 y elegí tu premio.</p>
   </header>
 
   <div class="tabs oculto" id="tabsSelector">
@@ -582,7 +582,7 @@
         <div class="member-card-tel">Cel. <span id="memberTel"></span></div>
         <div class="resumen">
           <div class="num" id="circulosTexto">0/10</div>
-          <div class="sub">círculos completados</div>
+          <div class="sub">sellos completados</div>
         </div>
         <div class="circulos" id="circulosGrid"></div>
       </div>
@@ -618,7 +618,7 @@
         <div class="premio oculto" id="premioBox"></div>
         <div class="resumen">
           <div class="num" id="circulosTextoEmp">0/10</div>
-          <div class="sub">círculos del cliente</div>
+          <div class="sub">sellos del cliente</div>
         </div>
         <div class="circulos" id="circulosGridEmp"></div>
         <button class="secundario oculto" id="btnWhatsapp" onclick="enviarWhatsapp()">Enviar aviso por WhatsApp</button>
@@ -785,7 +785,7 @@ async function consultarCliente(){
   pintarCirculos('circulosGrid', data.circulos);
   const falta = MONTO_POR_CIRCULO - Number(data.monto_acumulado);
   document.getElementById('faltanTexto').textContent = !data.premio_pendiente
-    ? `Te faltan $${falta.toLocaleString('es-AR')} para el próximo círculo`
+    ? `Te faltan $${falta.toLocaleString('es-AR')} para el próximo sello`
     : '';
   document.getElementById('tarjetasCompletadasTexto').textContent = data.tarjetas_completadas > 0
     ? `Tarjetas completadas hasta ahora: ${data.tarjetas_completadas}`
@@ -1241,7 +1241,7 @@ function enviarWhatsapp(){
   if(!ultimoResultado || !ultimoResultado.telefono) return;
   const numero = normalizarTelefono(ultimoResultado.telefono);
   if(!numero) return;
-  const texto = `¡Gracias por tu compra en Farmacia Garmendia! Sumaste un círculo en tu Club Farmendia: llevás ${ultimoResultado.circulos}/10. ¡Seguí sumando para tu premio sorpresa!`;
+  const texto = `¡Gracias por tu compra en Farmacia Garmendia! Sumaste un sello en tu Club Farmendia: llevás ${ultimoResultado.circulos}/10. ¡Seguí sumando para tu premio sorpresa!`;
   const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
   window.open(url, '_blank');
 }
