@@ -608,7 +608,7 @@
         <label for="telCompra">Celular del cliente</label>
         <input id="telCompra" inputmode="tel" placeholder="Ej: 11 2345-6789">
         <label for="montoCompra">Monto de la compra ($)</label>
-        <input id="montoCompra" inputmode="numeric" placeholder="Ej: 18000">
+        <input id="montoCompra" inputmode="numeric" placeholder="Ej: 18.000" oninput="formatearMonto(this)">
         <button onclick="cargarCompra()">Cargar compra</button>
       </div>
 
@@ -1196,9 +1196,14 @@ function normalizarTelefono(tel){
   return d;
 }
 
+function formatearMonto(input){
+  const digitos = input.value.replace(/\D/g, '');
+  input.value = digitos ? Number(digitos).toLocaleString('es-AR') : '';
+}
+
 async function cargarCompra(){
   const telRaw = document.getElementById('telCompra').value.trim();
-  const monto = Number(document.getElementById('montoCompra').value);
+  const monto = Number(document.getElementById('montoCompra').value.replace(/\D/g, ''));
   limpiarMsg('msgEmpleado');
   document.getElementById('resultadoEmpleado').classList.add('oculto');
   document.getElementById('btnWhatsapp').classList.add('oculto');
