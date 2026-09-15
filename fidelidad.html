@@ -1228,10 +1228,7 @@ async function cargarCompra(){
   }
 
   ultimoResultado = {telefono, circulos, tarjetaCompletadaAhora};
-
-  if(!tarjetaCompletadaAhora){
-    document.getElementById('btnWhatsapp').classList.remove('oculto');
-  }
+  document.getElementById('btnWhatsapp').classList.remove('oculto');
 
   document.getElementById('telCompra').value = '';
   document.getElementById('montoCompra').value = '';
@@ -1241,7 +1238,9 @@ function enviarWhatsapp(){
   if(!ultimoResultado || !ultimoResultado.telefono) return;
   const numero = normalizarTelefono(ultimoResultado.telefono);
   if(!numero) return;
-  const texto = `¡Gracias por tu compra en Farmacia Garmendia! Sumaste un sello en tu Club Farmendia: llevás ${ultimoResultado.circulos}/10. ¡Seguí sumando para tu premio sorpresa!`;
+  const texto = ultimoResultado.tarjetaCompletadaAhora
+    ? `¡Gracias por tu compra en Farmacia Garmendia! 🎉 ¡Completaste tu tarjeta del Club Farmendia! Entrá y elegí tu premio cuando quieras: https://farmagarmendia.netlify.app/fidelidad`
+    : `¡Gracias por tu compra en Farmacia Garmendia! Sumaste un sello en tu Club Farmendia: llevás ${ultimoResultado.circulos}/10. ¡Seguí sumando para tu premio sorpresa!\n\nConsultá tu tarjeta cuando quieras acá: https://farmagarmendia.netlify.app/fidelidad`;
   const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
   window.open(url, '_blank');
 }
