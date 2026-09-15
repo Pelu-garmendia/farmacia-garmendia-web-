@@ -55,24 +55,22 @@ export default async (req) => {
 
   const sb = createClient(SUPABASE_URL, SERVICE_KEY);
 
-  const { data: cliente, error: errBuscar } = await sb
-    .from("fidelidad_clientes")
-    .select("premio_pendiente")
-    .eq("telefono", telefono)
-    .maybeSingle();
-  if (errBuscar) {
-    return new Response(JSON.stringify({ error: "Error al buscar la tarjeta" }), { status: 500, headers: cors });
-  }
-  if (!cliente || !cliente.premio_pendiente) {
-    return new Response(JSON.stringify({ error: "No hay ningún premio pendiente para canjear" }), { status: 400, headers: cors });
-  }
-
-  const { error: errGuardar } = await sb
+  // Update atómico: solo tiene efecto si premio_pendiente todavía es true en
+  // ese mismo instante. Si dos pedidos de canje llegan casi juntos (dos
+  // pestañas, doble clic), el primero que Postgres procese gana la fila y
+  // el segundo no actualiza nada (affected.length === 0), evitando que se
+  // canjeen dos premios de una sola tarjeta completa.
+  const { data: actualizado, error: errGuardar } = await sb
     .from("fidelidad_clientes")
     .update({ ultimo_premio: producto, premio_pendiente: false })
-    .eq("telefono", telefono);
+    .eq("telefono", telefono)
+    .eq("premio_pendiente", true)
+    .select("id");
   if (errGuardar) {
     return new Response(JSON.stringify({ error: "Error al registrar el canje" }), { status: 500, headers: cors });
+  }
+  if (!actualizado || actualizado.length === 0) {
+    return new Response(JSON.stringify({ error: "No hay ningún premio pendiente para canjear" }), { status: 400, headers: cors });
   }
 
   return new Response(JSON.stringify({ ok: true }), { headers: cors });
