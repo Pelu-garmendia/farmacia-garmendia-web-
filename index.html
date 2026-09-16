@@ -71,13 +71,6 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 .hero-h1{font-size:clamp(2.6rem,4.5vw,4.2rem);font-weight:800;color:#0a3d42;line-height:1.06;letter-spacing:-.03em;margin-bottom:20px;animation:up .7s .2s both;text-wrap:balance}
 .hero-h1 mark{background:none;color:#0d9488}
 .hero-p{font-size:1rem;color:#5b8c8f;line-height:1.75;max-width:420px;margin-bottom:36px;animation:up .7s .3s both}
-.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px;animation:up .7s .4s both}
-.btn-g{display:inline-flex;align-items:center;gap:8px;background:#f97316;color:#fff;padding:14px 28px;border-radius:100px;font-size:.88rem;font-weight:800;text-decoration:none;border:none;cursor:pointer;font-family:inherit;transition:background .2s,transform .2s;box-shadow:0 4px 16px rgba(249,115,22,.4)}
-.btn-g:hover{background:#fb8c3c;transform:translateY(-2px)}
-.btn-arrow{display:inline-block;transition:transform .25s cubic-bezier(.22,1,.36,1)}
-.btn-g:hover .btn-arrow{transform:translateX(4px)}
-.btn-o{display:inline-flex;align-items:center;gap:8px;background:transparent;color:#f97316;border:1.5px solid rgba(249,115,22,.4);padding:14px 28px;border-radius:100px;font-size:.88rem;font-weight:600;text-decoration:none;cursor:pointer;font-family:inherit;transition:border-color .2s,color .2s,transform .2s}
-.btn-o:hover{border-color:#f97316;color:#fb8c3c;transform:translateY(-2px)}
 .hero-stats{display:flex;gap:24px;flex-wrap:wrap;animation:up .7s .5s both}
 .hstat{background:#f0fdfd;border:1px solid #cce9e8;border-radius:12px;padding:14px 18px}
 .hstat-n{font-size:1.4rem;font-weight:800;color:#0d9488;line-height:1}
@@ -362,7 +355,6 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   .hora-items{flex-direction:column;gap:8px;align-items:flex-start}
 }
 @media(max-width:500px){
-  .hero-ctas{flex-direction:column}
   .hero-stats{flex-direction:column}
 }
 
@@ -407,13 +399,6 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   <div class="hero-left">
     <h1 class="hero-h1">Salud y bienestar,<br><mark>a tu alcance</mark></h1>
     <p class="hero-p">Más que medicamentos: atención personalizada, trato cercano y profesionales que te escuchan. Garmendia 3402, Laferrere.</p>
-    <div class="hero-ctas">
-      <a href="tienda.html" class="btn-g">
-        <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="15"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        Ver productos
-      </a>
-      <a href="#servicios" class="btn-g">Ver servicios <span class="btn-arrow" aria-hidden="true">→</span></a>
-    </div>
     <div class="hero-stats">
       <div class="hstat"><div class="hstat-n">+10</div><div class="hstat-l">Años en el barrio</div></div>
       <div class="hstat"><div class="hstat-n">+500</div><div class="hstat-l">Familias atendidas</div></div>
