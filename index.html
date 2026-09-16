@@ -7,6 +7,16 @@
 <meta http-equiv="Expires" content="0"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Farmacia Garmendia · Laferrere</title>
+<meta name="description" content="Farmacia de barrio en Laferrere: medicamentos, dermocosmética, perfumería, turnos y atención personalizada. Garmendia 3402."/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Farmacia Garmendia · Laferrere"/>
+<meta property="og:description" content="Más que medicamentos: atención personalizada, trato cercano y profesionales que te escuchan. Garmendia 3402, Laferrere."/>
+<meta property="og:image" content="https://farmagarmendia.netlify.app/img/farmacia-garmendia-og.png"/>
+<meta property="og:url" content="https://farmagarmendia.netlify.app/"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Farmacia Garmendia · Laferrere"/>
+<meta name="twitter:description" content="Más que medicamentos: atención personalizada, trato cercano y profesionales que te escuchan."/>
+<meta name="twitter:image" content="https://farmagarmendia.netlify.app/img/farmacia-garmendia-og.png"/>
 <meta name="theme-color" content="#0a3d42"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -56,8 +66,6 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 /* ─── HERO ─── */
 #hero{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 68px);background:linear-gradient(135deg,#f0fdfd 0%,#d9f5ef 50%,#bdeee2 100%);overflow:hidden;position:relative}
 .hero-left{display:flex;flex-direction:column;justify-content:center;padding:72px 6% 72px 8%;position:relative;z-index:1}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(13,148,136,.1);border:1px solid rgba(13,148,136,.3);color:#0d9488;padding:6px 14px;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;width:fit-content;margin-bottom:28px;animation:up .7s .1s both}
-.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#0d9488;animation:blink 2s infinite}
 .hero-h1{font-size:clamp(2.6rem,4.5vw,4.2rem);font-weight:800;color:#0a3d42;line-height:1.06;letter-spacing:-.03em;margin-bottom:20px;animation:up .7s .2s both;text-wrap:balance}
 .hero-h1 mark{background:none;color:#0d9488}
 .hero-p{font-size:1rem;color:#5b8c8f;line-height:1.75;max-width:420px;margin-bottom:36px;animation:up .7s .3s both}
@@ -326,12 +334,10 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
 /* ─── ANIMATIONS ─── */
 @keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
 
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0ms!important;scroll-behavior:auto!important}
   .js-anim .reveal{opacity:1;transform:none}
-  .hero-badge::before{animation:none;opacity:1}
 }
 
 /* ─── RESPONSIVE ─── */
@@ -345,6 +351,8 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
 @media(max-width:768px){
   .nav-links{display:none}
   .nav-links.mob{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:#ffffff;padding:14px 5%;border-bottom:1px solid #cce9e8;gap:12px;z-index:99}
+  .nav-links.mob a{color:#0a3d42!important}
+  .nav-links.mob a:hover{color:#0d9488!important}
   .hb{display:flex}
   .fgrow{grid-template-columns:1fr}
   .pub-grid{grid-template-columns:1fr}
@@ -390,7 +398,6 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
 <!-- HERO -->
 <section id="hero">
   <div class="hero-left">
-    <div class="hero-badge">Farmacia de barrio · Laferrere</div>
     <h1 class="hero-h1">Salud y bienestar,<br><mark>a tu alcance</mark></h1>
     <p class="hero-p">Más que medicamentos: atención personalizada, trato cercano y profesionales que te escuchan. Garmendia 3402, Laferrere.</p>
     <div class="hero-ctas">
