@@ -46,7 +46,7 @@ html{
 html{scroll-behavior:smooth}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0fdfd;color:#0a3d42;line-height:1.6;overflow-x:hidden}
 a,button{touch-action:manipulation}
-#servicios,#info{scroll-margin-top:68px}
+#servicios{scroll-margin-top:68px}
 
 /* ─── NAV ─── */
 nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d42;border-bottom:1px solid #cce9e8;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 20px 0 2px 12px rgba(10,61,66,.1)}
@@ -157,25 +157,6 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 
 /* ─── INFO ─── */
 .info-layout{display:grid;grid-template-columns:1fr 1.6fr;gap:44px;align-items:start}
-.acc-banner-wrap{position:relative;border-radius:var(--r2);overflow:hidden;box-shadow:0 14px 44px rgba(10,61,66,.3)}
-.acc-banner-track{display:flex;transition:transform .5s cubic-bezier(.65,0,.35,1)}
-.acc-banner-slide{flex:0 0 100%;min-height:220px;display:flex;align-items:center;gap:24px;padding:36px 56px;text-decoration:none;cursor:pointer;position:relative;overflow:hidden;border:none;font-family:inherit;text-align:left;appearance:none}
-.acc-bg-1{background:linear-gradient(90deg,rgba(10,61,66,.8) 0%,rgba(10,61,66,.45) 42%,rgba(10,61,66,.05) 68%),url(img/contacto.jpg) center/cover}
-.acc-bg-2{background:linear-gradient(90deg,rgba(10,61,66,.8) 0%,rgba(10,61,66,.45) 42%,rgba(10,61,66,.05) 68%),url(img/tienda.jpg) center/cover}
-.acc-bg-3{background:linear-gradient(90deg,rgba(10,61,66,.8) 0%,rgba(10,61,66,.45) 42%,rgba(10,61,66,.05) 68%),url(img/club.jpg) center/cover}
-.acc-bg-4{background:linear-gradient(90deg,rgba(10,61,66,.8) 0%,rgba(10,61,66,.45) 42%,rgba(10,61,66,.05) 68%),url(img/turnos.jpg) center/cover}
-.acc-banner-txt{position:relative;z-index:1;color:#fff}
-.acc-banner-tag{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:6px}
-.acc-banner-h{font-size:1.5rem;font-weight:800;margin-bottom:6px}
-.acc-banner-p{font-size:.88rem;color:rgba(255,255,255,.8);max-width:420px;line-height:1.5}
-.acc-banner-cta{margin-top:14px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);color:#fff;padding:9px 18px;border-radius:100px;font-size:.78rem;font-weight:700}
-.acc-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.9);border:none;color:#0a3d42;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(10,61,66,.3);font-size:1.1rem;transition:all .2s}
-.acc-nav:hover{background:#fff;transform:translateY(-50%) scale(1.08)}
-.acc-prev{left:16px}
-.acc-next{right:16px}
-.acc-dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:5}
-.acc-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.45);cursor:pointer;border:none;padding:0;transition:background .2s,width .2s}
-.acc-dot.active{background:#fff;width:22px;border-radius:4px}
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(10,61,66,.55);z-index:500;align-items:center;justify-content:center;padding:16px;overscroll-behavior:contain}
 .modal-bg.open{display:flex}
 .modal-box{background:#f0fdfd;border:1px solid #cce9e8;border-radius:var(--r2);padding:32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:up .3s both;box-shadow:0 20px 60px rgba(10,61,66,.35)}
@@ -288,7 +269,7 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   </a>
   <ul class="nav-links" id="nl">
     <li><a href="#servicios">Servicios</a></li>
-    <li><a href="#info">Contacto</a></li>
+    <li><a href="#" id="nav-contact">Contactanos</a></li>
     <li><a href="farmaclick.html" style="color:#5eead4;font-weight:700;display:inline-flex;align-items:center;gap:6px"><svg aria-hidden="true" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Turnos</a></li>
     <li><a href="fidelidad.html" style="color:#5eead4;font-weight:700;display:inline-flex;align-items:center;gap:6px"><img src="img/club-farmendia-logo.webp" alt="" style="height:18px;width:18px;object-fit:contain">Club Farmendia</a></li>
   </ul>
@@ -387,58 +368,6 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   </div>
 </section>
 
-<!-- ACCESOS RÁPIDOS -->
-<section id="info" class="sec sec-teal">
-  <div style="margin-bottom:28px" class="reveal">
-    <h2 class="h2">Accesos rápidos</h2>
-  </div>
-  <div class="acc-banner-wrap reveal" id="acc-wrap">
-    <button class="acc-nav acc-prev" onclick="accMove(-1)" aria-label="Anterior">&#8249;</button>
-    <div class="acc-banner-track" id="acc-track">
-      <button type="button" class="acc-banner-slide acc-bg-1" id="acc-open-contact">
-        <div class="acc-banner-txt">
-          <div class="acc-banner-tag">Estamos para ayudarte</div>
-          <div class="acc-banner-h">Contactanos</div>
-          <div class="acc-banner-p">WhatsApp, Instagram y ubicación, todo en un solo lugar.</div>
-          <span class="acc-banner-cta">Ver contacto</span>
-        </div>
-      </button>
-      <a class="acc-banner-slide acc-bg-2" href="tienda.html">
-        <div class="acc-banner-txt">
-          <div class="acc-banner-tag">Comprá online</div>
-          <div class="acc-banner-h">Tienda</div>
-          <div class="acc-banner-p">Catálogo completo, ofertas y consulta directa por WhatsApp.</div>
-          <span class="acc-banner-cta">Ir a la tienda</span>
-        </div>
-      </a>
-      <a class="acc-banner-slide acc-bg-3" href="fidelidad.html">
-        <div class="acc-banner-txt">
-          <div class="acc-banner-tag">Sumate gratis</div>
-          <div class="acc-banner-h">Club Farmendia</div>
-          <div class="acc-banner-p">Beneficios y descuentos exclusivos para clientes frecuentes.</div>
-          <span class="acc-banner-cta">Ver beneficios</span>
-        </div>
-      </a>
-      <a class="acc-banner-slide acc-bg-4" href="farmaclick.html">
-        <div class="acc-banner-txt">
-          <div class="acc-banner-tag">La Matanza</div>
-          <div class="acc-banner-h">Turnos</div>
-          <div class="acc-banner-p">Encontrá la farmacia de guardia más cercana, al instante.</div>
-          <span class="acc-banner-cta">Ver turnos</span>
-        </div>
-      </a>
-    </div>
-    <button class="acc-nav acc-next" onclick="accMove(1)" aria-label="Siguiente">&#8250;</button>
-    <div class="acc-dots">
-      <button class="acc-dot" onclick="accGoto(0)" aria-label="Ir a Contactanos"></button>
-      <button class="acc-dot" onclick="accGoto(1)" aria-label="Ir a Tienda"></button>
-      <button class="acc-dot" onclick="accGoto(2)" aria-label="Ir a Club Farmendia"></button>
-      <button class="acc-dot" onclick="accGoto(3)" aria-label="Ir a Turnos"></button>
-    </div>
-  </div>
-  </div>
-</section>
-
 <!-- MODAL CONTACTANOS -->
 <div class="modal-bg" id="contact-modal">
   <div class="modal-box">
@@ -473,7 +402,7 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   <div><div class="f-brand">Farmacia Garmendia</div><div class="f-copy">© 2025 · Garmendia 3402, Laferrere</div></div>
   <div class="f-links">
     <a href="#servicios">Servicios</a>
-    <a href="#info">Contacto</a>
+    <a href="#" id="footer-contact">Contactanos</a>
   </div>
 </footer>
 
@@ -535,28 +464,10 @@ function rAds(){
 rAds();
 let adT=0;document.getElementById('ad-up').addEventListener('change',function(){[...this.files].forEach(f=>{compress(f,1000,.85,data=>{if(!data)return;const idx=ads.indexOf(null);if(idx!==-1)ads[idx]=data;else{ads[adT%2]=data;adT++;}S.set('ads',ads);rAds();toast('✅ Aviso guardado');});});this.value='';});
 
-// ── ACCESOS RÁPIDOS (banner carrusel) ──
-const ACC_SLIDES=4;
-let accIdx=0,accTimer=null;
-function accGoto(i){
-  accIdx=(i+ACC_SLIDES)%ACC_SLIDES;
-  const track=document.getElementById('acc-track');
-  if(track)track.style.transform=`translateX(-${accIdx*100}%)`;
-  document.querySelectorAll('.acc-dot').forEach((d,j)=>d.classList.toggle('active',j===accIdx));
-}
-function accMove(dir){accGoto(accIdx+dir);accRestart();}
-function accAutoplay(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  clearInterval(accTimer);
-  accTimer=setInterval(()=>accGoto(accIdx+1),5000);
-}
-function accRestart(){clearInterval(accTimer);accAutoplay();}
-const accWrap=document.getElementById('acc-wrap');
-accWrap?.addEventListener('mouseenter',()=>clearInterval(accTimer));
-accWrap?.addEventListener('mouseleave',accAutoplay);
-accGoto(0);
-accAutoplay();
-document.getElementById('acc-open-contact')?.addEventListener('click',()=>document.getElementById('contact-modal').classList.add('open'));
+// ── CONTACTANOS (modal) ──
+function openContact(e){e.preventDefault();document.getElementById('contact-modal').classList.add('open');}
+document.getElementById('nav-contact')?.addEventListener('click',openContact);
+document.getElementById('footer-contact')?.addEventListener('click',openContact);
 document.getElementById('cls-contact')?.addEventListener('click',()=>document.getElementById('contact-modal').classList.remove('open'));
 document.getElementById('contact-modal')?.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 
