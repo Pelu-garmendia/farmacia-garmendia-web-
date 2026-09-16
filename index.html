@@ -157,20 +157,28 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 
 /* ─── INFO ─── */
 .info-layout{display:grid;grid-template-columns:1fr 1.6fr;gap:44px;align-items:start}
-.acc-carousel-wrap{position:relative}
-.acc-track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:4px}
-.acc-track::-webkit-scrollbar{display:none}
-.acc-slide{scroll-snap-align:start;flex:0 0 180px;background:#e1f5ee;border:1.5px solid rgba(13,148,136,.08);border-radius:var(--r2);padding:22px 18px;box-shadow:0 4px 18px rgba(10,61,66,.1);display:flex;flex-direction:column;gap:10px;text-decoration:none;cursor:pointer;transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease,border-color .35s ease;font-family:inherit;text-align:left;appearance:none}
-.acc-slide:hover{transform:translateY(-6px);box-shadow:0 16px 38px rgba(13,148,136,.2);border-color:rgba(13,148,136,.3)}
-.acc-ico{width:42px;height:42px;border-radius:11px;background:rgba(13,148,136,.14);display:flex;align-items:center;justify-content:center;color:#0d9488}
-.acc-ico svg{width:20px}
-.acc-t{font-size:.95rem;font-weight:800;color:#0a3d42}
-.acc-s{font-size:.74rem;color:#5b8c8f;line-height:1.4}
-.acc-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:34px;height:34px;border-radius:50%;background:#fff;border:1.5px solid rgba(13,148,136,.2);color:#0a3d42;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(10,61,66,.2);font-size:1rem;transition:all .2s}
-.acc-nav:hover{background:#0d9488;color:#fff;border-color:#0d9488}
-.acc-nav:disabled{opacity:.3;cursor:not-allowed}
-.acc-prev{left:-14px}
-.acc-next{right:-14px}
+.acc-banner-wrap{position:relative;border-radius:var(--r2);overflow:hidden;box-shadow:0 14px 44px rgba(10,61,66,.3)}
+.acc-banner-track{display:flex;transition:transform .5s cubic-bezier(.65,0,.35,1)}
+.acc-banner-slide{flex:0 0 100%;min-height:220px;display:flex;align-items:center;gap:24px;padding:36px 56px;text-decoration:none;cursor:pointer;position:relative;overflow:hidden;border:none;font-family:inherit;text-align:left;appearance:none}
+.acc-banner-slide::after{content:'';position:absolute;right:-50px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.07);pointer-events:none}
+.acc-bg-1{background:linear-gradient(135deg,#0a3d42,#0d5c63)}
+.acc-bg-2{background:linear-gradient(135deg,#f97316,#fb8c3c)}
+.acc-bg-3{background:linear-gradient(135deg,#0d9488,#0f766e)}
+.acc-bg-4{background:linear-gradient(135deg,#0f766e,#0a3d42)}
+.acc-banner-ico{width:72px;height:72px;border-radius:18px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;position:relative;z-index:1}
+.acc-banner-ico svg{width:32px;height:32px}
+.acc-banner-txt{position:relative;z-index:1;color:#fff}
+.acc-banner-tag{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:6px}
+.acc-banner-h{font-size:1.5rem;font-weight:800;margin-bottom:6px}
+.acc-banner-p{font-size:.88rem;color:rgba(255,255,255,.8);max-width:420px;line-height:1.5}
+.acc-banner-cta{margin-top:14px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);color:#fff;padding:9px 18px;border-radius:100px;font-size:.78rem;font-weight:700}
+.acc-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.9);border:none;color:#0a3d42;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(10,61,66,.3);font-size:1.1rem;transition:all .2s}
+.acc-nav:hover{background:#fff;transform:translateY(-50%) scale(1.08)}
+.acc-prev{left:16px}
+.acc-next{right:16px}
+.acc-dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:5}
+.acc-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.45);cursor:pointer;border:none;padding:0;transition:background .2s,width .2s}
+.acc-dot.active{background:#fff;width:22px;border-radius:4px}
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(10,61,66,.55);z-index:500;align-items:center;justify-content:center;padding:16px;overscroll-behavior:contain}
 .modal-bg.open{display:flex}
 .modal-box{background:#f0fdfd;border:1px solid #cce9e8;border-radius:var(--r2);padding:32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:up .3s both;box-shadow:0 20px 60px rgba(10,61,66,.35)}
@@ -384,39 +392,60 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
 
 <!-- ACCESOS RÁPIDOS -->
 <section id="info" class="sec sec-teal">
-  <div style="margin-bottom:36px" class="reveal">
+  <div style="margin-bottom:28px" class="reveal">
     <h2 class="h2">Accesos rápidos</h2>
   </div>
-  <div class="info-layout reveal">
-    <div class="acc-carousel-wrap">
-      <button class="acc-nav acc-prev" id="acc-prev" onclick="accMove(-1)" aria-label="Anterior" disabled>&#8249;</button>
-      <div class="acc-track" id="acc-track">
-        <button type="button" class="acc-slide" id="acc-open-contact">
-          <div class="acc-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
-          <div class="acc-t">Contactanos</div>
-          <div class="acc-s">WhatsApp, Instagram y ubicación</div>
-        </button>
-        <a class="acc-slide" href="tienda.html">
-          <div class="acc-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
-          <div class="acc-t">Tienda</div>
-          <div class="acc-s">Catálogo y ofertas online</div>
-        </a>
-        <a class="acc-slide" href="fidelidad.html">
-          <div class="acc-ico"><img src="img/club-farmendia-logo.webp" alt="" width="24" height="24" style="object-fit:contain"></div>
-          <div class="acc-t">Club Farmendia</div>
-          <div class="acc-s">Beneficios y descuentos</div>
-        </a>
-        <a class="acc-slide" href="farmaclick.html">
-          <div class="acc-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-          <div class="acc-t">Turnos</div>
-          <div class="acc-s">Farmacias de guardia</div>
-        </a>
-      </div>
-      <button class="acc-nav acc-next" id="acc-next" onclick="accMove(1)" aria-label="Siguiente">&#8250;</button>
+  <div class="acc-banner-wrap reveal" id="acc-wrap">
+    <button class="acc-nav acc-prev" onclick="accMove(-1)" aria-label="Anterior">&#8249;</button>
+    <div class="acc-banner-track" id="acc-track">
+      <button type="button" class="acc-banner-slide acc-bg-1" id="acc-open-contact">
+        <div class="acc-banner-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+        <div class="acc-banner-txt">
+          <div class="acc-banner-tag">Estamos para ayudarte</div>
+          <div class="acc-banner-h">Contactanos</div>
+          <div class="acc-banner-p">WhatsApp, Instagram y ubicación, todo en un solo lugar.</div>
+          <span class="acc-banner-cta">Ver contacto</span>
+        </div>
+      </button>
+      <a class="acc-banner-slide acc-bg-2" href="tienda.html">
+        <div class="acc-banner-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+        <div class="acc-banner-txt">
+          <div class="acc-banner-tag">Comprá online</div>
+          <div class="acc-banner-h">Tienda</div>
+          <div class="acc-banner-p">Catálogo completo, ofertas y consulta directa por WhatsApp.</div>
+          <span class="acc-banner-cta">Ir a la tienda</span>
+        </div>
+      </a>
+      <a class="acc-banner-slide acc-bg-3" href="fidelidad.html">
+        <div class="acc-banner-ico"><img src="img/club-farmendia-logo.webp" alt="" width="40" height="40" style="object-fit:contain"></div>
+        <div class="acc-banner-txt">
+          <div class="acc-banner-tag">Sumate gratis</div>
+          <div class="acc-banner-h">Club Farmendia</div>
+          <div class="acc-banner-p">Beneficios y descuentos exclusivos para clientes frecuentes.</div>
+          <span class="acc-banner-cta">Ver beneficios</span>
+        </div>
+      </a>
+      <a class="acc-banner-slide acc-bg-4" href="farmaclick.html">
+        <div class="acc-banner-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <div class="acc-banner-txt">
+          <div class="acc-banner-tag">La Matanza</div>
+          <div class="acc-banner-h">Turnos</div>
+          <div class="acc-banner-p">Encontrá la farmacia de guardia más cercana, al instante.</div>
+          <span class="acc-banner-cta">Ver turnos</span>
+        </div>
+      </a>
     </div>
-    <div class="info-map">
-      <iframe src="https://maps.google.com/maps?q=Garmendia+3402+Laferrere+Buenos+Aires+Argentina&z=16&output=embed" allowfullscreen loading="lazy"></iframe>
+    <button class="acc-nav acc-next" onclick="accMove(1)" aria-label="Siguiente">&#8250;</button>
+    <div class="acc-dots">
+      <button class="acc-dot" onclick="accGoto(0)" aria-label="Ir a Contactanos"></button>
+      <button class="acc-dot" onclick="accGoto(1)" aria-label="Ir a Tienda"></button>
+      <button class="acc-dot" onclick="accGoto(2)" aria-label="Ir a Club Farmendia"></button>
+      <button class="acc-dot" onclick="accGoto(3)" aria-label="Ir a Turnos"></button>
     </div>
+  </div>
+  <div class="info-map reveal" style="margin-top:28px;max-width:900px;margin-left:auto;margin-right:auto">
+    <iframe src="https://maps.google.com/maps?q=Garmendia+3402+Laferrere+Buenos+Aires+Argentina&z=16&output=embed" allowfullscreen loading="lazy"></iframe>
+  </div>
   </div>
 </section>
 
@@ -515,22 +544,27 @@ function rAds(){
 rAds();
 let adT=0;document.getElementById('ad-up').addEventListener('change',function(){[...this.files].forEach(f=>{compress(f,1000,.85,data=>{if(!data)return;const idx=ads.indexOf(null);if(idx!==-1)ads[idx]=data;else{ads[adT%2]=data;adT++;}S.set('ads',ads);rAds();toast('✅ Aviso guardado');});});this.value='';});
 
-// ── ACCESOS RÁPIDOS (carrusel) ──
-function accUpdate(){
+// ── ACCESOS RÁPIDOS (banner carrusel) ──
+const ACC_SLIDES=4;
+let accIdx=0,accTimer=null;
+function accGoto(i){
+  accIdx=(i+ACC_SLIDES)%ACC_SLIDES;
   const track=document.getElementById('acc-track');
-  if(!track)return;
-  const prev=document.getElementById('acc-prev'),next=document.getElementById('acc-next');
-  if(prev)prev.disabled=track.scrollLeft<=4;
-  if(next)next.disabled=track.scrollLeft>=track.scrollWidth-track.clientWidth-4;
+  if(track)track.style.transform=`translateX(-${accIdx*100}%)`;
+  document.querySelectorAll('.acc-dot').forEach((d,j)=>d.classList.toggle('active',j===accIdx));
 }
-function accMove(dir){
-  const track=document.getElementById('acc-track');
-  if(!track)return;
-  track.scrollBy({left:dir*196,behavior:'smooth'});
+function accMove(dir){accGoto(accIdx+dir);accRestart();}
+function accAutoplay(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  clearInterval(accTimer);
+  accTimer=setInterval(()=>accGoto(accIdx+1),5000);
 }
-document.getElementById('acc-track')?.addEventListener('scroll',accUpdate);
-window.addEventListener('resize',accUpdate);
-accUpdate();
+function accRestart(){clearInterval(accTimer);accAutoplay();}
+const accWrap=document.getElementById('acc-wrap');
+accWrap?.addEventListener('mouseenter',()=>clearInterval(accTimer));
+accWrap?.addEventListener('mouseleave',accAutoplay);
+accGoto(0);
+accAutoplay();
 document.getElementById('acc-open-contact')?.addEventListener('click',()=>document.getElementById('contact-modal').classList.add('open'));
 document.getElementById('cls-contact')?.addEventListener('click',()=>document.getElementById('contact-modal').classList.remove('open'));
 document.getElementById('contact-modal')?.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
