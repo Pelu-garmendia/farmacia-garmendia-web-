@@ -160,13 +160,10 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 .acc-banner-wrap{position:relative;border-radius:var(--r2);overflow:hidden;box-shadow:0 14px 44px rgba(10,61,66,.3)}
 .acc-banner-track{display:flex;transition:transform .5s cubic-bezier(.65,0,.35,1)}
 .acc-banner-slide{flex:0 0 100%;min-height:220px;display:flex;align-items:center;gap:24px;padding:36px 56px;text-decoration:none;cursor:pointer;position:relative;overflow:hidden;border:none;font-family:inherit;text-align:left;appearance:none}
-.acc-banner-slide::after{content:'';position:absolute;right:-50px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.07);pointer-events:none}
-.acc-bg-1{background:linear-gradient(135deg,#0a3d42,#0d5c63)}
-.acc-bg-2{background:linear-gradient(135deg,#f97316,#fb8c3c)}
-.acc-bg-3{background:linear-gradient(135deg,#0d9488,#0f766e)}
-.acc-bg-4{background:linear-gradient(135deg,#0f766e,#0a3d42)}
-.acc-banner-ico{width:72px;height:72px;border-radius:18px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;position:relative;z-index:1}
-.acc-banner-ico svg{width:32px;height:32px}
+.acc-bg-1{background:linear-gradient(90deg,rgba(10,61,66,.8) 0%,rgba(10,61,66,.45) 42%,rgba(10,61,66,.05) 68%),url(img/contacto.jpg) center/cover}
+.acc-bg-2{background:linear-gradient(90deg,rgba(10,61,66,.8) 0%,rgba(10,61,66,.45) 42%,rgba(10,61,66,.05) 68%),url(img/tienda.jpg) center/cover}
+.acc-bg-3{background:linear-gradient(90deg,rgba(10,61,66,.8) 0%,rgba(10,61,66,.45) 42%,rgba(10,61,66,.05) 68%),url(img/club.jpg) center/cover}
+.acc-bg-4{background:linear-gradient(90deg,rgba(10,61,66,.8) 0%,rgba(10,61,66,.45) 42%,rgba(10,61,66,.05) 68%),url(img/turnos.jpg) center/cover}
 .acc-banner-txt{position:relative;z-index:1;color:#fff}
 .acc-banner-tag{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:6px}
 .acc-banner-h{font-size:1.5rem;font-weight:800;margin-bottom:6px}
@@ -399,7 +396,6 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
     <button class="acc-nav acc-prev" onclick="accMove(-1)" aria-label="Anterior">&#8249;</button>
     <div class="acc-banner-track" id="acc-track">
       <button type="button" class="acc-banner-slide acc-bg-1" id="acc-open-contact">
-        <div class="acc-banner-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
         <div class="acc-banner-txt">
           <div class="acc-banner-tag">Estamos para ayudarte</div>
           <div class="acc-banner-h">Contactanos</div>
@@ -408,7 +404,6 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
         </div>
       </button>
       <a class="acc-banner-slide acc-bg-2" href="tienda.html">
-        <div class="acc-banner-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
         <div class="acc-banner-txt">
           <div class="acc-banner-tag">Comprá online</div>
           <div class="acc-banner-h">Tienda</div>
@@ -417,7 +412,6 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
         </div>
       </a>
       <a class="acc-banner-slide acc-bg-3" href="fidelidad.html">
-        <div class="acc-banner-ico"><img src="img/club-farmendia-logo.webp" alt="" width="40" height="40" style="object-fit:contain"></div>
         <div class="acc-banner-txt">
           <div class="acc-banner-tag">Sumate gratis</div>
           <div class="acc-banner-h">Club Farmendia</div>
@@ -426,7 +420,6 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
         </div>
       </a>
       <a class="acc-banner-slide acc-bg-4" href="farmaclick.html">
-        <div class="acc-banner-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
         <div class="acc-banner-txt">
           <div class="acc-banner-tag">La Matanza</div>
           <div class="acc-banner-h">Turnos</div>
