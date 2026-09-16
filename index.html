@@ -141,36 +141,10 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 .srv-card:hover h3{color:#0d9488}
 .srv-card p{font-size:.78rem;color:#5b8c8f;line-height:1.6}
 
-/* ─── PRODUCTOS ─── */
-.prod-toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px;align-items:center}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.prod-card:hover 
-
-
-
-/* Upload buttons */
-
-
-
-
-
-/* Modal producto */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;align-items:center;justify-content:center;padding:16px;overscroll-behavior:contain}
+/* -- MODAL (resenas) -- */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(10,61,66,.55);z-index:500;align-items:center;justify-content:center;padding:16px;overscroll-behavior:contain}
 .modal-bg.open{display:flex}
-.modal-box{background:#f0fdfd;border:1px solid #cce9e8;border-radius:var(--r2);padding:32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:up .3s both;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.modal-box{background:#f0fdfd;border:1px solid #cce9e8;border-radius:var(--r2);padding:32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:up .3s both;box-shadow:0 20px 60px rgba(10,61,66,.35)}
 .modal-box h3{font-size:1.15rem;font-weight:800;color:#0a3d42;margin-bottom:6px}
 .modal-box>p{font-size:.8rem;color:#5b8c8f;margin-bottom:22px}
 .fg{margin-bottom:14px}
@@ -182,20 +156,15 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 .field-err.on{display:block}
 .fg textarea{min-height:80px;resize:vertical}
 .fgrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-
-
-
-
-.prod-img-preview-ph p{font-size:.75rem;margin-top:6px}
-
+.modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:6px}
 .btn-cancel{background:none;color:#5b8c8f;border:1.5px solid #cce9e8;padding:9px 20px;border-radius:100px;font-size:.82rem;cursor:pointer;font-family:inherit;transition:color .2s}
 .btn-cancel:hover{color:#0a3d42}
-/* Excel import info */
-.excel-hint{background:#ffffff;border:1px solid #cce9e8;border-radius:10px;padding:14px 16px;margin-top:12px;font-size:.78rem;color:#5b8c8f;line-height:1.7}
-.excel-hint strong{color:#0d9488;display:block;margin-bottom:4px}
+.btn-up{display:inline-flex;align-items:center;gap:7px;background:#0d9488;color:#042f2c;border:none;padding:9px 20px;border-radius:100px;font-size:.82rem;font-weight:800;cursor:pointer;font-family:inherit;transition:background .2s}
+.btn-up:hover{background:#14b8a6}
+.btn-up-alt{background:transparent;color:#0d9488;border:1.5px solid rgba(13,148,136,.35)}
+.btn-up-alt:hover{background:rgba(13,148,136,.08);color:#0a3d42}
 
-/* ─── PUBLICIDAD ─── */
+/* -- PUBLICIDAD -- */
 .pub-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .ad-slot{border:2px dashed #a3d9d6;border-radius:var(--r2);min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;cursor:pointer;transition:border-color .2s,background .2s;position:relative;overflow:hidden;padding:24px;text-align:center}
 .ad-slot:hover{border-color:#0d9488;background:#ffffff}
@@ -203,22 +172,9 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 .ad-title{font-size:.9rem;font-weight:700;color:#0a3d42}
 .ad-sub{font-size:.72rem;color:#5b8c8f}
 .ad-slot img{max-width:100%;max-height:120px;object-fit:contain;border-radius:8px}
-.ad-del{position:absolute;top:8px;right:8px;background:rgba(11,21,36,.8);border:none;color:#5b8c8f;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.78rem;display:none;align-items:center;justify-content:center}
+.ad-del{position:absolute;top:8px;right:8px;background:rgba(10,61,66,.8);border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.78rem;display:none;align-items:center;justify-content:center}
 .ad-slot:hover .ad-del{display:flex}
 
-/* ─── NOVEDADES ─── */
-.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px}
-.nc{background:#f0fdfd;border:1px solid #cce9e8;border-radius:var(--r2);overflow:hidden;transition:transform .25s,box-shadow .25s;position:relative}
-.nc:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
-.nc-img{width:100%;height:185px;background:#ffffff;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.nc-img img{width:100%;height:185px;object-fit:cover}
-.nc-body{padding:22px}
-.nc-tag{font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0d9488;margin-bottom:7px}
-.nc-title{font-size:.95rem;font-weight:700;color:#0a3d42;margin-bottom:7px;line-height:1.3}
-.nc-text{font-size:.8rem;color:#5b8c8f;line-height:1.65}
-.nc-del{position:absolute;top:10px;right:10px;background:rgba(11,21,36,.85);border:none;color:#5b8c8f;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:.8rem;display:none;align-items:center;justify-content:center}
-.nc:hover .nc-del{display:flex}
-.empty-state{grid-column:1/-1;padding:60px;text-align:center;color:#5b8c8f;border:2px dashed #a3d9d6;border-radius:var(--r2)}
 
 /* ─── VALORACIONES ─── */
 #valoraciones{overflow:hidden;position:relative}
@@ -247,8 +203,6 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 .rev-stars-s svg{width:12px;height:12px}
 .rev-stars-s svg.on{fill:#fbbf24}.rev-stars-s svg.off{fill:#a3d9d6}
 .rev-text{font-size:.8rem;color:#5b8c8f;line-height:1.65;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
-.rev-vc{display:flex;align-items:center;gap:4px;margin-top:10px;font-size:.63rem;color:#5ec8c2}
-.rev-vc svg{width:10px;fill:#5ec8c2}
 .rev-footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
 .btn-opinion{display:inline-flex;align-items:center;gap:7px;background:rgba(13,148,136,.1);color:#0d9488;border:1.5px solid rgba(13,148,136,.3);padding:11px 22px;border-radius:100px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s}
 .btn-opinion:hover{background:rgba(13,148,136,.18)}
@@ -322,7 +276,7 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
 /* ─── TOAST ─── */
 .toast{position:fixed;bottom:76px;right:22px;z-index:400;background:#ffffff;color:#0a3d42;border:1px solid #cce9e8;padding:11px 18px;border-radius:100px;font-size:.8rem;font-weight:600;transform:translateY(8px);opacity:0;transition:transform .3s,opacity .3s;pointer-events:none}
 .toast.on{transform:translateY(0);opacity:1}
-.toast.err{background:#450a0a;color:#fca5a5;border-color:#7f1d1d}
+.toast.err{background:#fef2f2;color:#dc2626;border-color:#fecaca}
 
 /* ─── ANIMATIONS ─── */
 @keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
@@ -376,7 +330,7 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
     <li><a href="#servicios">Servicios</a></li>
     <li><a href="#valoraciones">Opiniones</a></li>
     <li><a href="#info">Contacto</a></li>
-    <li><a href="farmaclick.html" style="color:#5eead4;font-weight:700">💊 Turnos</a></li>
+    <li><a href="farmaclick.html" style="color:#5eead4;font-weight:700;display:inline-flex;align-items:center;gap:6px"><svg aria-hidden="true" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Turnos</a></li>
     <li><a href="fidelidad.html" style="color:#5eead4;font-weight:700;display:inline-flex;align-items:center;gap:6px"><img src="img/club-farmendia-logo.webp" alt="" style="height:18px;width:18px;object-fit:contain">Club Farmendia</a></li>
   </ul>
   <a href="tienda.html" class="nav-pill">
@@ -456,7 +410,7 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   <div class="srv-featured reveal">
     <div class="sf-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
     <div>
-      <div class="sf-tag">⭐ Nuestro diferencial</div>
+      <div class="sf-tag">Nuestro diferencial</div>
       <h3 class="sf-h">Atención personalizada</h3>
       <p class="sf-p">No somos una farmacia más. Nos tomamos el tiempo para escucharte, orientarte y acompañarte. Farmacéuticos matriculados, trato cercano y sin apuros.</p>
     </div>
@@ -473,10 +427,10 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
 </section>
 
 <!-- PUBLICIDAD -->
-<section class="sec sec-alt" style="padding-top:52px;padding-bottom:52px">
+<section class="sec sec-alt" id="pub-sec" style="padding-top:52px;padding-bottom:52px;display:none">
   <div class="sec-head reveal">
     <div><p class="lbl">Promociones</p><h2 class="h2" style="font-size:1.6rem;margin-bottom:0">Espacio publicitario</h2></div>
-    <label class="btn-up btn-up-alt" style="cursor:pointer">
+    <label class="btn-up btn-up-alt" id="ad-up-lbl" style="cursor:pointer;display:none">
       <svg aria-hidden="true" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       Subir aviso
       <input type="file" accept="image/*" multiple style="display:none" id="ad-up"/>
@@ -638,7 +592,15 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
 // ── PUBLICIDAD ──
 let ads=S.get('ads')||[null,null];while(ads.length<2)ads.push(null);
-function rAds(){[0,1].forEach(i=>{const s=document.getElementById('ad-'+i);if(!s)return;if(ads[i]){s.innerHTML=`<img src="${ads[i]}" width="400" height="120" alt="Promo ${i+1}"/><button class="ad-del" data-i="${i}" aria-label="Quitar aviso ${i+1}">✕</button>`;s.querySelector('.ad-del').addEventListener('click',e=>{e.stopPropagation();const idx=+e.currentTarget.dataset.i;if(!confirm('¿Quitar este aviso?'))return;ads[idx]=null;S.set('ads',ads);rAds();});s.onclick=null;}else{s.innerHTML=`<div class="ad-tag">Espacio ${i+1}</div><div class="ad-title">Tu promo aquí</div><div class="ad-sub">Hacé clic para subir</div>`;s.onclick=()=>document.getElementById('ad-up').click();}});}
+const promoAdmin=location.search.includes('promo=1');
+function rAds(){
+  const sec=document.getElementById('pub-sec');
+  const hasAds=ads.some(a=>a);
+  if(sec)sec.style.display=(hasAds||promoAdmin)?'':'none';
+  const lbl=document.getElementById('ad-up-lbl');
+  if(lbl)lbl.style.display=promoAdmin?'':'none';
+  [0,1].forEach(i=>{const s=document.getElementById('ad-'+i);if(!s)return;if(ads[i]){s.innerHTML=`<img src="${ads[i]}" width="400" height="120" alt="Promo ${i+1}"/>`+(promoAdmin?`<button class="ad-del" data-i="${i}" aria-label="Quitar aviso ${i+1}">✕</button>`:'');if(promoAdmin)s.querySelector('.ad-del').addEventListener('click',e=>{e.stopPropagation();const idx=+e.currentTarget.dataset.i;if(!confirm('¿Quitar este aviso?'))return;ads[idx]=null;S.set('ads',ads);rAds();});s.onclick=null;}else if(promoAdmin){s.innerHTML=`<div class="ad-tag">Espacio ${i+1}</div><div class="ad-title">Tu promo aquí</div><div class="ad-sub">Hacé clic para subir</div>`;s.onclick=()=>document.getElementById('ad-up').click();}else{s.innerHTML='';s.style.display='none';}});
+}
 rAds();
 let adT=0;document.getElementById('ad-up').addEventListener('change',function(){[...this.files].forEach(f=>{compress(f,1000,.85,data=>{if(!data)return;const idx=ads.indexOf(null);if(idx!==-1)ads[idx]=data;else{ads[adT%2]=data;adT++;}S.set('ads',ads);rAds();toast('✅ Aviso guardado');});});this.value='';});
 
@@ -662,7 +624,7 @@ function rRevs(){
   const sc=document.getElementById('rev-sc');sc.innerHTML='';
   revs.forEach((r,i)=>{
     const c=document.createElement('div');c.className='rev-card';
-    c.innerHTML=`<div class="rev-top"><div class="rev-av" style="background:${AV[i%AV.length]}">${ini(r.name)}</div><div><div class="rev-name">${r.name}${r.loc?` <span style="opacity:.4;font-size:.7rem;font-weight:300">· ${r.loc}</span>`:''}</div><div class="rev-loc">${fRD(r.date)}</div></div></div><div class="rev-stars-s">${stH(r.stars)}</div><div class="rev-text">${r.text}</div><div class="rev-vc"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Cliente verificado</div>`;
+    c.innerHTML=`<div class="rev-top"><div class="rev-av" style="background:${AV[i%AV.length]}">${ini(r.name)}</div><div><div class="rev-name">${r.name}${r.loc?` <span style="opacity:.4;font-size:.7rem;font-weight:300">· ${r.loc}</span>`:''}</div><div class="rev-loc">${fRD(r.date)}</div></div></div><div class="rev-stars-s">${stH(r.stars)}</div><div class="rev-text">${r.text}</div>`;
     sc.appendChild(c);
   });
   const tot=revs.length;if(!tot)return;
