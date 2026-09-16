@@ -135,15 +135,6 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 .srv-card:hover h3{color:#0d9488}
 .srv-card p{font-size:.78rem;color:#5b8c8f;line-height:1.6}
 
-.fg{margin-bottom:14px}
-.fg label{font-size:.67rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0d9488;display:block;margin-bottom:5px}
-.fg input,.fg textarea,.fg select{width:100%;background:#ffffff;border:1.5px solid #cce9e8;color:#0a3d42;padding:10px 14px;border-radius:10px;font-family:inherit;font-size:.87rem;outline:none;transition:border-color .2s}
-.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:#0d9488}
-.fg input:focus-visible,.fg textarea:focus-visible,.fg select:focus-visible{outline:2px solid #0d9488;outline-offset:1px}
-.field-err{display:none;color:#dc2626;font-size:.72rem;margin-top:4px}
-.field-err.on{display:block}
-.fg textarea{min-height:80px;resize:vertical}
-.fgrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .btn-up{display:inline-flex;align-items:center;gap:7px;background:#0d9488;color:#042f2c;border:none;padding:9px 20px;border-radius:100px;font-size:.82rem;font-weight:800;cursor:pointer;font-family:inherit;transition:background .2s}
 .btn-up:hover{background:#14b8a6}
 .btn-up-alt{background:transparent;color:#0d9488;border:1.5px solid rgba(13,148,136,.35)}
@@ -171,7 +162,28 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 
 /* ─── INFO ─── */
 .info-layout{display:grid;grid-template-columns:1fr 1.6fr;gap:44px;align-items:start}
-.info-stack{display:flex;flex-direction:column;gap:16px}
+.acc-carousel-wrap{position:relative}
+.acc-track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:4px}
+.acc-track::-webkit-scrollbar{display:none}
+.acc-slide{scroll-snap-align:start;flex:0 0 180px;background:#e1f5ee;border:1.5px solid rgba(13,148,136,.08);border-radius:var(--r2);padding:22px 18px;box-shadow:0 4px 18px rgba(10,61,66,.1);display:flex;flex-direction:column;gap:10px;text-decoration:none;cursor:pointer;transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease,border-color .35s ease;font-family:inherit;text-align:left;appearance:none}
+.acc-slide:hover{transform:translateY(-6px);box-shadow:0 16px 38px rgba(13,148,136,.2);border-color:rgba(13,148,136,.3)}
+.acc-ico{width:42px;height:42px;border-radius:11px;background:rgba(13,148,136,.14);display:flex;align-items:center;justify-content:center;color:#0d9488}
+.acc-ico svg{width:20px}
+.acc-t{font-size:.95rem;font-weight:800;color:#0a3d42}
+.acc-s{font-size:.74rem;color:#5b8c8f;line-height:1.4}
+.acc-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:34px;height:34px;border-radius:50%;background:#fff;border:1.5px solid rgba(13,148,136,.2);color:#0a3d42;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(10,61,66,.2);font-size:1rem;transition:all .2s}
+.acc-nav:hover{background:#0d9488;color:#fff;border-color:#0d9488}
+.acc-nav:disabled{opacity:.3;cursor:not-allowed}
+.acc-prev{left:-14px}
+.acc-next{right:-14px}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(10,61,66,.55);z-index:500;align-items:center;justify-content:center;padding:16px;overscroll-behavior:contain}
+.modal-bg.open{display:flex}
+.modal-box{background:#f0fdfd;border:1px solid #cce9e8;border-radius:var(--r2);padding:32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:up .3s both;box-shadow:0 20px 60px rgba(10,61,66,.35)}
+.modal-box h3{font-size:1.15rem;font-weight:800;color:#0a3d42;margin-bottom:6px}
+.modal-box>p{font-size:.8rem;color:#5b8c8f;margin-bottom:22px}
+.modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+.btn-cancel{background:none;color:#5b8c8f;border:1.5px solid #cce9e8;padding:9px 20px;border-radius:100px;font-size:.82rem;cursor:pointer;font-family:inherit;transition:color .2s}
+.btn-cancel:hover{color:#0a3d42}
 .icard{background:#e1f5ee;border:1.5px solid rgba(13,148,136,.08);border-radius:var(--r2);overflow:hidden;box-shadow:0 4px 18px rgba(10,61,66,.1);transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease,border-color .35s ease}
 .icard:hover{transform:translateY(-6px);box-shadow:0 16px 38px rgba(13,148,136,.2);border-color:rgba(13,148,136,.3)}
 .icard-hd{background:#cdeee4;color:#0a3d42;padding:13px 18px;display:flex;align-items:center;gap:9px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid rgba(13,148,136,.15)}
@@ -192,12 +204,6 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 .cnt-btn.wa{background:rgba(94,234,212,.12);color:#5eead4;border:1.5px solid rgba(94,234,212,.3)}
 .cnt-btn.ig{background:rgba(192,132,252,.14);color:#d8b4fe;border:1.5px solid rgba(192,132,252,.35)}
 .cnt-sub{font-size:.68rem;font-weight:400;color:currentColor;opacity:.8;display:block;margin-top:1px}
-.cnt-form{background:#e1f5ee;border:1.5px solid rgba(13,148,136,.08);border-radius:var(--r2);padding:24px;box-shadow:0 4px 18px rgba(10,61,66,.1);transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease,border-color .35s ease}
-.cnt-form:hover{transform:translateY(-6px);box-shadow:0 16px 38px rgba(13,148,136,.2);border-color:rgba(13,148,136,.3)}
-.cnt-form h4{font-size:.95rem;font-weight:800;color:#0a3d42;margin-bottom:4px}
-.cnt-form>p{font-size:.78rem;color:#5b8c8f;margin-bottom:18px}
-.btn-send{width:100%;background:#0d9488;color:#042f2c;border:none;padding:13px;border-radius:100px;font-weight:800;font-size:.85rem;cursor:pointer;font-family:inherit;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-send:hover{background:#14b8a6}
 .info-map{border-radius:var(--r2);overflow:hidden;border:1px solid rgba(94,234,212,.2);height:100%;min-height:560px;box-shadow:0 4px 20px rgba(0,0,0,.12)}
 .info-map iframe{width:100%;height:100%;border:none;display:block}
 
@@ -256,7 +262,6 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   .nav-links.mob a{color:#0a3d42!important}
   .nav-links.mob a:hover{color:#0d9488!important}
   .hb{display:flex}
-  .fgrow{grid-template-columns:1fr}
   .pub-grid{grid-template-columns:1fr}
   .hora-items{flex-direction:column;gap:8px;align-items:flex-start}
 }
@@ -399,49 +404,71 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   </div>
 </section>
 
-<!-- INFO -->
+<!-- ACCESOS RÁPIDOS -->
 <section id="info" class="sec sec-teal">
-  <div style="margin-bottom:44px" class="reveal">
-    <p class="lbl" style="color:#0f766e">Encontranos</p>
-    <h2 class="h2">Contacto, horarios<br>y ubicación</h2>
+  <div style="margin-bottom:36px" class="reveal">
+    <h2 class="h2">Accesos rápidos</h2>
   </div>
   <div class="info-layout reveal">
-    <div class="info-stack">
-      <div class="icard">
-        <div class="icard-hd"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Horarios</div>
-        <div class="irow"><div class="iico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="ilbl">Lun – Sáb</div><div class="ival">9:00–13:00 · 17:00–20:00 hs<small>Horario de invierno</small></div></div></div>
-        <div class="irow"><div class="iico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="ilbl">Dom y Feriados</div><div class="ival">9:00–13:00 hs</div></div></div>
-      </div>
-      <div class="icard">
-        <div class="icard-hd"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Dónde estamos</div>
-        <div class="irow"><div class="iico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="ilbl">Dirección</div><div class="ival">Garmendia 3402, Laferrere<small>La Matanza, Buenos Aires</small></div></div></div>
-      </div>
-      <div class="cnt-btns">
-        <a href="https://wa.me/541130858200?text=Hola!%20Tengo%20una%20consulta" target="_blank" class="cnt-btn wa">
-          <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" width="20"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          <div>Consultar por WhatsApp<span class="cnt-sub">Respondemos a la brevedad</span></div>
-        </a>
-        <a href="https://instagram.com/farma.garmendia" target="_blank" class="cnt-btn ig">
-          <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" width="20"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-          <div>Seguinos en Instagram<span class="cnt-sub">@farma.garmendia</span></div>
-        </a>
-      </div>
-      <div class="cnt-form">
-        <h4>Envianos un mensaje</h4>
-        <p>Te respondemos por WhatsApp al instante.</p>
-        <div class="fgrow"><div class="fg"><label for="cf-n">Nombre</label><input type="text" id="cf-n" name="cf-n" autocomplete="name" placeholder="Tu nombre"/></div><div class="fg"><label for="cf-p">Teléfono</label><input type="tel" id="cf-p" name="cf-p" autocomplete="tel" inputmode="tel" placeholder="11 1234-5678"/></div></div>
-        <div class="fg" style="margin-bottom:14px"><label for="cf-m">Mensaje *</label><textarea id="cf-m" name="cf-m" placeholder="¿En qué te podemos ayudar?"></textarea><span class="field-err" id="cf-m-err" aria-live="polite"></span></div>
-        <button class="btn-send" id="snd-wa">
-          <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" width="15"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Enviar por WhatsApp
+    <div class="acc-carousel-wrap">
+      <button class="acc-nav acc-prev" id="acc-prev" onclick="accMove(-1)" aria-label="Anterior" disabled>&#8249;</button>
+      <div class="acc-track" id="acc-track">
+        <button type="button" class="acc-slide" id="acc-open-contact">
+          <div class="acc-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+          <div class="acc-t">Contactanos</div>
+          <div class="acc-s">WhatsApp, Instagram y ubicación</div>
         </button>
+        <a class="acc-slide" href="tienda.html">
+          <div class="acc-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+          <div class="acc-t">Tienda</div>
+          <div class="acc-s">Catálogo y ofertas online</div>
+        </a>
+        <a class="acc-slide" href="fidelidad.html">
+          <div class="acc-ico"><img src="img/club-farmendia-logo.webp" alt="" width="24" height="24" style="object-fit:contain"></div>
+          <div class="acc-t">Club Farmendia</div>
+          <div class="acc-s">Beneficios y descuentos</div>
+        </a>
+        <a class="acc-slide" href="farmaclick.html">
+          <div class="acc-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div class="acc-t">Turnos</div>
+          <div class="acc-s">Farmacias de guardia</div>
+        </a>
       </div>
+      <button class="acc-nav acc-next" id="acc-next" onclick="accMove(1)" aria-label="Siguiente">&#8250;</button>
     </div>
     <div class="info-map">
       <iframe src="https://maps.google.com/maps?q=Garmendia+3402+Laferrere+Buenos+Aires+Argentina&z=16&output=embed" allowfullscreen loading="lazy"></iframe>
     </div>
   </div>
 </section>
+
+<!-- MODAL CONTACTANOS -->
+<div class="modal-bg" id="contact-modal">
+  <div class="modal-box">
+    <h3>Contactanos</h3>
+    <p>Horarios, ubicación y todas las formas de comunicarte con nosotros.</p>
+    <div class="icard" style="margin-bottom:14px">
+      <div class="icard-hd"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Horarios</div>
+      <div class="irow"><div class="iico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="ilbl">Lun – Sáb</div><div class="ival">9:00–13:00 · 17:00–20:00 hs<small>Horario de invierno</small></div></div></div>
+      <div class="irow"><div class="iico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="ilbl">Dom y Feriados</div><div class="ival">9:00–13:00 hs</div></div></div>
+    </div>
+    <div class="icard" style="margin-bottom:20px">
+      <div class="icard-hd"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Dónde estamos</div>
+      <div class="irow"><div class="iico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="ilbl">Dirección</div><div class="ival">Garmendia 3402, Laferrere<small>La Matanza, Buenos Aires</small></div></div></div>
+    </div>
+    <div class="cnt-btns">
+      <a href="https://wa.me/541130858200?text=Hola!%20Tengo%20una%20consulta" target="_blank" class="cnt-btn wa">
+        <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" width="20"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <div>Consultar por WhatsApp<span class="cnt-sub">Respondemos a la brevedad</span></div>
+      </a>
+      <a href="https://instagram.com/farma.garmendia" target="_blank" class="cnt-btn ig">
+        <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" width="20"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        <div>Seguinos en Instagram<span class="cnt-sub">@farma.garmendia</span></div>
+      </a>
+    </div>
+    <div class="modal-footer"><button class="btn-cancel" id="cls-contact">Cerrar</button></div>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -510,15 +537,25 @@ function rAds(){
 rAds();
 let adT=0;document.getElementById('ad-up').addEventListener('change',function(){[...this.files].forEach(f=>{compress(f,1000,.85,data=>{if(!data)return;const idx=ads.indexOf(null);if(idx!==-1)ads[idx]=data;else{ads[adT%2]=data;adT++;}S.set('ads',ads);rAds();toast('✅ Aviso guardado');});});this.value='';});
 
-function fieldErr(id,msg){const e=document.getElementById(id);if(!e)return;e.textContent=msg||'';e.classList.toggle('on',!!msg);}
-
-// ── CONTACTO WA ──
-document.getElementById('snd-wa').addEventListener('click',()=>{
-  const n=document.getElementById('cf-n').value.trim(),p=document.getElementById('cf-p').value.trim(),mEl=document.getElementById('cf-m'),m=mEl.value.trim();
-  fieldErr('cf-m-err','');
-  if(!m){fieldErr('cf-m-err','Escribí tu mensaje');mEl.focus();return;}
-  window.open(`https://wa.me/541130858200?text=${encodeURIComponent(`Hola! Soy ${n||'un cliente'}${p?' ('+p+')':''}.\n\n${m}`)}`,'_blank');
-});
+// ── ACCESOS RÁPIDOS (carrusel) ──
+function accUpdate(){
+  const track=document.getElementById('acc-track');
+  if(!track)return;
+  const prev=document.getElementById('acc-prev'),next=document.getElementById('acc-next');
+  if(prev)prev.disabled=track.scrollLeft<=4;
+  if(next)next.disabled=track.scrollLeft>=track.scrollWidth-track.clientWidth-4;
+}
+function accMove(dir){
+  const track=document.getElementById('acc-track');
+  if(!track)return;
+  track.scrollBy({left:dir*196,behavior:'smooth'});
+}
+document.getElementById('acc-track')?.addEventListener('scroll',accUpdate);
+window.addEventListener('resize',accUpdate);
+accUpdate();
+document.getElementById('acc-open-contact')?.addEventListener('click',()=>document.getElementById('contact-modal').classList.add('open'));
+document.getElementById('cls-contact')?.addEventListener('click',()=>document.getElementById('contact-modal').classList.remove('open'));
+document.getElementById('contact-modal')?.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 
 // ── LIGHTBOX ──
 document.getElementById('lb-x').addEventListener('click',()=>document.getElementById('lb').classList.remove('open'));
