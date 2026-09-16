@@ -24,21 +24,8 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-/* ═══ PALETA AZUL MARINO ═══ */
+/* ═══ PALETA TEAL / NAVY ═══ */
 html{
-  --g:#0d9488;
-  --g2:#0d9488;
-  --navy:#0a3d42;
-  --navy2:#0d5c63;
-  --navy3:#e8f4ff;
-  --navy4:#cce9e8;
-  --navy5:#cce9e8;
-  --text:#e0fdfb;
-  --text2:#8fb5b8;
-  --border:#cce9e8;
-  --green-glow:rgba(13,148,136,.35);
-  --sh:0 2px 12px rgba(10,61,66,.1);
-  --sh2:0 4px 32px 0 2px 12px rgba(10,61,66,.1);
   --r:12px;
   --r2:20px;
 }
@@ -176,7 +163,6 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 
 
 /* ─── INFO ─── */
-.info-layout{display:grid;grid-template-columns:1fr 1.6fr;gap:44px;align-items:start}
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(10,61,66,.55);z-index:500;align-items:center;justify-content:center;padding:16px;overscroll-behavior:contain}
 .modal-bg.open{display:flex}
 .modal-box{background:#f0fdfd;border:1px solid #cce9e8;border-radius:var(--r2);padding:32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:up .3s both;box-shadow:0 20px 60px rgba(10,61,66,.35)}
@@ -207,7 +193,6 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 .cnt-sub{font-size:.68rem;font-weight:400;color:currentColor;opacity:.8;display:block;margin-top:1px}
 .modal-map{border-radius:var(--r);overflow:hidden;border:1px solid #cce9e8;height:170px;margin-top:10px}
 .modal-map iframe{width:100%;height:100%;border:none;display:block}
-.info-map iframe{width:100%;height:100%;border:none;display:block}
 
 /* ─── FOOTER ─── */
 footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
@@ -217,9 +202,6 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
 .f-links a{color:#5ec8c2;text-decoration:none;font-size:.75rem;font-weight:500;transition:color .2s}
 .f-links a:hover{color:#0d9488}
 
-/* ─── UPLOAD LABEL ─── */
-.up-lbl{display:flex;align-items:center;gap:7px;background:#ffffff;border:1.5px dashed #cce9e8;border-radius:8px;padding:9px 12px;cursor:pointer;font-size:.76rem;color:#5b8c8f;transition:border-color .2s}
-.up-lbl:hover{border-color:#0d9488;color:#0a3d42}
 
 /* ─── WA FLOAT ─── */
 .wa-float{position:fixed;bottom:80px;left:20px;z-index:200;display:flex;align-items:center;gap:8px;background:#f97316;color:#fff;padding:11px 18px;border-radius:100px;text-decoration:none;font-size:.78rem;font-weight:800;box-shadow:0 4px 20px rgba(249,115,22,.5);transition:transform .2s}
@@ -229,12 +211,6 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   .wa-float{left:auto;right:16px;bottom:16px;padding:14px;box-shadow:0 4px 16px rgba(249,115,22,.5)}
   .wa-float-txt{display:none}
 }
-
-/* ─── LIGHTBOX ─── */
-.lb{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:600;display:none;align-items:center;justify-content:center}
-.lb.open{display:flex}
-.lb img{max-width:90vw;max-height:90vh;border-radius:var(--r)}
-.lb-x{position:absolute;top:18px;right:22px;background:rgba(255,255,255,.1);border:none;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center}
 
 /* ─── TOAST ─── */
 .toast{position:fixed;bottom:76px;right:22px;z-index:400;background:#ffffff;color:#0a3d42;border:1px solid #cce9e8;padding:11px 18px;border-radius:100px;font-size:.8rem;font-weight:600;transform:translateY(8px);opacity:0;transition:transform .3s,opacity .3s;pointer-events:none}
@@ -254,8 +230,6 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
 @media(max-width:960px){
   #hero{grid-template-columns:1fr;min-height:auto}
   .hero-right{min-height:320px;padding:40px}
-  .info-layout{grid-template-columns:1fr}
-  .val-layout{grid-template-columns:1fr}
 }
 @media(max-width:768px){
   .nav-links{display:none}
@@ -461,7 +435,6 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   <span class="wa-float-txt">Consultar por WhatsApp</span>
 </a>
 
-<div class="lb" id="lb"><button class="lb-x" id="lb-x" aria-label="Cerrar imagen">✕</button><img id="lb-img" src="" alt=""/></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -511,7 +484,7 @@ function rAds(){
   [0,1].forEach(i=>{const s=document.getElementById('ad-'+i);if(!s)return;if(ads[i]){s.innerHTML=`<img src="${ads[i]}" width="400" height="120" alt="Promo ${i+1}"/>`+(promoAdmin?`<button class="ad-del" data-i="${i}" aria-label="Quitar aviso ${i+1}">✕</button>`:'');if(promoAdmin)s.querySelector('.ad-del').addEventListener('click',e=>{e.stopPropagation();const idx=+e.currentTarget.dataset.i;if(!confirm('¿Quitar este aviso?'))return;ads[idx]=null;S.set('ads',ads);rAds();});s.onclick=null;}else if(promoAdmin){s.innerHTML=`<div class="ad-tag">Espacio ${i+1}</div><div class="ad-title">Tu promo aquí</div><div class="ad-sub">Hacé clic para subir</div>`;s.onclick=()=>document.getElementById('ad-up').click();}else{s.innerHTML='';s.style.display='none';}});
 }
 rAds();
-let adT=0;document.getElementById('ad-up').addEventListener('change',function(){[...this.files].forEach(f=>{compress(f,1000,.85,data=>{if(!data)return;const idx=ads.indexOf(null);if(idx!==-1)ads[idx]=data;else{ads[adT%2]=data;adT++;}S.set('ads',ads);rAds();toast('✅ Aviso guardado');});});this.value='';});
+let adT=0;document.getElementById('ad-up').addEventListener('change',function(){[...this.files].forEach(f=>{compress(f,1000,.85,data=>{if(!data)return;const idx=ads.indexOf(null);if(idx!==-1)ads[idx]=data;else{ads[adT%2]=data;adT++;}S.set('ads',ads);rAds();toast('Aviso guardado');});});this.value='';});
 
 // ── ACCESOS RÁPIDOS (franja carrusel) ──
 const ACC_SLIDES=4;
@@ -541,9 +514,6 @@ document.getElementById('footer-contact')?.addEventListener('click',openContact)
 document.getElementById('cls-contact')?.addEventListener('click',()=>document.getElementById('contact-modal').classList.remove('open'));
 document.getElementById('contact-modal')?.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 
-// ── LIGHTBOX ──
-document.getElementById('lb-x').addEventListener('click',()=>document.getElementById('lb').classList.remove('open'));
-document.getElementById('lb').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 
 })();
 </script>
