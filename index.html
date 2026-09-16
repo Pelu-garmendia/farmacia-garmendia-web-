@@ -75,19 +75,7 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 .hstat-l{font-size:.7rem;color:#5b8c8f;margin-top:3px}
 
 .hero-right{background:transparent;display:flex;align-items:center;justify-content:center;padding:48px 5%;position:relative;overflow:hidden}
-.trust-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:380px}
-.trust-card{background:#e1f5ee;border-radius:16px;padding:20px;box-shadow:0 4px 18px rgba(10,61,66,.08);border:1.5px solid rgba(13,148,136,.08);transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease,border-color .35s ease;cursor:default;animation:up .6s cubic-bezier(.22,1,.36,1) both}
-.trust-card:hover{transform:translateY(-8px) scale(1.03);box-shadow:0 16px 38px rgba(13,148,136,.22);border-color:rgba(13,148,136,.35)}
-.trust-card:nth-child(1){animation-delay:.55s}
-.trust-card:nth-child(2){animation-delay:.62s}
-.trust-card:nth-child(3){animation-delay:.69s}
-.trust-card:nth-child(4){animation-delay:.76s}
-.trust-ico{width:40px;height:40px;border-radius:11px;background:rgba(13,148,136,.12);display:flex;align-items:center;justify-content:center;color:#0d9488;margin-bottom:12px;transition:transform .35s cubic-bezier(.34,1.56,.64,1),background .35s ease,color .35s ease}
-.trust-card:hover .trust-ico{transform:scale(1.15) rotate(-6deg);background:#0d9488;color:#fff}
-.trust-ico svg{width:20px;height:20px}
-.trust-t{font-size:.95rem;font-weight:800;color:#0a3d42;line-height:1.1;margin-bottom:3px;transition:color .35s ease}
-.trust-card:hover .trust-t{color:#0d9488}
-.trust-s{font-size:.72rem;color:#5b8c8f;line-height:1.4}
+.hero-photo{width:100%;max-width:560px;height:auto;border-radius:var(--r2);box-shadow:0 20px 50px rgba(10,61,66,.25);border:1px solid rgba(13,148,136,.15);object-fit:cover;animation:up .7s .3s both}
 
 /* ─── HORARIO STRIP (ÚNICA) ─── */
 .hora-strip{background:#0d9488;padding:14px 5%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
@@ -352,28 +340,7 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
     </div>
   </div>
     <div class="hero-right" style="background:transparent;display:flex;align-items:center;justify-content:center;padding:40px 5%;position:relative;overflow:hidden">
-    <div class="trust-grid">
-      <div class="trust-card">
-        <div class="trust-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="trust-t">+10 años</div>
-        <div class="trust-s">en el barrio, junto a vos</div>
-      </div>
-      <div class="trust-card">
-        <div class="trust-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
-        <div class="trust-t">Trato cercano</div>
-        <div class="trust-s">atendemos personas, no clientes</div>
-      </div>
-      <div class="trust-card">
-        <div class="trust-ico"><svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.46 3.46 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg></div>
-        <div class="trust-t">Consultas por WhatsApp</div>
-        <div class="trust-s">te respondemos al instante</div>
-      </div>
-      <div class="trust-card">
-        <div class="trust-ico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
-        <div class="trust-t">Te escuchamos</div>
-        <div class="trust-s">con tiempo y sin apuros</div>
-      </div>
-    </div>
+    <img src="img/frente.jpg" alt="Frente de Farmacia Garmendia en Garmendia 3402, Laferrere" class="hero-photo" width="1600" height="900" loading="eager" fetchpriority="high"/>
   </div>
 </section>
 
