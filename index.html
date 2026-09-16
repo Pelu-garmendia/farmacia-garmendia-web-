@@ -166,20 +166,12 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
 .btn-cancel{background:none;color:#5b8c8f;border:1.5px solid #cce9e8;padding:9px 20px;border-radius:100px;font-size:.82rem;cursor:pointer;font-family:inherit;transition:color .2s}
 .btn-cancel:hover{color:#0a3d42}
-.icard{background:#e1f5ee;border:1.5px solid rgba(13,148,136,.08);border-radius:var(--r2);overflow:hidden;box-shadow:0 4px 18px rgba(10,61,66,.1);transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease,border-color .35s ease}
-.icard:hover{transform:translateY(-6px);box-shadow:0 16px 38px rgba(13,148,136,.2);border-color:rgba(13,148,136,.3)}
-.icard-hd{background:#cdeee4;color:#0a3d42;padding:13px 18px;display:flex;align-items:center;gap:9px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid rgba(13,148,136,.15)}
-.icard-hd svg{width:14px;color:#0d9488}
-.irow{display:flex;gap:12px;padding:15px 18px;border-bottom:1px solid #cce9e8;align-items:flex-start}
-.irow:last-child{border-bottom:none}
-.iico{width:32px;height:32px;border-radius:8px;background:rgba(13,148,136,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#0d9488}
-.iico svg{width:14px}
-.ilbl{font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#5b8c8f;margin-bottom:2px}
-.ival{font-size:.84rem;color:#0a3d42;line-height:1.5}
-.ival a{color:#0d9488;text-decoration:none;font-weight:600}
-.ival a:hover{text-decoration:underline}
-.ival small{font-size:.72rem;color:#5b8c8f;display:block}
-.cnt-btns{display:flex;flex-direction:column;gap:10px}
+.info-block{display:flex;gap:14px;margin-bottom:24px}
+.info-block-icon{width:42px;height:42px;border-radius:12px;background:rgba(13,148,136,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#0d9488}
+.info-block-icon svg{width:19px}
+.info-block-title{font-size:1rem;font-weight:700;color:#0a3d42;margin-bottom:5px}
+.info-block-text{font-size:.86rem;color:#4b7a7d;line-height:1.6}
+.cnt-btns{display:flex;flex-direction:column;gap:10px;margin-top:28px}
 .cnt-btn{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:14px;text-decoration:none;font-size:.85rem;font-weight:700;transition:transform .2s}
 .cnt-btn:hover{transform:translateX(4px)}
 .cnt-btn svg{width:20px;flex-shrink:0}
@@ -364,15 +356,20 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
   <div class="modal-box">
     <h3>Contactanos</h3>
     <p>Horarios, ubicación y todas las formas de comunicarte con nosotros.</p>
-    <div class="icard" style="margin-bottom:14px">
-      <div class="icard-hd"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Horarios</div>
-      <div class="irow"><div class="iico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="ilbl">Lun – Sáb</div><div class="ival">9:00–13:00 · 17:00–20:00 hs<small>Horario de invierno</small></div></div></div>
-      <div class="irow"><div class="iico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><div class="ilbl">Dom y Feriados</div><div class="ival">9:00–13:00 hs</div></div></div>
+    <div class="info-block">
+      <div class="info-block-icon"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div>
+        <div class="info-block-title">Horarios</div>
+        <div class="info-block-text">Lun a sáb, 9:00 a 13:00 y 17:00 a 20:00 hs<br>Dom y feriados, 9:00 a 13:00 hs</div>
+      </div>
     </div>
-    <div class="icard" style="margin-bottom:20px">
-      <div class="icard-hd"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Dónde estamos</div>
-      <div class="irow"><div class="iico"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="ilbl">Dirección</div><div class="ival">Garmendia 3402, Laferrere<small>La Matanza, Buenos Aires</small></div></div></div>
-      <div class="modal-map"><iframe src="https://maps.google.com/maps?q=Garmendia+3402+Laferrere+Buenos+Aires+Argentina&z=16&output=embed" allowfullscreen loading="lazy"></iframe></div>
+    <div class="info-block">
+      <div class="info-block-icon"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+      <div>
+        <div class="info-block-title">Dónde estamos</div>
+        <div class="info-block-text">Garmendia 3402, Laferrere — La Matanza, Buenos Aires</div>
+        <div class="modal-map"><iframe src="https://maps.google.com/maps?q=Garmendia+3402+Laferrere+Buenos+Aires+Argentina&z=16&output=embed" allowfullscreen loading="lazy"></iframe></div>
+      </div>
     </div>
     <div class="cnt-btns">
       <a href="https://wa.me/541130858200?text=Hola!%20Tengo%20una%20consulta" target="_blank" class="cnt-btn wa">
