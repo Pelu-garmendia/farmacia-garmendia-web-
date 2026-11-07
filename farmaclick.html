@@ -825,8 +825,16 @@
   const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
   const DIAS  = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 
+  // El turno va de 8:30 a 8:30 del día siguiente (hora Argentina):
+  // antes de las 8:30 sigue de turno el grupo del día anterior.
+  function turnoDate() {
+    const ar = new Date(Date.now() - 3 * 3600 * 1000); // UTC-3 (Argentina, sin horario de verano)
+    const t  = new Date(ar.getTime() - (8 * 60 + 30) * 60 * 1000);
+    return new Date(t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate());
+  }
+
   function todayKey() {
-    const n = new Date();
+    const n = turnoDate();
     return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`;
   }
 
@@ -978,7 +986,7 @@
     currentCAL = buildCAL(data.calendario);
     const key   = todayKey();
     const letra = currentCAL[key];
-    const now   = new Date();
+    const now   = turnoDate();
 
     document.getElementById('hero-date').textContent =
       `${DIAS[now.getDay()]} ${now.getDate()} de ${MESES[now.getMonth()]} de ${now.getFullYear()}`;
@@ -1218,6 +1226,13 @@
 
   // ══ ARRANCAR ══
   loadLocality('laferrere');
+
+  // Si la página queda abierta, actualiza el grupo cuando cambia el turno (8:30 hs)
+  let lastTurnoKey = todayKey();
+  setInterval(() => {
+    const k = todayKey();
+    if (k !== lastTurnoKey) { lastTurnoKey = k; loadLocality(currentLocality || 'laferrere'); }
+  }, 60000);
   cargarEstadoProblemas();
   </script>
 </body>
