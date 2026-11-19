@@ -58,8 +58,7 @@ nav{position:sticky;top:0;z-index:200;height:68px;padding:0 5%;background:#0a3d4
 .acc-strip-slide{flex:0 0 100%;height:100%;display:flex;align-items:center;padding:0 56px;text-decoration:none;cursor:pointer;position:relative;border:none;font-family:inherit;text-align:left;appearance:none}
 .acc-bg-1{background:linear-gradient(90deg,rgba(10,61,66,.82) 0%,rgba(10,61,66,.5) 45%,rgba(10,61,66,.1) 75%),url(img/contacto.jpg) center 65%/cover}
 .acc-bg-2{background:linear-gradient(90deg,rgba(10,61,66,.82) 0%,rgba(10,61,66,.5) 45%,rgba(10,61,66,.1) 75%),url(img/tienda.jpg) center/cover}
-.acc-bg-3{background:linear-gradient(90deg,rgba(10,61,66,.82) 0%,rgba(10,61,66,.5) 45%,rgba(10,61,66,.1) 75%),url(img/club.jpg) center/cover}
-.acc-bg-4{background:linear-gradient(90deg,rgba(10,61,66,.82) 0%,rgba(10,61,66,.5) 45%,rgba(10,61,66,.1) 75%),url(img/turnos.jpg) center 60%/cover}
+.acc-bg-3{background:linear-gradient(90deg,rgba(10,61,66,.82) 0%,rgba(10,61,66,.5) 45%,rgba(10,61,66,.1) 75%),url(img/turnos.jpg) center 60%/cover}
 .acc-strip-txt{color:#fff}
 .acc-strip-h{font-size:1.15rem;font-weight:800;line-height:1.2}
 .acc-strip-p{font-size:.8rem;color:rgba(255,255,255,.8);margin-top:4px}
@@ -242,7 +241,6 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
       <li><a href="#" id="nav-contact" class="nav-pill nav-pill-sm">
         <svg aria-hidden="true" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Contacto</a></li>
       <li><a href="farmaclick.html" class="nav-pill nav-pill-sm"><svg aria-hidden="true" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Turnos</a></li>
-      <li><a href="fidelidad.html" class="nav-pill nav-pill-sm"><img src="img/club-farmendia-logo.webp" alt="" style="height:16px;width:16px;object-fit:contain">Club Farmendia</a></li>
     </ul>
     <a href="tienda.html" class="nav-pill">
       <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="14"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
@@ -268,13 +266,7 @@ footer{background:#0a3d42;border-top:1px solid #cce9e8;padding:40px 5%;display:f
         <div class="acc-strip-p">Catálogo y ofertas online</div>
       </div>
     </a>
-    <a class="acc-strip-slide acc-bg-3" href="fidelidad.html">
-      <div class="acc-strip-txt">
-        <div class="acc-strip-h">Club Farmendia</div>
-        <div class="acc-strip-p">Beneficios y descuentos</div>
-      </div>
-    </a>
-    <a class="acc-strip-slide acc-bg-4" href="farmaclick.html">
+    <a class="acc-strip-slide acc-bg-3" href="farmaclick.html">
       <div class="acc-strip-txt">
         <div class="acc-strip-h">Turnos</div>
         <div class="acc-strip-p">Farmacia de guardia más cercana</div>
@@ -443,7 +435,7 @@ rAds();
 let adT=0;document.getElementById('ad-up').addEventListener('change',function(){[...this.files].forEach(f=>{compress(f,1000,.85,data=>{if(!data)return;const idx=ads.indexOf(null);if(idx!==-1)ads[idx]=data;else{ads[adT%2]=data;adT++;}S.set('ads',ads);rAds();toast('Aviso guardado');});});this.value='';});
 
 // ── ACCESOS RÁPIDOS (franja carrusel) ──
-const ACC_SLIDES=4;
+const ACC_SLIDES=3;
 let accIdx=0,accTimer=null;
 function accGoto(i){
   accIdx=(i+ACC_SLIDES)%ACC_SLIDES;
