@@ -13,11 +13,6 @@
   to = "/farmaclick.html"
   status = 200
 
-[[redirects]]
-  from = "/fidelidad"
-  to = "/fidelidad.html"
-  status = 200
-
 # Rutas no encontradas → index
 [[redirects]]
   from = "/*"

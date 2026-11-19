@@ -571,11 +571,11 @@ button{font-family:'Inter',sans-serif}
     <div class="modal" style="text-align:center">
       <div id="vitoOnboarding" style="margin:0 auto 10px"></div>
       <h2 style="color:var(--azul);font-size:19px">¡Hola! Soy Turnin 👋</h2>
-      <p style="font-size:13px;color:var(--texto-suave);margin:8px 0 16px">Sumate al club de beneficios de tu farmacia de barrio. Son 20 segundos:</p>
+      <p style="font-size:13px;color:var(--texto-suave);margin:8px 0 16px">Registrate para jugar y sumar puntos. Son 20 segundos:</p>
       <div class="campo" style="text-align:left"><label>Nombre y apellido</label><input type="text" id="inputNombre" placeholder="Ej: Pablo García"></div>
       <div class="campo" style="text-align:left"><label>DNI</label><input type="tel" id="inputDni" inputmode="numeric" maxlength="8" placeholder="Sin puntos, ej: 32456789"></div>
       <div class="campo" style="text-align:left"><label>WhatsApp</label><input type="tel" id="inputWsp" inputmode="numeric" placeholder="Con código de área, ej: 1130858200" onkeydown="if(event.key==='Enter')guardarRegistro()"></div>
-      <button class="btn btn-verde btn-block" onclick="guardarRegistro()">¡Hacerme socio! 🚀</button>
+      <button class="btn btn-verde btn-block" onclick="guardarRegistro()">¡Registrarme! 🚀</button>
       <p style="font-size:10.5px;color:var(--texto-suave);margin-top:10px">Tus datos quedan en la farmacia, no se comparten con nadie.</p>
       <button class="btn btn-borde btn-sm" style="margin-top:6px;width:100%;background:transparent;border-color:var(--celeste-med);color:var(--texto-suave)" onclick="mostrarCambiarDatos()">¿Ya estás registrado? Cambiar datos</button>
     </div>
@@ -1133,7 +1133,7 @@ function irVista(v){
 /* Número de socio: secuencial por orden de llegada en el tiempo.
    Los socios 1-6 están reservados (fundador + socios de prueba); desde ahí,
    cada franja de 20 minutos desde el lanzamiento suma un número.
-   En la app real (Supabase) lo asigna el servidor y es único garantizado. */
+   */
 const LANZAMIENTO = new Date('2026-08-04T09:00:00-03:00').getTime();
 function asignarNumeroSocio(){
   const franjas = Math.max(0, Math.floor((Date.now() - LANZAMIENTO) / (20*60*1000)));
