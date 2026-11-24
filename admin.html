@@ -184,9 +184,10 @@ dialog form{padding:18px}
     <label for="do-nombre">Nombre</label>
     <input id="do-nombre" maxlength="200" required>
     <div class="row2">
-      <div><label for="do-ant">Precio anterior</label><input id="do-ant" type="number" min="0" step="1" inputmode="numeric" required></div>
-      <div><label for="do-nue">Precio oferta</label><input id="do-nue" type="number" min="0" step="1" inputmode="numeric" required></div>
+      <div><label for="do-ant">Precio anterior (opcional)</label><input id="do-ant" type="number" min="0" step="1" inputmode="numeric"></div>
+      <div><label for="do-nue">Precio oferta (opcional)</label><input id="do-nue" type="number" min="0" step="1" inputmode="numeric"></div>
     </div>
+    <p class="sub" style="margin:6px 0 0">Si la imagen ya trae el precio, dejá los dos vacíos.</p>
     <label for="do-cat">Categoría (opcional)</label>
     <input id="do-cat" list="cats" maxlength="60">
     <label for="do-foto">Foto</label>
@@ -487,7 +488,7 @@ $('btn-importar').addEventListener('click', async () => {
     }
     const ofs = (inv.ofertas || []).map(o => ({
       nombre: String(o.nombre || '').trim().slice(0, 200), categoria: o.categoria || '',
-      precio_anterior: Number(o.precioOld) || 0, precio_nuevo: Number(o.precioNew) || 0,
+      precio_anterior: Number(o.precioOld) > 0 ? Number(o.precioOld) : null, precio_nuevo: Number(o.precioNew) > 0 ? Number(o.precioNew) : null,
       publicada: o.publicada === 'SI' || o.publicada === true, imagen_url: o.img || ''
     })).filter(o => o.nombre);
     if (ofs.length) {
@@ -512,7 +513,7 @@ function renderOfertas() {
     <div class="prod">
       <img class="thumb" loading="lazy" alt="" src="${esc(o.imagen_url)}" onerror="this.style.visibility='hidden'">
       <div class="prod-info"><b>${esc(o.nombre)}</b>
-        <small><s>${fmt(o.precio_anterior)}</s> → <b style="display:inline">${fmt(o.precio_nuevo)}</b></small>
+        <small>${o.precio_nuevo != null ? (o.precio_anterior != null ? `<s>${fmt(o.precio_anterior)}</s> → ` : '') + `<b style="display:inline">${fmt(o.precio_nuevo)}</b>` : 'Precio en la imagen'}</small>
         <span class="pill ${o.publicada ? 'pub' : 'oculto'}">${o.publicada ? 'Publicada' : 'Oculta'}</span></div>
       <button class="btn-ghost" type="button" data-id="${o.id}">Editar</button>
     </div>`).join('') || '<p class="sub">Todavía no hay ofertas.</p>';
@@ -526,8 +527,8 @@ function abrirOferta(o) {
   editOf = o;
   $('do-titulo').textContent = o ? 'Editar oferta' : 'Nueva oferta';
   $('do-nombre').value = o ? o.nombre : '';
-  $('do-ant').value = o ? o.precio_anterior : '';
-  $('do-nue').value = o ? o.precio_nuevo : '';
+  $('do-ant').value = o && o.precio_anterior != null ? o.precio_anterior : '';
+  $('do-nue').value = o && o.precio_nuevo != null ? o.precio_nuevo : '';
   $('do-cat').value = o ? o.categoria : '';
   $('do-url').value = o ? o.imagen_url : '';
   $('do-foto').value = '';
@@ -540,8 +541,10 @@ function abrirOferta(o) {
 $('do-cancel').addEventListener('click', () => $('dlg-of').close());
 $('f-of').addEventListener('submit', async e => {
   e.preventDefault();
-  const ant = Number($('do-ant').value), nue = Number($('do-nue').value);
-  if (nue >= ant) { msg('msg-do', 'El precio de oferta tiene que ser menor al anterior.', 'err'); return; }
+  const ant = $('do-ant').value === '' ? null : Number($('do-ant').value);
+  const nue = $('do-nue').value === '' ? null : Number($('do-nue').value);
+  if (ant != null && nue == null) { msg('msg-do', 'Si cargás el precio anterior, cargá también el de oferta.', 'err'); return; }
+  if (ant != null && nue >= ant) { msg('msg-do', 'El precio de oferta tiene que ser menor al anterior.', 'err'); return; }
   const btn = $('do-guardar'); btn.disabled = true; msg('msg-do', 'Guardando…');
   try {
     let url = $('do-url').value.trim();
