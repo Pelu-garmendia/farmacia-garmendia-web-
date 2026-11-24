@@ -51,6 +51,32 @@ button{font:inherit;cursor:pointer}
 .hidden{display:none!important}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .count{font-size:12px;color:var(--muted);text-align:right}
+
+.tab-nav{display:flex;gap:8px;margin-bottom:14px}
+.toolbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.toolbar .full{grid-column:1/-1}
+.prod{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.prod:last-child{border-bottom:0}
+.thumb{width:48px;height:48px;border-radius:8px;object-fit:cover;background:var(--bg);flex-shrink:0;border:1px solid var(--line)}
+.prod-info{flex:1;min-width:0}
+.prod-info b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prod-info small{color:var(--muted)}
+.pill{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:99px;margin-left:6px}
+.pill.pub{background:#dcfce7;color:#166534}.pill.oculto{background:#fee2e2;color:#991b1b}
+@media (prefers-color-scheme: dark){.pill.pub{background:#14532d;color:#bbf7d0}.pill.oculto{background:#7f1d1d;color:#fecaca}}
+.pager{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px}
+.pager button{width:auto;padding:8px 14px}
+dialog{border:0;border-radius:16px;padding:0;width:min(520px,calc(100vw - 24px));background:var(--card);color:var(--ink);max-height:92vh}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+dialog form{padding:18px}
+.modal-actions{display:flex;gap:8px;margin-top:16px}
+.modal-actions .btn{flex:1}
+.btn-danger{background:var(--danger)}
+.preview{width:100%;max-height:200px;object-fit:contain;background:var(--bg);border-radius:10px;margin-top:8px;border:1px solid var(--line)}
+.check{display:flex;align-items:center;gap:10px;margin-top:12px;font-weight:700}
+.check input{width:20px;height:20px}
+.import-box{border:2px dashed var(--brand);border-radius:12px;padding:14px;margin-bottom:12px}
+.import-box p{margin:0 0 10px}
 </style>
 </head>
 <body>
@@ -77,11 +103,13 @@ button{font:inherit;cursor:pointer}
 
   <!-- PANEL -->
   <section class="hidden" id="vista-panel">
-    <div class="tabs" role="tablist">
-      <button class="tab" role="tab" aria-selected="true" type="button">Turnos</button>
-      <button class="tab" role="tab" aria-selected="false" type="button" disabled title="Próximamente">Productos (próximamente)</button>
+    <div class="tab-nav" role="tablist">
+      <button class="tab" role="tab" id="t-turnos" aria-selected="true" type="button" data-sec="turnos">Turnos</button>
+      <button class="tab" role="tab" id="t-productos" aria-selected="false" type="button" data-sec="productos">Productos</button>
+      <button class="tab" role="tab" id="t-ofertas" aria-selected="false" type="button" data-sec="ofertas">Ofertas</button>
     </div>
 
+    <div id="sec-turnos">
     <div class="card">
       <h2 style="margin:0 0 4px;font-size:17px">Avisos de turnos</h2>
       <p class="sub">Activá el aviso de una farmacia y contá qué pasa. Lo ven todos los visitantes de FarmaClick.</p>
@@ -89,8 +117,92 @@ button{font:inherit;cursor:pointer}
       <p class="msg" id="msg-guardar" role="status"></p>
       <button class="btn" type="button" id="btn-guardar">Guardar cambios</button>
     </div>
+    </div>
+
+    <div id="sec-productos" class="hidden">
+      <div class="card">
+        <h2 style="margin:0 0 4px;font-size:17px">Productos</h2>
+        <p class="sub" id="prod-resumen">Cargando…</p>
+        <div class="import-box hidden" id="import-box">
+          <p><b>No hay productos cargados.</b> Podés traer el inventario actual (<code>inventario.json</code> de GitHub) con un toque.</p>
+          <button class="btn" type="button" id="btn-importar">Importar inventario actual</button>
+        </div>
+        <div class="toolbar">
+          <input class="full" id="p-buscar" type="search" placeholder="Buscar producto…" aria-label="Buscar producto">
+          <select id="p-cat" aria-label="Filtrar por categoría"><option value="">Todas las categorías</option></select>
+          <select id="p-est" aria-label="Filtrar por estado">
+            <option value="">Publicados y ocultos</option><option value="pub">Solo publicados</option><option value="oculto">Solo ocultos</option>
+          </select>
+          <button class="btn full" type="button" id="p-nuevo">+ Nuevo producto</button>
+        </div>
+        <div id="p-lista"></div>
+        <div class="pager"><button class="btn-ghost" type="button" id="p-ant">← Anterior</button><span id="p-pag" class="sub" style="margin:0"></span><button class="btn-ghost" type="button" id="p-sig">Siguiente →</button></div>
+        <p class="msg" id="msg-prod" role="status"></p>
+      </div>
+    </div>
+
+    <div id="sec-ofertas" class="hidden">
+      <div class="card">
+        <h2 style="margin:0 0 4px;font-size:17px">Ofertas</h2>
+        <p class="sub">Las ofertas publicadas aparecen en el carrusel de la tienda.</p>
+        <button class="btn" type="button" id="o-nueva" style="margin-bottom:10px">+ Nueva oferta</button>
+        <div id="o-lista"></div>
+        <p class="msg" id="msg-of" role="status"></p>
+      </div>
+    </div>
   </section>
 </main>
+
+<dialog id="dlg-prod">
+  <form method="dialog" id="f-prod">
+    <h2 style="margin:0 0 4px;font-size:17px" id="dp-titulo">Producto</h2>
+    <label for="dp-nombre">Nombre</label>
+    <input id="dp-nombre" maxlength="200" required>
+    <label for="dp-cat">Categoría</label>
+    <input id="dp-cat" list="cats" maxlength="60" placeholder="Ej: Analgésico">
+    <datalist id="cats"></datalist>
+    <label for="dp-precio">Precio (opcional, en pesos)</label>
+    <input id="dp-precio" type="number" min="0" step="1" inputmode="numeric" placeholder="Sin precio: se consulta por WhatsApp">
+    <label for="dp-foto">Foto</label>
+    <input id="dp-foto" type="file" accept="image/*">
+    <img class="preview hidden" id="dp-prev" alt="Vista previa">
+    <label for="dp-url">…o link de la imagen</label>
+    <input id="dp-url" type="url" placeholder="https://…">
+    <label class="check"><input type="checkbox" id="dp-pub"> Publicado en la tienda</label>
+    <p class="msg" id="msg-dp" role="alert"></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" type="button" id="dp-cancel" style="background:none;color:var(--ink);border:1px solid var(--line)">Cancelar</button>
+      <button class="btn" type="submit" id="dp-guardar">Guardar</button>
+    </div>
+    <button class="btn btn-danger hidden" type="button" id="dp-borrar" style="margin-top:8px">Eliminar producto</button>
+  </form>
+</dialog>
+
+<dialog id="dlg-of">
+  <form method="dialog" id="f-of">
+    <h2 style="margin:0 0 4px;font-size:17px" id="do-titulo">Oferta</h2>
+    <label for="do-nombre">Nombre</label>
+    <input id="do-nombre" maxlength="200" required>
+    <div class="row2">
+      <div><label for="do-ant">Precio anterior</label><input id="do-ant" type="number" min="0" step="1" inputmode="numeric" required></div>
+      <div><label for="do-nue">Precio oferta</label><input id="do-nue" type="number" min="0" step="1" inputmode="numeric" required></div>
+    </div>
+    <label for="do-cat">Categoría (opcional)</label>
+    <input id="do-cat" list="cats" maxlength="60">
+    <label for="do-foto">Foto</label>
+    <input id="do-foto" type="file" accept="image/*">
+    <img class="preview hidden" id="do-prev" alt="Vista previa">
+    <label for="do-url">…o link de la imagen</label>
+    <input id="do-url" type="url" placeholder="https://…">
+    <label class="check"><input type="checkbox" id="do-pub"> Publicada</label>
+    <p class="msg" id="msg-do" role="alert"></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" type="button" id="do-cancel" style="background:none;color:var(--ink);border:1px solid var(--line)">Cancelar</button>
+      <button class="btn" type="submit" id="do-guardar">Guardar</button>
+    </div>
+    <button class="btn btn-danger hidden" type="button" id="do-borrar" style="margin-top:8px">Eliminar oferta</button>
+  </form>
+</dialog>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="data/turnos-db.js"></script>
@@ -219,6 +331,237 @@ $('form-login').addEventListener('submit', async e => {
 });
 $('btn-guardar').addEventListener('click', guardar);
 $('btn-salir').addEventListener('click', () => sb.auth.signOut());
+
+// ═══════════════ PESTAÑAS ═══════════════
+const SECCIONES = ['turnos', 'productos', 'ofertas'];
+let cargados = { productos: false, ofertas: false };
+function irA(sec) {
+  SECCIONES.forEach(n => {
+    $('sec-' + n).classList.toggle('hidden', n !== sec);
+    $('t-' + n).setAttribute('aria-selected', n === sec);
+  });
+  if (sec === 'productos' && !cargados.productos) cargarProductos();
+  if (sec === 'ofertas' && !cargados.ofertas) cargarOfertas();
+}
+document.querySelector('.tab-nav').addEventListener('click', e => {
+  const b = e.target.closest('.tab'); if (b) irA(b.dataset.sec);
+});
+
+const fmt = n => '$' + Number(n).toLocaleString('es-AR');
+const BUCKET = 'productos';
+
+// Achica la foto antes de subirla (celulares sacan fotos de varios MB)
+async function achicar(file, max = 900) {
+  const bmp = await createImageBitmap(file);
+  const k = Math.min(1, max / Math.max(bmp.width, bmp.height));
+  const c = document.createElement('canvas');
+  c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+  c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+  return await new Promise(ok => c.toBlob(ok, 'image/webp', 0.82));
+}
+async function subirFoto(file) {
+  const blob = await achicar(file);
+  const ruta = Date.now() + '-' + Math.random().toString(36).slice(2, 8) + '.webp';
+  const { error } = await sb.storage.from(BUCKET).upload(ruta, blob, { contentType: 'image/webp' });
+  if (error) throw error;
+  return sb.storage.from(BUCKET).getPublicUrl(ruta).data.publicUrl;
+}
+function vistaPrevia(inputFile, img) {
+  inputFile.addEventListener('change', () => {
+    const f = inputFile.files[0];
+    if (f) { img.src = URL.createObjectURL(f); img.classList.remove('hidden'); }
+  });
+}
+function setPrev(img, url) { if (url) { img.src = url; img.classList.remove('hidden'); } else img.classList.add('hidden'); }
+
+// ═══════════════ PRODUCTOS ═══════════════
+const PP = 25;
+let productos = [], pagina = 1, editando = null;
+
+async function cargarProductos() {
+  const todos = [];
+  for (let desde = 0; ; desde += 1000) {
+    const { data, error } = await sb.from('productos').select('*').order('nombre').range(desde, desde + 999);
+    if (error) { msg('msg-prod', 'No se pudieron cargar los productos.', 'err'); return; }
+    todos.push(...data);
+    if (data.length < 1000) break;
+  }
+  productos = todos; cargados.productos = true;
+  $('import-box').classList.toggle('hidden', productos.length > 0);
+  const cats = [...new Set(productos.map(p => p.categoria).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es'));
+  const actual = $('p-cat').value;
+  $('p-cat').innerHTML = '<option value="">Todas las categorías</option>' + cats.map(c => `<option>${esc(c)}</option>`).join('');
+  $('p-cat').value = cats.includes(actual) ? actual : '';
+  $('cats').innerHTML = cats.map(c => `<option value="${esc(c)}">`).join('');
+  renderProductos();
+}
+function filtrados() {
+  const q = $('p-buscar').value.trim().toLowerCase(), c = $('p-cat').value, e = $('p-est').value;
+  return productos.filter(p => (!q || p.nombre.toLowerCase().includes(q)) && (!c || p.categoria === c)
+    && (!e || (e === 'pub') === p.publicado));
+}
+function renderProductos() {
+  const lista = filtrados(), paginas = Math.max(1, Math.ceil(lista.length / PP));
+  pagina = Math.min(pagina, paginas);
+  const pub = productos.filter(p => p.publicado).length;
+  $('prod-resumen').textContent = `${productos.length} productos · ${pub} publicados · ${lista.length} en esta búsqueda`;
+  $('p-lista').innerHTML = lista.slice((pagina - 1) * PP, pagina * PP).map(p => `
+    <div class="prod">
+      <img class="thumb" loading="lazy" alt="" src="${esc(p.imagen_url)}" onerror="this.style.visibility='hidden'">
+      <div class="prod-info"><b>${esc(p.nombre)}</b>
+        <small>${esc(p.categoria || 'Sin categoría')}${p.precio != null ? ' · ' + fmt(p.precio) : ''}</small>
+        <span class="pill ${p.publicado ? 'pub' : 'oculto'}">${p.publicado ? 'Publicado' : 'Oculto'}</span></div>
+      <button class="btn-ghost" type="button" data-id="${p.id}">Editar</button>
+    </div>`).join('') || '<p class="sub">No hay productos con ese filtro.</p>';
+  $('p-pag').textContent = `${pagina} / ${paginas}`;
+  $('p-ant').disabled = pagina <= 1; $('p-sig').disabled = pagina >= paginas;
+}
+['p-buscar', 'p-cat', 'p-est'].forEach(id => $(id).addEventListener('input', () => { pagina = 1; renderProductos(); }));
+$('p-ant').addEventListener('click', () => { pagina--; renderProductos(); });
+$('p-sig').addEventListener('click', () => { pagina++; renderProductos(); });
+$('p-lista').addEventListener('click', e => {
+  const b = e.target.closest('[data-id]'); if (b) abrirProducto(productos.find(p => p.id === b.dataset.id));
+});
+$('p-nuevo').addEventListener('click', () => abrirProducto(null));
+
+vistaPrevia($('dp-foto'), $('dp-prev'));
+function abrirProducto(p) {
+  editando = p;
+  $('dp-titulo').textContent = p ? 'Editar producto' : 'Nuevo producto';
+  $('dp-nombre').value = p ? p.nombre : '';
+  $('dp-cat').value = p ? p.categoria : '';
+  $('dp-precio').value = p && p.precio != null ? p.precio : '';
+  $('dp-url').value = p ? p.imagen_url : '';
+  $('dp-foto').value = '';
+  $('dp-pub').checked = p ? p.publicado : true;
+  setPrev($('dp-prev'), p ? p.imagen_url : '');
+  $('dp-borrar').classList.toggle('hidden', !p);
+  msg('msg-dp', '');
+  $('dlg-prod').showModal();
+}
+$('dp-cancel').addEventListener('click', () => $('dlg-prod').close());
+$('f-prod').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = $('dp-guardar'); btn.disabled = true; msg('msg-dp', 'Guardando…');
+  try {
+    let url = $('dp-url').value.trim();
+    const f = $('dp-foto').files[0];
+    if (f) url = await subirFoto(f);
+    const fila = {
+      nombre: $('dp-nombre').value.trim(),
+      categoria: $('dp-cat').value.trim(),
+      precio: $('dp-precio').value === '' ? null : Number($('dp-precio').value),
+      publicado: $('dp-pub').checked,
+      imagen_url: url,
+      updated_at: new Date().toISOString()
+    };
+    const q = editando ? sb.from('productos').update(fila).eq('id', editando.id) : sb.from('productos').insert(fila);
+    const { error } = await q;
+    if (error) throw error;
+    $('dlg-prod').close(); msg('msg-prod', '✓ Guardado. Ya se ve en la tienda.', 'ok');
+    await cargarProductos();
+  } catch (err) { msg('msg-dp', 'No se pudo guardar. Probá de nuevo.', 'err'); }
+  btn.disabled = false;
+});
+$('dp-borrar').addEventListener('click', async () => {
+  if (!editando || !confirm('¿Eliminar "' + editando.nombre + '"? No se puede deshacer.')) return;
+  const { error } = await sb.from('productos').delete().eq('id', editando.id);
+  if (error) { msg('msg-dp', 'No se pudo eliminar.', 'err'); return; }
+  $('dlg-prod').close(); msg('msg-prod', 'Producto eliminado.', 'ok'); cargarProductos();
+});
+
+// Importación inicial desde el inventario.json de GitHub (solo con la tabla vacía)
+$('btn-importar').addEventListener('click', async () => {
+  const btn = $('btn-importar'); btn.disabled = true; btn.textContent = 'Importando…';
+  try {
+    const r = await fetch('https://raw.githubusercontent.com/Pelu-garmendia/imagenes-farmacia/main/inventario.json', { cache: 'no-store' });
+    if (!r.ok) throw new Error('No se pudo leer inventario.json');
+    const inv = await r.json();
+    const prods = (inv.productos || []).map(p => ({
+      nombre: String(p.name || '').trim().slice(0, 200), categoria: String(p.category || '').trim(),
+      precio: p.priceNum > 0 ? p.priceNum : null, publicado: p.published !== false, imagen_url: p.img || ''
+    })).filter(p => p.nombre);
+    for (let i = 0; i < prods.length; i += 200) {
+      const { error } = await sb.from('productos').insert(prods.slice(i, i + 200));
+      if (error) throw error;
+    }
+    const ofs = (inv.ofertas || []).map(o => ({
+      nombre: String(o.nombre || '').trim().slice(0, 200), categoria: o.categoria || '',
+      precio_anterior: Number(o.precioOld) || 0, precio_nuevo: Number(o.precioNew) || 0,
+      publicada: o.publicada === 'SI' || o.publicada === true, imagen_url: o.img || ''
+    })).filter(o => o.nombre);
+    if (ofs.length) {
+      const { count } = await sb.from('ofertas').select('id', { count: 'exact', head: true });
+      if (!count) { const { error } = await sb.from('ofertas').insert(ofs); if (error) throw error; }
+    }
+    msg('msg-prod', `✓ Importados ${prods.length} productos y ${ofs.length} ofertas.`, 'ok');
+    cargados.ofertas = false; await cargarProductos();
+  } catch (err) { msg('msg-prod', 'No se pudo importar: ' + err.message, 'err'); }
+  btn.disabled = false; btn.textContent = 'Importar inventario actual';
+});
+
+// ═══════════════ OFERTAS ═══════════════
+let ofertas = [], editOf = null;
+async function cargarOfertas() {
+  const { data, error } = await sb.from('ofertas').select('*').order('created_at', { ascending: false });
+  if (error) { msg('msg-of', 'No se pudieron cargar las ofertas.', 'err'); return; }
+  ofertas = data; cargados.ofertas = true; renderOfertas();
+}
+function renderOfertas() {
+  $('o-lista').innerHTML = ofertas.map(o => `
+    <div class="prod">
+      <img class="thumb" loading="lazy" alt="" src="${esc(o.imagen_url)}" onerror="this.style.visibility='hidden'">
+      <div class="prod-info"><b>${esc(o.nombre)}</b>
+        <small><s>${fmt(o.precio_anterior)}</s> → <b style="display:inline">${fmt(o.precio_nuevo)}</b></small>
+        <span class="pill ${o.publicada ? 'pub' : 'oculto'}">${o.publicada ? 'Publicada' : 'Oculta'}</span></div>
+      <button class="btn-ghost" type="button" data-id="${o.id}">Editar</button>
+    </div>`).join('') || '<p class="sub">Todavía no hay ofertas.</p>';
+}
+$('o-lista').addEventListener('click', e => {
+  const b = e.target.closest('[data-id]'); if (b) abrirOferta(ofertas.find(o => o.id === b.dataset.id));
+});
+$('o-nueva').addEventListener('click', () => abrirOferta(null));
+vistaPrevia($('do-foto'), $('do-prev'));
+function abrirOferta(o) {
+  editOf = o;
+  $('do-titulo').textContent = o ? 'Editar oferta' : 'Nueva oferta';
+  $('do-nombre').value = o ? o.nombre : '';
+  $('do-ant').value = o ? o.precio_anterior : '';
+  $('do-nue').value = o ? o.precio_nuevo : '';
+  $('do-cat').value = o ? o.categoria : '';
+  $('do-url').value = o ? o.imagen_url : '';
+  $('do-foto').value = '';
+  $('do-pub').checked = o ? o.publicada : true;
+  setPrev($('do-prev'), o ? o.imagen_url : '');
+  $('do-borrar').classList.toggle('hidden', !o);
+  msg('msg-do', '');
+  $('dlg-of').showModal();
+}
+$('do-cancel').addEventListener('click', () => $('dlg-of').close());
+$('f-of').addEventListener('submit', async e => {
+  e.preventDefault();
+  const ant = Number($('do-ant').value), nue = Number($('do-nue').value);
+  if (nue >= ant) { msg('msg-do', 'El precio de oferta tiene que ser menor al anterior.', 'err'); return; }
+  const btn = $('do-guardar'); btn.disabled = true; msg('msg-do', 'Guardando…');
+  try {
+    let url = $('do-url').value.trim();
+    const f = $('do-foto').files[0];
+    if (f) url = await subirFoto(f);
+    const fila = { nombre: $('do-nombre').value.trim(), categoria: $('do-cat').value.trim(),
+      precio_anterior: ant, precio_nuevo: nue, publicada: $('do-pub').checked, imagen_url: url };
+    const q = editOf ? sb.from('ofertas').update(fila).eq('id', editOf.id) : sb.from('ofertas').insert(fila);
+    const { error } = await q;
+    if (error) throw error;
+    $('dlg-of').close(); msg('msg-of', '✓ Guardada.', 'ok'); await cargarOfertas();
+  } catch (err) { msg('msg-do', 'No se pudo guardar. Probá de nuevo.', 'err'); }
+  btn.disabled = false;
+});
+$('do-borrar').addEventListener('click', async () => {
+  if (!editOf || !confirm('¿Eliminar la oferta "' + editOf.nombre + '"?')) return;
+  const { error } = await sb.from('ofertas').delete().eq('id', editOf.id);
+  if (error) { msg('msg-do', 'No se pudo eliminar.', 'err'); return; }
+  $('dlg-of').close(); msg('msg-of', 'Oferta eliminada.', 'ok'); cargarOfertas();
+});
 
 sb.auth.onAuthStateChange((_ev, sesion) => mostrar(sesion));
 sb.auth.getSession().then(({ data }) => mostrar(data.session));
