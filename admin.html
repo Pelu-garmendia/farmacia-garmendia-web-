@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin · Farmacia Garmendia</title>
+<style>
+:root{
+  --bg:#f4f7f8;--card:#fff;--ink:#0f2a33;--muted:#5f7680;--line:#dbe5e8;
+  --brand:#0e8a7d;--brand-d:#0a6b61;--danger:#dc2626;--ok:#15803d;
+}
+@media (prefers-color-scheme: dark){
+  :root{--bg:#0b1a20;--card:#12262e;--ink:#e6f1f3;--muted:#8fa8b1;--line:#23404a;--brand:#2dd4bf;--brand-d:#14b8a6}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+header h1{font-size:16px;margin:0}
+main{max-width:720px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+label{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin:10px 0 4px}
+input,select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--brand);color:#fff;border:0;border-radius:10px;padding:12px 16px;font-weight:700;width:100%}
+.btn:disabled{opacity:.6}
+.btn-ghost{background:none;border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:8px 12px;width:auto}
+.tabs{display:flex;gap:8px;margin-bottom:14px}
+.tab{flex:1;padding:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font-weight:700}
+.tab[aria-selected="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
+.tab[disabled]{opacity:.5;cursor:not-allowed}
+.sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.farm{display:flex;align-items:center;gap:12px;justify-content:space-between}
+.farm b{display:block}
+.farm small{color:var(--muted)}
+.switch{position:relative;width:46px;height:26px;flex-shrink:0;border-radius:13px;border:0;background:var(--line);padding:0}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .15s}
+.switch[aria-pressed="true"]{background:var(--danger)}
+.switch[aria-pressed="true"]::after{left:23px}
+.detalle{display:none;margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}
+.farm-wrap.on .detalle{display:block}
+.farm-wrap{border-bottom:1px solid var(--line);padding:12px 0}
+.farm-wrap:last-child{border-bottom:0}
+.msg{min-height:20px;font-size:13.5px;margin:10px 0 0}
+.msg.err{color:var(--danger)}.msg.ok{color:var(--ok)}
+.hidden{display:none!important}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.count{font-size:12px;color:var(--muted);text-align:right}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Admin · Farmacia Garmendia</h1>
+  <button class="btn-ghost hidden" id="btn-salir" type="button">Salir</button>
+</header>
+
+<main>
+  <!-- LOGIN -->
+  <section class="card" id="vista-login">
+    <h2 style="margin:0 0 4px;font-size:17px">Ingresar</h2>
+    <p class="sub">Acceso solo para la farmacia.</p>
+    <form id="form-login">
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="username" required>
+      <label for="clave">Contraseña</label>
+      <input id="clave" type="password" autocomplete="current-password" required>
+      <p class="msg" id="msg-login" role="alert"></p>
+      <button class="btn" type="submit" id="btn-login">Entrar</button>
+    </form>
+  </section>
+
+  <!-- PANEL -->
+  <section class="hidden" id="vista-panel">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" type="button">Turnos</button>
+      <button class="tab" role="tab" aria-selected="false" type="button" disabled title="Próximamente">Productos (próximamente)</button>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:0 0 4px;font-size:17px">Avisos de turnos</h2>
+      <p class="sub">Activá el aviso de una farmacia y contá qué pasa. Lo ven todos los visitantes de FarmaClick.</p>
+      <div id="lista"></div>
+      <p class="msg" id="msg-guardar" role="status"></p>
+      <button class="btn" type="button" id="btn-guardar">Guardar cambios</button>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="data/turnos-db.js"></script>
+<script>
+const SUPABASE_URL = 'https://qlzwatloykyugyptxbvb.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_KMW3N1ZQtAbVEwxuBA-Jgw_YrPBkL4m';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const MOTIVOS = {
+  cerrada_temporal: 'Cerrada temporalmente',
+  sin_personal:     'Sin personal',
+  problema_tecnico: 'Problema técnico',
+  horario_reducido: 'Horario reducido',
+  inventario:       'Cerrada por inventario',
+  otro:             'Otro'
+};
+
+const $ = id => document.getElementById(id);
+const esc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let avisos = {};
+
+// Farmacias de la zona (únicas, de todas las localidades cargadas)
+function farmaciasZona() {
+  const out = [], vistas = new Set();
+  Object.values(DB).forEach(loc => {
+    Object.values(loc.grupos || {}).forEach(lista => lista.forEach(f => {
+      if (vistas.has(f.nombre)) return;
+      vistas.add(f.nombre);
+      out.push({ nombre: f.nombre, dir: f.dir, loc: loc.nombre });
+    }));
+  });
+  return out.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+}
+
+function render() {
+  const cont = $('lista');
+  cont.innerHTML = '';
+  farmaciasZona().forEach(f => {
+    const a = avisos[f.nombre];
+    const on = !!a;
+    const w = document.createElement('div');
+    w.className = 'farm-wrap' + (on ? ' on' : '');
+    w.dataset.nombre = f.nombre;
+    w.innerHTML = `
+      <div class="farm">
+        <div><b>Farmacia ${esc(f.nombre)}</b><small>${esc(f.dir)}, ${esc(f.loc)}</small></div>
+        <button type="button" class="switch" aria-pressed="${on}" aria-label="Aviso para Farmacia ${esc(f.nombre)}"></button>
+      </div>
+      <div class="detalle">
+        <label>Motivo</label>
+        <select class="f-motivo">
+          ${Object.entries(MOTIVOS).map(([k, v]) => `<option value="${k}"${a && a.motivo === k ? ' selected' : ''}>${v}</option>`).join('')}
+        </select>
+        <label>Detalle (opcional)</label>
+        <input class="f-detalle" maxlength="200" placeholder="Ej: por inventario anual" value="${a ? esc(a.detalle) : ''}">
+        <div class="count"><span class="f-cont">${a ? a.detalle.length : 0}</span>/200</div>
+        <label>Reabre a las (opcional)</label>
+        <input class="f-hora" type="time" value="${a && a.reabre_hora ? esc(a.reabre_hora) : ''}">
+      </div>`;
+    cont.appendChild(w);
+  });
+}
+
+$('lista').addEventListener('click', e => {
+  const b = e.target.closest('.switch');
+  if (!b) return;
+  const on = b.getAttribute('aria-pressed') !== 'true';
+  b.setAttribute('aria-pressed', on);
+  b.closest('.farm-wrap').classList.toggle('on', on);
+});
+$('lista').addEventListener('input', e => {
+  if (e.target.classList.contains('f-detalle'))
+    e.target.closest('.farm-wrap').querySelector('.f-cont').textContent = e.target.value.length;
+});
+
+function msg(id, t, cls) { const m = $(id); m.textContent = t; m.className = 'msg ' + (cls || ''); }
+
+async function cargarAvisos() {
+  const { data, error } = await sb.from('turnos_avisos').select('*');
+  if (error) { msg('msg-guardar', 'No se pudieron cargar los avisos.', 'err'); return; }
+  avisos = {};
+  data.forEach(r => { avisos[r.farmacia] = r; });
+  render();
+}
+
+async function guardar() {
+  const btn = $('btn-guardar');
+  btn.disabled = true; msg('msg-guardar', 'Guardando…');
+  const activos = [], apagar = [];
+  document.querySelectorAll('.farm-wrap').forEach(w => {
+    const nombre = w.dataset.nombre;
+    if (w.querySelector('.switch').getAttribute('aria-pressed') === 'true') {
+      activos.push({
+        farmacia: nombre,
+        motivo: w.querySelector('.f-motivo').value,
+        detalle: w.querySelector('.f-detalle').value.trim().slice(0, 200),
+        reabre_hora: w.querySelector('.f-hora').value || null,
+        updated_at: new Date().toISOString()
+      });
+    } else if (avisos[nombre]) apagar.push(nombre);
+  });
+  let error = null;
+  if (activos.length) ({ error } = await sb.from('turnos_avisos').upsert(activos));
+  if (!error && apagar.length) ({ error } = await sb.from('turnos_avisos').delete().in('farmacia', apagar));
+  btn.disabled = false;
+  if (error) { msg('msg-guardar', 'No se pudo guardar. Probá de nuevo.', 'err'); return; }
+  msg('msg-guardar', '✓ Guardado. Ya se ve en FarmaClick.', 'ok');
+  cargarAvisos();
+}
+
+function mostrar(sesion) {
+  $('vista-login').classList.toggle('hidden', !!sesion);
+  $('vista-panel').classList.toggle('hidden', !sesion);
+  $('btn-salir').classList.toggle('hidden', !sesion);
+  if (sesion) cargarAvisos();
+}
+
+$('form-login').addEventListener('submit', async e => {
+  e.preventDefault();
+  $('btn-login').disabled = true; msg('msg-login', '');
+  const { error } = await sb.auth.signInWithPassword({ email: $('email').value.trim(), password: $('clave').value });
+  $('btn-login').disabled = false;
+  if (error) { msg('msg-login', 'Email o contraseña incorrectos.', 'err'); return; }
+  $('clave').value = '';
+});
+$('btn-guardar').addEventListener('click', guardar);
+$('btn-salir').addEventListener('click', () => sb.auth.signOut());
+
+sb.auth.onAuthStateChange((_ev, sesion) => mostrar(sesion));
+sb.auth.getSession().then(({ data }) => mostrar(data.session));
+</script>
+</body>
+</html>
